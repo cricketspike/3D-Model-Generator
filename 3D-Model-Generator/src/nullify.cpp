@@ -3,11 +3,15 @@ using namespace std;
 
 #include "ColoredVertexMatrix.h"
 
-float color_diff(uint8 c1[3], uint8 c2[3]) {
-	return sqrt( pow(c1[0] - c2[0], 2) + pow(c1[1] - c2[1], 2) + pow(c1[2] - c2[2], 2) );
+//	takes two rgb colors
+float color_diff(uint8* c1, uint8* c2) {
+	const float max_diff = sqrt( pow(255,2) + pow(255,2) + pow(255,2) );
+	float diff = sqrt( pow(c1[0] - c2[0], 2) + pow(c1[1] - c2[1], 2) + pow(c1[2] - c2[2], 2) );
+	return (diff/max_diff) * 100.0;
 }
 
-float color_diff_2(uint8 c1[3], uint8 c2[3]) {
+//	takes two rgb colors
+float color_diff_2(uint8* c1, uint8* c2) {
 	float r1, g1, b1, r2, g2, b2,
 		x1, y1, z1, x2, y2, z2,
 		l1, a1, b1, l2, a2, b2,
@@ -22,17 +26,17 @@ float color_diff_2(uint8 c1[3], uint8 c2[3]) {
 	g2 = c2[1]/255.0;
 	b2 = c2[2]/255.0;
 	
-	if(r1 > 0.04045) r1 = pow( (r1 + 0.055)/1.055, 2.4) * 100;
+	if(r1 > 0.04045) r1 = pow( (r1 + 0.055)/1.055, 2.4) * 100.0;
 		else r1 = r1 / 0.1292;
-	if(g1 > 0.04045) g1 = pow( (g1 + 0.055)/1.055, 2.4) * 100;
+	if(g1 > 0.04045) g1 = pow( (g1 + 0.055)/1.055, 2.4) * 100.0;
 		else g1 = g1 / 0.1292;
-	if(b1 > 0.04045) b1 = pow( (b1 + 0.055)/1.055, 2.4) * 100;
+	if(b1 > 0.04045) b1 = pow( (b1 + 0.055)/1.055, 2.4) * 100.0;
 		else b1 = b1 / 0.1292;
-	if(r2 > 0.04045) r2 = pow( (r2 + 0.055)/1.055, 2.4) * 100;
+	if(r2 > 0.04045) r2 = pow( (r2 + 0.055)/1.055, 2.4) * 100.0;
 		else r2 = r2 / 0.1292;
-	if(g2 > 0.04045) g2 = pow( (g2 + 0.055)/1.055, 2.4) * 100;
+	if(g2 > 0.04045) g2 = pow( (g2 + 0.055)/1.055, 2.4) * 100.0;
 		else g2 = g2 / 0.1292;
-	if(b2 > 0.04045) b2 = pow( (b2 + 0.055)/1.055, 2.4) * 100;
+	if(b2 > 0.04045) b2 = pow( (b2 + 0.055)/1.055, 2.4) * 100.0;
 		else b2 = b2 / 0.1292;
 	
 	x1 = ( (r1 * 0.4124) + (g1 * 0.3576) + (b1 * 0.1805) ) / 95.047;
@@ -126,13 +130,13 @@ float color_diff_2(uint8 c1[3], uint8 c2[3]) {
 }
 
 //	thresh = [0, 100]
-void nullify(ColoredVertexMatrix& image, uint8 c_null[3], float thresh) {
+void nullify(ColoredVertexMatrix& image, uint8* c_null, float thresh) {
 	for(unsigned long x=0; x<image.m_width; ++x) {
 		for(unsigned long y=0; y<image.m_height; ++y) {
 			for(unsigned long z=0; z<image.m_depth; ++z) {
 				// if color difference is less than threshold
-				if( color_diff_2(image.matrix[x][y][z], c_null) < thresh )
-					// set color.alpha to zero
+				if( color_diff_2(image.matrix[x][y][z].value, c_null) < thresh )
+					image.matrix[x][y][z].value[3] = 0;
 			}
 		}
 	}

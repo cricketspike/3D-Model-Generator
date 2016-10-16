@@ -8,10 +8,14 @@
 #include "src/ImportedImage.h"
 #include "src/mainwaindow.h"
 #include "ColoredVertexMatrix.h"
+#include "nullify.cpp"
 
 
 int main(int argc, char **argv)
 {
+	uint8 null_color[3] = {255, 255, 255};
+	float threshold = 5;
+	
     std::cout << "3D Model Builder " << std::endl;
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
@@ -96,8 +100,9 @@ int main(int argc, char **argv)
                                      model_width, model_height, model_depth,b.getSides()[i],resolution_split)
                                   );
             }
-           ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split );
+            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split );
 
+		    nullify(vertices, null_color, threshold);
 
         } else if (input == "exit" || input == "quit") {
 
