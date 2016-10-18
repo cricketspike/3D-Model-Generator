@@ -1,3 +1,4 @@
+#include <vector>
 #include <cmath>
 using namespace std;
 
@@ -11,20 +12,20 @@ float color_diff(uint8* c1, uint8* c2) {
 }
 
 //	takes two rgb colors
-float color_diff_2(uint8* c1, uint8* c2) {
+float color_diff_2(uint8* col1, uint8* col2) {
 	float r1, g1, b1, r2, g2, b2,
 		x1, y1, z1, x2, y2, z2,
-		l1, a1, b1, l2, a2, b2,
+		l1, ap1, bp1, l2, ap2, bp2,
 		a1p, a2p,
 		c1, c2, c, h1, h2, hp, t,
-		l, dL, k1, k2, kL, sL, dC, kC, sC, dh, dH, kH, sH, rT;
+		l, dL, kL, sL, dC, kC, sC, dh, dH, kH, sH, rT;
 		
-	r1 = c1[0]/255.0;
-	g1 = c1[1]/255.0;
-	b1 = c1[2]/255.0;
-	r2 = c2[0]/255.0;
-	g2 = c2[1]/255.0;
-	b2 = c2[2]/255.0;
+	r1 = col1[0]/255.0;
+	g1 = col1[1]/255.0;
+	b1 = col1[2]/255.0;
+	r2 = col2[0]/255.0;
+	g2 = col2[1]/255.0;
+	b2 = col2[2]/255.0;
 	
 	if(r1 > 0.04045) r1 = pow( (r1 + 0.055)/1.055, 2.4) * 100.0;
 		else r1 = r1 / 0.1292;
@@ -60,23 +61,29 @@ float color_diff_2(uint8* c1, uint8* c2) {
 		else z2 = (7.787 * z2) + (16/116.0);
 	
 	l1 = (116 * x1) - 16;
-	a1 = 500 * (x1 - y1);
-	b1 = 200 * (y1 - z1);
+	ap1 = 500 * (x1 - y1);
+	bp1 = 200 * (y1 - z1);
 	l2 = (116 * x2) - 16;
-	a2 = 500 * (x2 - y2);
-	b2 = 200 * (y2 - z2);
+	ap2 = 500 * (x2 - y2);
+	bp2 = 200 * (y2 - z2);
 	
-	c1 = sqrt( pow(a1,2) + pow(b1,2) );
-	c2 = sqrt( pow(a2,2) + pow(b2,2) );
+	c1 = sqrt( pow(ap1,2) + pow(b1,2) );
+	c2 = sqrt( pow(ap2,2) + pow(b2,2) );
 	
 	dL = l2 - l1;
 	l = (l1 + l2) / 2.0;
 	dC = c2 - c1;
 	c = (c1 + c2) / 2.0;
 	
+	a1p = ap1 + (ap1/2.0 *
+		(1 - sqrt(pow(c,7) / (pow(c,7)+pow(25,7))))
+		);
+	a2p = ap2 + (ap2/2.0 *
+		(1 - sqrt(pow(c,7) / (pow(c,7)+pow(25,7))))
+		);
 	
-	h1 = fmod( atan2(b1, a1p), 6.2831853072 );
-	h2 = fmod( atan2(b2, a2p), 6.2831853072 );
+	h1 = fmod( atan2(bp1, a1p), 6.2831853072 );
+	h2 = fmod( atan2(bp2, a2p), 6.2831853072 );
 	if(abs(h1 - h2) <= 3.14159265358) dh = h2 - h1;
 	else if(abs(h1 - h2) > 3.14159265358 && h1 >= h2) dh = h2 - h1 + 6.2831853072;
 	else dh = h2 - h1 - 6.2831853072;
@@ -87,10 +94,8 @@ float color_diff_2(uint8* c1, uint8* c2) {
 	else if(abs(h1 - h2) > 3.14159265358 && h1 >= h2) hp = h2 - h1 + 6.2831853072;
 	else hp = h2 - h1 - 6.2831853072;
 	
-	t = 1 - (0.17 * cos(hp-0.523599) + (0.24 * cos(2*hp)) + (0.32 * cos( (3*hp)+0.10472 )) - (0.2 * cos( (4*hp)-1.09956 ));
+	t = 1 - (0.17 * cos(hp-0.523599) + (0.24 * cos(2*hp)) + (0.32 * cos( (3*hp)+0.10472 )) - (0.2 * cos( (4*hp)-1.09956 )));
 	
-	k1 = 0.045;
-	k2 = 0.015;
 	kL = 1;
 	kC = 1;
 	kH = 1;
@@ -109,7 +114,7 @@ float color_diff_2(uint8* c1, uint8* c2) {
 		* sin(
 			(3.14159265358 / 180.0) * (60
 				* pow(2.7182818,
-					-( (h - 275) / 25.0 )
+					-( (hp - 275) / 25.0 )
 				)
 			)
 		)
