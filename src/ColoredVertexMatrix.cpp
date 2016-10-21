@@ -5,10 +5,9 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
     m_width = undivided_width/resolution_split;
     m_height = undivided_height/resolution_split;
     m_depth = undivided_depth/resolution_split;
-	color_contrast_tollerance = 2;
+    color_contrast_tollerance = 30;
 	matrix = std::vector<std::vector<std::vector<ColoredVertex>>>();
     for (unsigned int i = 0; i < m_width; i++) {
-
 		matrix.push_back(std::vector<std::vector<ColoredVertex>>());
         for (unsigned int j = 0; j < m_height; j++) {
 

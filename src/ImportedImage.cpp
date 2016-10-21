@@ -24,51 +24,55 @@ void ImportedImage::setPixels() {
 box::box(vector<QImage> images) {
     for (int count = 0; count < 6; count++){
         //0=front,1bottom,2back,3up,4left,5right
-
+//direction corresponds to side camera is on
         ImportedImage side = ImportedImage(images[count]);
         side.setFace(count);
         side.setPixels();
-        if(count == 0){
-            side.setInvertU(false);
-            side.setInvertV(false);
-            side.setInvertDepth(true);
+        if(count == 0){//front
+            side.setInvertU(false);//right=+x
+            side.setInvertV(false);//up=+y
+            side.setInvertDepth(false);//forward(towards screen in opengl)=+z
 
             side.setU('x');
 
             side.setV('y');
-        } else if (count == 1){
-            side.setInvertU(false);
-            side.setInvertV(false);
-            side.setInvertDepth(false);
+        } else if (count == 1){//bottom
+            side.setInvertU(false);//right=+x
+            side.setInvertV(false);//up=+z
+            side.setInvertDepth(true);//forward(towards screen in opengl)=-y
             side.setU('x');
             side.setV( 'z');
-        }  else if (count == 2){
-            side.setInvertU(true);
-            side.setInvertV(false);
-            side.setInvertDepth(false);
+        }  else if (count == 2){//2back
+            side.setInvertU(true);//right=-x
+            side.setInvertV(false);//up=+y
+            side.setInvertDepth(true);//forward(towards screen in opengl)=-z
 
             side.setU('x');
 
             side.setV('y');
-        } else if (count == 3){
-            side.setInvertU(false);
-            side.setInvertV(true);
-            side.setInvertDepth(true);
+        } else if (count == 3){//up
+            side.setInvertU(false);//right=x
+            side.setInvertV(true);//up=-z
+            side.setInvertDepth(false);//forward(towards screen in opengl)=+y
+
             side.setU('x');
 
             side.setV('z');
-        } else if (count == 4){
-            side.setInvertU(true);
-            side.setInvertV(false);
+        } else if (count == 4){//left
+            side.setInvertU(false);//right=+z
+            side.setInvertV(false);//up=+y
+            side.setInvertDepth(true);//forward(towards screen in opengl)=-x
+
 
             side.setU('z');
 
             side.setV('y');
-        } else if (count == 5){
-            side.setInvertU(false);
-            side.setInvertV(false);
-            side.setU('z');
+        } else if (count == 5){//right
+            side.setInvertU(true);//right=-z
+            side.setInvertV(false);//up=+y
+            side.setInvertDepth(false);//forward(towards screen in opengl)=+x
 
+            side.setU('z');
             side.setV('y');
         }
         sides.push_back(side);

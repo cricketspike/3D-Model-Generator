@@ -15,7 +15,8 @@ class ColoredVertexMatrix {
 public:
 
     ColoredVertexMatrix(unsigned int width, unsigned int height, unsigned int depth, std::vector<VotingMatrix> images,float resolution_split);
-	MatrixNode getValue(int x, int y, int z);
+    ColoredVertex getValue(int x, int y, int z){
+        return matrix[x][y][z];}
 	void setValue(int x, int y, int z, MatrixNode value);
     void setNull(int x,int y,int z){
         matrix[x][y][z].getValue()[3]=0;
