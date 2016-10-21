@@ -17,7 +17,7 @@ VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivi
 
             for (int k = 0; k < m_depth; k++) {
 
-                matrix[i][j][k]=createElement(i,j,k);
+                matrix[i][j][k]=createElement(i*resolution_split,j*resolution_split,k*resolution_split);
             }
         }
     }
@@ -79,6 +79,11 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
     char u = m_image.getU();
     char v = m_image.getV();
 
+    float full_width=m_width*m_resolution_split;
+
+    float full_height=m_height*m_resolution_split;
+
+    float full_depth=m_depth*m_resolution_split;
 
     if (u == 'x') {
         if (image_width != m_width) {
@@ -86,7 +91,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
             exit(1);
         }
         if (m_image.uIsInverted()) {
-            i_wid = m_width - 1 - i_wid;
+            i_wid = full_width - 1 - i_wid;
         }
         if (v == 'y') {//front/back
             if (image_height != m_height) {
@@ -96,15 +101,15 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
 
 
             if (m_image.vIsInverted()) {
-                j_hei = m_height - 1 - j_hei;
+                j_hei = full_height - 1 - j_hei;
             }
             if (m_image.depthIsInverted()) {
-                k_dep = m_depth - 1 - k_dep;
+                k_dep = full_depth - 1 - k_dep;
             }
 
             uint8_t *colors = m_image.getValue(i_wid, j_hei);
 
-            return new MatrixNode(colors[0], colors[1], colors[2], k_dep);
+            return new MatrixNode(colors[0], colors[1], colors[2], ((float)k_dep)/full_depth);
 
         }
         else if (v == 'z') {//up/down (same horizontal axis)
@@ -113,13 +118,13 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
 
             }
             if (m_image.vIsInverted()) {
-                j_hei = m_depth - 1 - j_hei;
+                k_dep = full_depth - 1 - k_dep;
             }
             if (m_image.depthIsInverted()) {
-                k_dep = m_height - 1 - k_dep;
+                j_hei = full_height - 1 - j_hei;
             }
-            uint8_t *colors = m_image.getValue(i_wid, j_hei);
-            return new MatrixNode(colors[0], colors[1], colors[2], m_depth);
+            uint8_t *colors = m_image.getValue(i_wid, k_dep);
+            return new MatrixNode(colors[0], colors[1], colors[2], ((float)j_hei)/full_height);
         }
        // std::cerr << "error: image does not have the right angles UV= " <<u<<", "<<v <<std::endl;
                 exit(1);
@@ -132,17 +137,19 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
       //      std::cerr << "error: image has height of " << image_height << "trying to project on a cube's height of" << m_height << std::endl;
         }
         if (m_image.uIsInverted()) {
-            i_wid = m_depth - 1 - i_wid;
-        }
-        if (m_image.vIsInverted()) {
-            j_hei = m_height - 1 - j_hei;
-        }
-        if (m_image.depthIsInverted()) {
-            k_dep = m_width - 1 - k_dep;
+            k_dep = full_depth - 1 - k_dep;
 
         }
+        if (m_image.vIsInverted()) {
+            j_hei = full_height - 1 - j_hei;
+        }
+        if (m_image.depthIsInverted()) {
+            i_wid = full_width - 1 - i_wid;
+
+        }else{
+}
         uint8_t *colors = m_image.getValue(k_dep, j_hei);
-        return new MatrixNode(colors[0], colors[1], colors[2], m_depth);
+        return new MatrixNode(colors[0], colors[1], colors[2], ((float)i_wid)/full_width);
     }
     else {
         std::cerr << "error: image does not have the right angles UV= " <<u<<", "<<v <<std::endl;
@@ -152,7 +159,6 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
 void VotingMatrix::print(){
     for(int i=0; i<m_width;i++){
 
-        std::cout<<"x="<<i<<endl;
         for(int j=0; j<m_height;j++){
 
             std::cout<<"    y="<<j<<endl;

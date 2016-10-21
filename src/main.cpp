@@ -9,12 +9,13 @@
 #include "src/mainwaindow.h"
 #include "ColoredVertexMatrix.h"
 #include"vertexlinker.h"
-
+#include"qstring.h"
+#include"qfile.h"
 int main(int argc, char **argv)
 {
 
     uint8_t null_color[3] = {255, 255, 255};
-    float threshold = 5;
+    float threshold = 20;
     std::cout << "3D Model Builder " << std::endl;
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
@@ -88,7 +89,7 @@ int main(int argc, char **argv)
 
             }
 
-            float resolution_split=5;
+            float resolution_split=10;
 
             cout<<endl<<"FINAL: "<<model_width<<" "<<model_height<<" "<<model_depth<<endl;
 
@@ -100,7 +101,27 @@ int main(int argc, char **argv)
                                   );
             }
            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split );
+           cout<<"**************************";
            nullify(vertices, null_color, threshold);
+
+           QString filename="testVerts";
+           QFile file(filename);
+           if(file.open(QIODevice::ReadWrite)){
+               QTextStream stream( &file );
+               int width=vertices.getWidth();
+               int height=vertices.getHeight();
+               int depth=vertices.getDepth();
+              for (int i=0;i<width;i++){
+              for (int j=0;j<height;j++){
+              for (int k=0;k<depth;k++){
+                  uint8_t* values= vertices.getValue(i,j,k).getValue();
+              //std::cout<<endl<<i<<":"<<j<<":"<<k<<":           ";
+                  if((int)values[3]!=0){stream <<i<<" "<<j<<" "<<k<<" "<<endl;}
+
+
+              }}}
+
+           }
 
            VertexLinker vl=VertexLinker(&vertices);
            vl.makeShapes();

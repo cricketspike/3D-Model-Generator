@@ -143,8 +143,8 @@ void nullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh) {
         for(unsigned long y=0; y<image.getHeight(); ++y) {
             for(unsigned long z=0; z<image.getDepth(); ++z) {
                 // if color difference is less than threshold
-                if( color_diff_2(verts[x][y][z].getValue(), c_null) < thresh )
-                    image.setNull(x,y,z);
+                if( color_diff(verts[x][y][z].getValue(), c_null) < thresh )
+                    image.setNull(x,y,z);//nullify
             }
         }
     }

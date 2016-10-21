@@ -41,6 +41,11 @@ public:
 
 	}
 
+    void printValues(){
+
+        std::cout<<"R:"<<(int)colors[0]<<" G:"<<(int)colors[1]<<" B:"<<(int)colors[2]<<"Weight:"<<getWeight()<<std::endl;
+    }
+
 private:
 	std::vector<MatrixNode> voters;
 	uint8_t colors[3];
@@ -58,8 +63,15 @@ public:
 	void addVoter(MatrixNode voter) { voters.push_back(voter); }
 	void setValueFromVoters(int grouping_tollerance) {
 
-		std::vector<VotingNode> groupedVoters;//group together nodes based on similar colors
+        std::vector<VotingNode> groupedVoters;//group together nodes based on similar colors
+
+       // cout<<endl<<"voters:"<<width<<":"<<depth<<":"<<height<<":";
+     //   for (int i = 0; i < voters.size(); i++) {
+         // voters[i].printValues();
+
+//}
 		for (int i = 0; i < voters.size(); i++) {
+
 			int closest_group_index = -1, closest_size = -1;//find the group that matches the color the best
 
 			for (int j = 0; j < groupedVoters.size(); j++) {
@@ -83,10 +95,14 @@ public:
 				groupedVoters[closest_group_index].addVoter(voters[i]);
 
 			}
-			//TODO add similar votingNodes
+            //TODO add similar votingNodes
 
 
 		}
+        //for (int i = 0; i < groupedVoters.size(); i++) {
+         // groupedVoters[i].printValues();
+
+        //}
 		//tally the total voting weight of each node
 		int greatest_vote_weight = -1, index_of_vote = -1;
 		for (int i = 0; i < groupedVoters.size(); i++) {
@@ -96,6 +112,8 @@ public:
 			}
 		}
 		VotingNode winner = groupedVoters[index_of_vote];
+        //cout<<endl<<"WINNER :"<<endl;
+        winner.printValues();
 		value = new uint8_t[4];
 		value[0] = winner.getColor(0);
 		value[1] = winner.getColor(1);

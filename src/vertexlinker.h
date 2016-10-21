@@ -70,14 +70,10 @@ public:
 
         }
 
-int c=0, d=0;
         int x, y, z;
         foreach(std::vector<ColoredVertex> loop, loops) {
             y = loop[0].getY();
-            d=0;
             foreach(ColoredVertex v, loop) {
-                std::cout<<"       D="<<d++<<endl<<":"<<loop.size();
-
                 x = v.getX();
                 z = v.getZ();
                 for (int i = 0; i < 4; i++) {
@@ -298,8 +294,6 @@ private:
         //from now on return true because this was added to the loop
         cur_loop.push_back(active);
         taken[x][y][z] = true;
-
-        cout<<"TAKEN"<<x<<","<<y<<","<<z<<endl;
         //should not branch out durring recursion, so only go down one reccurion path
         if (reccurFindNextVertex(x + 1, y, z)) {
             return true;
@@ -396,7 +390,6 @@ private:
         case(0): {found_neighbors_same[3] = found_current; }
         case(1): {found_neighbors_above[3] = found_current; }
         }
-        std::cout<<"H\n";
 
     }
 
