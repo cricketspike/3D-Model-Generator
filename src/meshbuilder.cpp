@@ -19,7 +19,7 @@ void MeshBuilder::getMeshVertices(ColoredVertexMatrix& matrix, const int& slices
     }
 }
 
-void MeshBuilder::getMeshVertices_base(std::vector<std::vector<ColoredVertex> >& image, const int& rays, std::vector<Point>& points)
+void MeshBuilder::getMeshVertices_base(std::vector<std::vector<ColoredVertex>>& image, const int& rays, std::vector<Point>& points)
 {
     points.clear();
 
@@ -27,7 +27,7 @@ void MeshBuilder::getMeshVertices_base(std::vector<std::vector<ColoredVertex> >&
     size_t image_height = image.size();
 
     Point p_origin = { 0, 0 };
-    p_origin = cartesian2array((int)image_width, (int)image_height, p_origin);
+    p_origin = cartesianToArray((int)image_width, (int)image_height, p_origin);
 
     double* angles = new double[rays];
     radialAngles(rays, angles);
@@ -42,7 +42,7 @@ void MeshBuilder::getMeshVertices_base(std::vector<std::vector<ColoredVertex> >&
     delete [] angles;
 }
 
-void MeshBuilder::getMeshVertices_refine(std::vector<std::vector<ColoredVertex> >& image, std::vector<Point>& points)
+void MeshBuilder::getMeshVertices_refine(std::vector<std::vector<ColoredVertex>>& image, std::vector<Point>& points)
 {
     for (int i=0; i<points.size()-1; i++) {
         Point p1 = points[i];
@@ -75,8 +75,8 @@ void MeshBuilder::trace(std::vector<std::vector<ColoredVertex>>& image, const Po
     // or vice versa
 
     int slope_abs = (int)abs(floor(tan(angle)));
-    bool vertical = slope_abs == 0;
-    if (vertical)
+    bool run_over_rise = (slope_abs == 0);
+    if (run_over_rise)
         slope_abs = (int)abs(round(1/tan(angle)));
 
     // Trace
@@ -96,8 +96,8 @@ void MeshBuilder::trace(std::vector<std::vector<ColoredVertex>>& image, const Po
             return;
         }
 
-        p_a_before = p_a;                                                                       // Bookkeeping
-        trace_increment(quadrant_toward, vertical, slope_abs, p_a);
+        p_a_before = p_a;                                                                       //      Bookkeeping
+        trace_increment(quadrant_toward, run_over_rise, slope_abs, p_a);
         solid_before = solid_now;
 
     }
@@ -118,10 +118,10 @@ bool MeshBuilder::trace_boundsCheck(const int& width, const int& height, const i
     return false;
 }
 
-void MeshBuilder::trace_increment(const int& quadrant, const bool& vertical, const int& slope_abs, Point& p_a)
+void MeshBuilder::trace_increment(const int& quadrant, const bool& run_over_rise, const int& slope_abs, Point& p_a)
 {
     if (quadrant == 1) {
-        if (vertical) {
+        if (run_over_rise) {
             p_a.x = p_a.x + slope_abs;
             p_a.y = p_a.y - 1;
         } else {
@@ -129,7 +129,7 @@ void MeshBuilder::trace_increment(const int& quadrant, const bool& vertical, con
             p_a.y -= slope_abs;
         }
     } else if (quadrant == 2) {
-        if (vertical) {
+        if (run_over_rise) {
             p_a.x = p_a.x - slope_abs;
             p_a.y = p_a.y - 1;
         } else {
@@ -137,7 +137,7 @@ void MeshBuilder::trace_increment(const int& quadrant, const bool& vertical, con
             p_a.y -= slope_abs;
         }
     } else if (quadrant == 3) {
-        if (vertical) {
+        if (run_over_rise) {
             p_a.x = p_a.x - slope_abs;
             p_a.y = p_a.y + 1;
         } else {
@@ -145,7 +145,7 @@ void MeshBuilder::trace_increment(const int& quadrant, const bool& vertical, con
             p_a.y += slope_abs;
         }
     } else if (quadrant == 4) {
-        if (vertical) {
+        if (run_over_rise) {
             p_a.x = p_a.x + slope_abs;
             p_a.y = p_a.y + 1;
         } else {
@@ -188,12 +188,16 @@ double MeshBuilder::lineAngle(const Point& p1, const Point& p2)
     double slope = (p2.y-p1.y)/(p2.x-p1.x);
     double angle = atan(slope);
 
-    // Range of atan limited to [-M_PI/2, M_PI/2]; adjust to span 2*M_PI
+    // Range of atan limited to [-M_PI/2, M_PI/2]. Adjust to [0, 2*M_PI]
     if (p2.x < p1.x) {
         if (p2.y > p1.y) {
             angle = M_PI - angle;
         } else {
             angle = M_PI + angle;
+        }
+    } else {
+        if (p2.y > p1.y) {
+            angle = (2.0*M_PI) + angle;
         }
     }
 
@@ -211,7 +215,7 @@ Point MeshBuilder::lineCenter(const Point& p1, const Point& p2)
 }
 
 // |x| < (width/2), |y| < (height/2)
-Point MeshBuilder::cartesian2array(const int& width, const int& height, const Point& p)
+Point MeshBuilder::cartesianToArray(const int& width, const int& height, const Point& p)
 {
     Point p_a;
 
@@ -221,7 +225,7 @@ Point MeshBuilder::cartesian2array(const int& width, const int& height, const Po
     return p_a;
 }
 
-Point MeshBuilder::array2cartesian(const int& width, const int& height, const Point& p_a)
+Point MeshBuilder::arrayToCartesian(const int& width, const int& height, const Point& p_a)
 {
     Point p;
 
