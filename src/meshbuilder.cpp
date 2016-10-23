@@ -1,69 +1,106 @@
 #include "meshbuilder.h"
 
 
-// Assumes access on 3D vector of ColoredVertex is matrix[z][y][x]
-std::vector<std::vector<ColoredVertex>> MeshBuilder::getMatrixSlice(const int& index, const int& of, int& d, ColoredVertexMatrix& matrix)
+void MeshBuilder::getMeshVertices(ColoredVertexMatrix& matrix, const int& slices, const int& rays, const int& refinement, std::vector<PointsPlane>& pointsPlanes)
 {
-    int i = 0;
+    pointsPlanes.clear();
 
-    if (index <= 1) {
-        i = 0;
-    } else if (index >= of) {
-        i = matrix.getDepth() - 1;
-    } else {
-        double a = matrix.getDepth() - 2;
-        double b = of - 1;
-        double i = floor(a / b);
-        int increment = i;
+    for (int s=1; s<=slices; s++) {
+        int d;
+        std::vector<std::vector<ColoredVertex>>& slice = getMatrixSlice(s, slices, d, matrix);
 
-        i = 1 + (index * increment);
-    }
-
-    d = i;
-
-    return matrix.getVertices()[d];
-}
-
-
-void MeshBuilder::slopes(const int &count, double *array)
-{
-    double angle_rad = 0;
-    double angle_rad_incr = 2.0*M_PI/(double)count;
-
-    for (int i=0; i<count; i++) {
-        array[i] = tan(angle_rad);
-
-        angle_rad += angle_rad_incr;
+        std::vector<Point> points;
+        getMeshVertices_base(slice, rays, points);
+        if (!points.empty()) {
+            for (int r=0; r<refinement; r++)
+                getMeshVertices_refine(slice, points);
+            pointsPlanes.push_back({points, d});
+        }
     }
 }
 
-double MeshBuilder::lineSlope(const Point& p1, const Point& p2)
+void MeshBuilder::getMeshVertices_base(std::vector<std::vector<ColoredVertex> >& image, const int& rays, std::vector<Point>& points)
 {
-    return (p2.y-p1.y)/(p2.x-p1.x);
+    points.clear();
+
+    size_t image_width = image[0].size();
+    size_t image_height = image.size();
+
+    Point p_origin = { 0, 0 };
+    p_origin = cartesian2array((int)image_width, (int)image_height, p_origin);
+
+    double* angles = new double[rays];
+    radialAngles(rays, angles);
+
+    for (int i=0; i<rays; i++) {
+        Point p_t;
+        trace(image, p_origin, angles[i], p_t);
+        if (!(p_t.x == MESHBUILDER_COORDINATE_NOTFOUND || p_t.y == MESHBUILDER_COORDINATE_NOTFOUND))
+            points.push_back(p_t);
+    }
+
+    delete [] angles;
 }
 
-double MeshBuilder::perpendicular(const double& slope)
+void MeshBuilder::getMeshVertices_refine(std::vector<std::vector<ColoredVertex> >& image, std::vector<Point>& points)
 {
-    return -1/slope;
+    for (int i=0; i<points.size()-1; i++) {
+        Point p1 = points[i];
+        Point p2 = points[i+1];
+
+        Point p_t;
+
+        Point p_c = lineCenter(p1, p2);
+        double angle = lineAngle(p1, p2);
+        trace(image, p_c, angle+(3.0*M_PI/2.0), p_t);
+        if (!(p_t.x == MESHBUILDER_COORDINATE_NOTFOUND || p_t.y == MESHBUILDER_COORDINATE_NOTFOUND)) {
+            points.insert(points.begin()+i+1, p_t);
+            i++;
+        }
+    }
 }
 
-void MeshBuilder::lineCenter(const Point& p1, const Point& p2, Point& p3)
+// Assumes access on 2D vector of ColoredVertex is matrix[y][x]
+void MeshBuilder::trace(std::vector<std::vector<ColoredVertex>>& image, const Point& p_c, const double& angle, Point& p_t)
 {
-    p3.x = p1.x + ((p2.x - p1.x) / 2);
-    p3.y = p1.x + ((p2.x - p1.x) / 2);
-}
+    size_t image_width = image[0].size();
+    size_t image_height = image.size();
 
-// |x| < (width/2), |y| < (height/2)
-void MeshBuilder::cartesian2array(const int& width, const int& height, const Point& p, Point& p_a)
-{
-    p_a.x =  p.x + (width / 2);
-    p_a.y = -p.y + (height / 2);
-}
+    // Determine quadrant in cartesian plane of image
+    //      to which line heads toward
 
-void MeshBuilder::array2cartesian(const int& width, const int& height, const Point& p_a, Point& p)
-{
-    p.x = p_a.x - (width / 2);
-    p.y = (height / 2) -  p_a.y;
+    int quadrant_toward = ceil(angle/(M_PI/2.0));
+
+    // Get y distance per unit x
+    // or vice versa
+
+    int slope_abs = (int)floor(tan(angle));
+    bool vertical = slope_abs == 0;
+    if (vertical)
+        slope_abs = (int)round(1/tan(angle));
+
+    // Trace
+
+    Point p_a = p_c;
+    Point p_a_before;                                                                           // Bookkeeping setup
+    bool solid_before = image[p_a.y][p_a.x].getValue()[3] != 0;
+
+    p_t.x = MESHBUILDER_COORDINATE_NOTFOUND;                                                    // Loop below sets p_t.x, p_t.y
+    p_t.y = MESHBUILDER_COORDINATE_NOTFOUND;                                                    //  to coordinates of a mesh vertex, if found
+
+    while ( trace_boundsCheck((int)image_width, (int)image_height, quadrant_toward, p_a) ) {    // While not out of bounds in direction of trace
+
+        bool solid_now = image[p_a.y][p_a.x].getValue()[3] != 0;
+        if (solid_before == !solid_now) {                                                       //      If alpha transition between this step of the line and the last
+            p_t = lineCenter(p_a_before, p_a);                                                  //       return the vertex at the center of the area jumped over by this step
+            return;
+        }
+
+        p_a_before = p_a;                                                                       // Bookkeeping
+        trace_increment(quadrant_toward, vertical, slope_abs, p_a);
+        solid_before = solid_now;
+
+    }
 }
 
 bool MeshBuilder::trace_boundsCheck(const int& width, const int& height, const int& quadrant, const Point& p_a)
@@ -118,62 +155,80 @@ void MeshBuilder::trace_increment(const int& quadrant, const bool& vertical, con
     }
 }
 
-// Assumes access on 2D vector of ColoredVertex is matrix[y][x]
-// (cx, cy) & (imgX, imgY) in cartesian coordinates
-void MeshBuilder::trace(std::vector<std::vector<ColoredVertex>>& image, const Point& p_c, const double& slope, Point& p_t)
+// Assumes access on 3D vector of ColoredVertex is matrix[z][y][x]
+std::vector<std::vector<ColoredVertex>> MeshBuilder::getMatrixSlice(const int& index, const int& of, int& d, ColoredVertexMatrix& matrix)
 {
-    size_t image_width = image[0].size();
-    size_t image_height = image.size();
+    int i = 0;
 
-    // Translate (cx, cy) to array coordinates
-
-    Point p_a;
-    cartesian2array((int)image_width, (int)image_height, p_c, p_a);
-
-    // Determine quadrant in cartesian plane of image
-    //      in which (cx, cy) falls
-    //      in order to determine the outward direction
-
-    int quadrant;
-    if (p_a.y < image_height / 2) {
-        if (p_a.x > image_width / 2)
-            quadrant = 1;
-        else
-            quadrant = 2;
+    if (index <= 1) {
+        i = 0;
+    } else if (index >= of) {
+        i = matrix.getDepth() - 1;
     } else {
-        if (p_a.x < image_width / 2)
-            quadrant = 3;
-        else
-            quadrant = 4;
+        double a = matrix.getDepth() - 2;
+        double b = of - 1;
+        int increment = floor(a / b);
+
+        i = 1 + ((index-1) * increment);
     }
 
-    // Get y distance per unit x
-    // or vice versa
+    d = i;
 
-    int slope_abs = (int)floor(abs(slope));
-    bool vertical = slope_abs == 0;
-    if (vertical)
-        slope_abs = (int)round(abs(1/slope));
+    return matrix.getVertices()[d];
+}
 
-    // Trace
 
-    Point p_a_before;                                                                           // Bookkeeping
-    bool solid_before = image[p_a.y][p_a.x].getValue()[3] != 0;
+void MeshBuilder::radialAngles(const int &count, double *array)
+{
+    double angle_rad_incr = 2.0*M_PI/(double)count;
 
-    p_t.x = MESHBUILDER_COORDINATE_NOTFOUND;                                                    // Loop below sets p_t.x, p_t.y
-    p_t.y = MESHBUILDER_COORDINATE_NOTFOUND;                                                    //  to coordinates of a mesh vertex, if found
+    for (int i=0; i<count; i++)
+        array[i] = i * angle_rad_incr;
 
-    while ( trace_boundsCheck((int)image_width, (int)image_height, quadrant, p_a) ) {           // While not out of bounds in direction of trace
+}
 
-        bool solid_now = image[p_a.y][p_a.x].getValue()[3] != 0;
-        if (solid_before == !solid_now) {                                                       //      If alpha transition between this step of the line and the last
-            lineCenter(p_a_before, p_a, p_t);                                                   //       return the vertex at the center of the area jumped over by this step
-            return;
+double MeshBuilder::lineAngle(const Point& p1, const Point& p2)
+{
+    double slope = (p2.y-p1.y)/(p2.x-p1.x);
+    double angle = atan(slope);
+    if (p2.x < p1.x) {
+        if (p2.y > p1.y) {
+            angle = M_PI - angle;
+        } else {
+            angle = M_PI + angle;
         }
-
-        p_a_before = p_a;                                                                       // Bookkeeping
-        trace_increment(quadrant, vertical, slope_abs, p_a);
-        solid_before = solid_now;
-
     }
+
+    return angle;
+}
+
+Point MeshBuilder::lineCenter(const Point& p1, const Point& p2)
+{
+    Point p3;
+
+    p3.x = p1.x + ((p2.x - p1.x) / 2);
+    p3.y = p1.x + ((p2.x - p1.x) / 2);
+
+    return p3;
+}
+
+// |x| < (width/2), |y| < (height/2)
+Point MeshBuilder::cartesian2array(const int& width, const int& height, const Point& p)
+{
+    Point p_a;
+
+    p_a.x =  p.x + (width / 2);
+    p_a.y = -p.y + (height / 2);
+
+    return p_a;
+}
+
+Point MeshBuilder::array2cartesian(const int& width, const int& height, const Point& p_a)
+{
+    Point p;
+
+    p.x = p_a.x - (width / 2);
+    p.y = (height / 2) -  p_a.y;
+
+    return p;
 }
