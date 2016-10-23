@@ -74,10 +74,10 @@ void MeshBuilder::trace(std::vector<std::vector<ColoredVertex>>& image, const Po
     // Get y distance per unit x
     // or vice versa
 
-    int slope_abs = (int)floor(tan(angle));
+    int slope_abs = (int)abs(floor(tan(angle)));
     bool vertical = slope_abs == 0;
     if (vertical)
-        slope_abs = (int)round(1/tan(angle));
+        slope_abs = (int)abs(round(1/tan(angle)));
 
     // Trace
 
@@ -156,23 +156,19 @@ void MeshBuilder::trace_increment(const int& quadrant, const bool& vertical, con
 }
 
 // Assumes access on 3D vector of ColoredVertex is matrix[z][y][x]
-std::vector<std::vector<ColoredVertex>> MeshBuilder::getMatrixSlice(const int& index, const int& of, int& d, ColoredVertexMatrix& matrix)
+std::vector<std::vector<ColoredVertex>> MeshBuilder::getMatrixSlice(const int& index, const int& count, int& d, ColoredVertexMatrix &matrix)
 {
-    int i = 0;
-
     if (index <= 1) {
-        i = 0;
-    } else if (index >= of) {
-        i = matrix.getDepth() - 1;
+        d = 0;
+    } else if (index >= count) {
+        d = matrix.getDepth() - 1;
     } else {
         double a = matrix.getDepth() - 2;
-        double b = of - 1;
+        double b = count - 1;
         int increment = floor(a / b);
 
-        i = 1 + ((index-1) * increment);
+        d = 1 + ((index-1) * increment);
     }
-
-    d = i;
 
     return matrix.getVertices()[d];
 }
@@ -191,6 +187,8 @@ double MeshBuilder::lineAngle(const Point& p1, const Point& p2)
 {
     double slope = (p2.y-p1.y)/(p2.x-p1.x);
     double angle = atan(slope);
+
+    // Range of atan limited to [-M_PI/2, M_PI/2]; adjust to span 2*M_PI
     if (p2.x < p1.x) {
         if (p2.y > p1.y) {
             angle = M_PI - angle;
