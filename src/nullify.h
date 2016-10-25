@@ -4,7 +4,7 @@
 #include <cmath>
 using namespace std;
 
-#include "ColoredVertexMatrix.h"
+#include "coloredvertexmatrix.h"
 
 //	takes two rgb colors
 float color_diff(uint8_t* c1, uint8_t* c2) {

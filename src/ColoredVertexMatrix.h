@@ -2,14 +2,14 @@
 #define COLORMATRIX_H
 
 #include "Matrix_2D.h"
-#include "MatrixNode.h"
+#include "matrixnode.h"
 #include <cassert>
 #include<vector>
 #include<string.h>
 #include<stdio.h>
 #include<iostream>
-#include"VotingMatrix.h"
-#include "ColoredVertex.h"
+#include"votingmatrix.h"
+#include "coloredvertex.h"
 #include <vector>
 class ColoredVertexMatrix {
 public:
