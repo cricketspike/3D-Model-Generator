@@ -1,5 +1,5 @@
 
-#include "VotingMatrix.h"
+#include "votingmatrix.h"
 #include <vector>
 
 VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivided_depth, ImportedImage image,float resolution_split) {
@@ -74,18 +74,17 @@ void VotingMatrix::initMatrix() {//creates a 3d matrix[width][height][depth] wti
 }
 
 MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
+    //based on the position in the array and the images angle finds the correct color from the image and sets the colored vertex's weight
+    //init local vars
     int image_width = m_image.getImageWidth()/m_resolution_split;
     int image_height = m_image.getImageHeight()/m_resolution_split;
-    char u = m_image.getU();
+    char u = m_image.getU();//images U and V values represent which of the cube's dimensions match with which of the image's
     char v = m_image.getV();
-
-    float full_width=m_width*m_resolution_split;
-
+    float full_width=m_width*m_resolution_split;//width, height and depth of photo if it had full resolution
     float full_height=m_height*m_resolution_split;
-
     float full_depth=m_depth*m_resolution_split;
 
-    if (u == 'x') {
+    if (u == 'x') {//true for all but the left and right faces
         if (image_width != m_width) {
             std::cerr << "error: image has width of " << image_width << "trying to project on a cube's width of" << m_width << std::endl;
             exit(1);
@@ -93,7 +92,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
         if (m_image.uIsInverted()) {
             i_wid = full_width - 1 - i_wid;
         }
-        if (v == 'y') {//front/back
+        if (v == 'y') {// true for front and back views
             if (image_height != m_height) {
                // std::cerr << "error: image has height of " << image_height << "trying to project on a cube's height of" << m_height << std::endl;
                 exit(1);
@@ -112,7 +111,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
             return new MatrixNode(colors[0], colors[1], colors[2], ((float)k_dep)/full_depth);
 
         }
-        else if (v == 'z') {//up/down (same horizontal axis)
+        else if (v == 'z') {//true for up and down views
             if (image_height!= m_depth) {
                 //std::cerr << "error: image has height of " << image_height << "trying to project on a cube's depth of" << m_depth << std::endl;
 
@@ -156,7 +155,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
                 exit(1);
     }
 }
-void VotingMatrix::print(){
+void VotingMatrix::print(){//prints out every node in the resulting voting matrix
     for(int i=0; i<m_width;i++){
 
         for(int j=0; j<m_height;j++){

@@ -7,7 +7,7 @@
 #include<stdio.h>
 #include<iostream>
 #include "ImportedImage.h"
-#include "MatrixNode.h"
+#include "matrixnode.h"
 class VotingMatrix {
 public:
     VotingMatrix();

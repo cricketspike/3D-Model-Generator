@@ -13,23 +13,23 @@ TEMPLATE = app
 SOURCES += \
     src/openglwindow.cpp \
     src/mainwindow.cpp \
-    src/ColoredVertexMatrix.cpp \
-    src/votingmatrix.cpp \
     src/main.cpp \
-    src/ImportedImage.cpp \
     src/nullify.cpp \
-    src/vertexlinker.cpp
+    src/importedimage.cpp \
+    src/coloredvertexmatrix.cpp \
+    src/vertexlinker.cpp \
+    src/votingmatrix.cpp
 
 HEADERS += \
     src/openglwindow.h \
     src/mainwaindow.h \
-    src/ColoredVertex.h \
-    src/MatrixNode.h \
-    src/ColoredVertexMatrix.h \
-    src/VotingMatrix.h \
     src/ImportedImage.h \
+    src/nullify.h \
+    src/votingmatrix.h \
     src/vertexlinker.h \
-    src/nullify.h
+    src/matrixnode.h \
+    src/coloredvertexmatrix.h \
+    src/coloredvertex.h
 
 RESOURCES += \
     resources/resources.qrc

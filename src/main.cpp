@@ -7,7 +7,7 @@
 #include "nullify.h"
 #include "src/ImportedImage.h"
 #include "src/mainwaindow.h"
-#include "ColoredVertexMatrix.h"
+#include "coloredvertexmatrix.h"
 #include"vertexlinker.h"
 #include"qstring.h"
 #include"qfile.h"
@@ -125,6 +125,22 @@ int main(int argc, char **argv)
 
            VertexLinker vl=VertexLinker(&vertices);
            vl.makeShapes();
+
+           foreach (vector<ColoredVertex*> face , vl.getTriangles()){
+                   cout<<"triangle\n";
+                   face[0]->printVert();
+                   face[1]->printVert();
+                   face[2]->printVert();
+                   cout<<std::endl;
+           }
+           foreach (vector<ColoredVertex*> face , vl.getSquares()){
+                   face[0]->printVert();
+                   face[1]->printVert();
+                   face[2]->printVert();
+                   face[3]->printVert();
+                   cout<<std::endl;
+           }
+
 
         } else if (input == "exit" || input == "quit") {
 
