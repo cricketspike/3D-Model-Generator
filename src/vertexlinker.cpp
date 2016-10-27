@@ -7,8 +7,6 @@ void VertexLinker::makeShapes() {
     taken = std::vector<std::vector<std::vector<bool>>>(matrix->getWidth(), std::vector<std::vector<bool>>(matrix->getHeight(), std::vector<bool>(matrix->getDepth(), false)));
     for (int y = 0; y < matrix_height; y++) {
         for (int x = 0; x <matrix_width ; x++) {
-            std::cout<<"LOOP"<<"x"<<x<<" "<<matrix_width<<"|y"<<y<<" "<<matrix_height<<std::endl;
-
             for (int z = 0; z < matrix_depth; z++) {
 
                 //if it finds a vertex at matrix[x][y][z]
@@ -24,10 +22,9 @@ void VertexLinker::makeShapes() {
                             //reccursive check algorithm
                             reccurFindNextVertex(x, y, z);
                             loops.push_back(cur_loop);
-                            cout<<loops.size()<<"------"<<cur_loop.size()<<"\n";
                         }
                     }
-                    else {cout<<"NO"<<endl;
+                    else {
                         std::cerr << "ERROR: alpha=" << (int)alpha; }
                 }//else{cout<<"NULLIFIED"<<endl;}
 
@@ -168,7 +165,6 @@ void VertexLinker::makeShapes() {
                             flat_face_up[i] = true;
                             if (flat_face_up[i - 1]) {
                                 addTriangle(this_vertex, &vertices[x + 1][y][z + 1], &vertices[x + 1][y][z]);
-std::cout<<"J2f\n";
                                 //adds a horizontal face
                             }
 

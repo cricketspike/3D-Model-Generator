@@ -8,7 +8,6 @@ VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivi
     m_height = undivided_height/resolution_split;
     m_depth = undivided_depth/resolution_split;
 
-    cout<<"init start:"<<" w: "<<m_width<<" h:"<<m_height<<" d: "<<m_depth<<endl;
     m_image = image;
     m_resolution_split=resolution_split;
     initMatrix();
