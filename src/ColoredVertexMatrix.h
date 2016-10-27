@@ -15,6 +15,8 @@ class ColoredVertexMatrix {
 public:
 
     ColoredVertexMatrix(unsigned int width, unsigned int height, unsigned int depth, std::vector<VotingMatrix> images,float resolution_split);
+    ColoredVertexMatrix(ColoredVertexMatrix * original);
+
     ColoredVertex getValue(int x, int y, int z){
         return matrix[x][y][z];}
 	void setValue(int x, int y, int z, MatrixNode value);
@@ -26,6 +28,7 @@ public:
     int getDepth(){return m_depth;}
 	int color_contrast_tollerance;
     std::vector<std::vector<std::vector<ColoredVertex>>>  getVertices(){return matrix;}
+    ColoredVertexMatrix * getShell();
 protected:
 
 

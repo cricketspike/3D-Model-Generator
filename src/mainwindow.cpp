@@ -69,7 +69,7 @@ void MainWindow::render()
     GLfloat vertices[] = {
          0.0f,  0.707f,
         -0.5f, -0.5f,
-         0.5f, -0.5f
+         0.5f, -0.5f,
     };
 
     GLfloat colors[] = {

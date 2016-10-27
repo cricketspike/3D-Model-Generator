@@ -101,20 +101,23 @@ int main(int argc, char **argv)
                                   );
             }
            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split );
-           cout<<"**************************";
+
            nullify(vertices, null_color, threshold);
 
-           QString filename="testVerts";
+
+           ColoredVertexMatrix *shell= vertices.getShell();
+
+           QString filename="testVertsShell";
            QFile file(filename);
            if(file.open(QIODevice::ReadWrite)){
                QTextStream stream( &file );
-               int width=vertices.getWidth();
-               int height=vertices.getHeight();
-               int depth=vertices.getDepth();
+               int width= shell->getWidth();
+               int height= shell->getHeight();
+               int depth= shell->getDepth();
               for (int i=0;i<width;i++){
               for (int j=0;j<height;j++){
               for (int k=0;k<depth;k++){
-                  uint8_t* values= vertices.getValue(i,j,k).getValue();
+                  uint8_t* values=  shell->getValue(i,j,k).getValue();
               //std::cout<<endl<<i<<":"<<j<<":"<<k<<":           ";
                   if((int)values[3]!=0){stream <<i<<" "<<j<<" "<<k<<" "<<endl;}
 
@@ -123,7 +126,7 @@ int main(int argc, char **argv)
 
            }
 
-           VertexLinker vl=VertexLinker(&vertices);
+           VertexLinker vl=VertexLinker(shell);
            vl.makeShapes();
 
            foreach (vector<ColoredVertex*> face , vl.getTriangles()){
@@ -134,6 +137,7 @@ int main(int argc, char **argv)
                    cout<<std::endl;
            }
            foreach (vector<ColoredVertex*> face , vl.getSquares()){
+               cout<<"square\n";
                    face[0]->printVert();
                    face[1]->printVert();
                    face[2]->printVert();

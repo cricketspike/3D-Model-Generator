@@ -11,10 +11,9 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
     for (unsigned int i = 0; i < m_width; i++) {
 		matrix.push_back(std::vector<std::vector<ColoredVertex>>());
         for (unsigned int j = 0; j < m_height; j++) {
-
 			matrix[i].push_back(std::vector<ColoredVertex>());
             for (unsigned int k = 0; k < m_depth; k++) {
-                ColoredVertex temp = ColoredVertex(i, j, k);
+                ColoredVertex temp = ColoredVertex(i, j, k,this);
 				matrix[i][j].push_back( temp);
 			}
 		}
@@ -41,6 +40,28 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
 		}
 	}
 
-
-
 }
+ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original){
+    m_width=original->getWidth();
+    m_height=original->getHeight();
+    m_depth=original->getDepth();
+    matrix = std::vector<std::vector<std::vector<ColoredVertex>>>();
+    for (unsigned int i = 0; i < m_width; i++) {
+        matrix.push_back(std::vector<std::vector<ColoredVertex>>());
+        for (unsigned int j = 0; j < m_height; j++) {
+            matrix[i].push_back(std::vector<ColoredVertex>());
+            for (unsigned int k = 0; k < m_depth; k++) {
+                ColoredVertex temp_vert=original->getValue(i,j, k).copy(this);
+                if(original->getValue(i,j, k).isInside()){
+                    temp_vert.getValue()[3]=0;
+                }
+                matrix[i][j].push_back( temp_vert);
+            }
+        }
+    }
+}
+ ColoredVertexMatrix* ColoredVertexMatrix::getShell(){
+        ColoredVertexMatrix *shell= new ColoredVertexMatrix(this);
+        return shell;
+    }
+

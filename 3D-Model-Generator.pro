@@ -18,7 +18,13 @@ SOURCES += \
     src/importedimage.cpp \
     src/coloredvertexmatrix.cpp \
     src/vertexlinker.cpp \
-    src/votingmatrix.cpp
+    src/votingmatrix.cpp \
+    src/coloredvertex.cpp \
+    src/Display.cpp \
+    src/Texture.cpp \
+    src/Shader.cpp \
+    src/stb_image.c \
+    src/Mesh.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -29,7 +35,14 @@ HEADERS += \
     src/vertexlinker.h \
     src/matrixnode.h \
     src/coloredvertexmatrix.h \
-    src/coloredvertex.h
+    src/coloredvertex.h \
+    src/sheller.h \
+    src/Display.h \
+    src/stb_image.h \
+    src/Texture.h \
+    src/Shader.h \
+    src/Transform.h \
+    src/Mesh.h
 
 RESOURCES += \
     resources/resources.qrc
