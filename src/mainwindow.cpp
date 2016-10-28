@@ -2,8 +2,12 @@
 // njacobs1@ucsc.edu
 // 2016-10-06
 // Adapted from: http://doc.qt.io/qt-5/qtgui-openglwindow-example.html
-
 #include <iostream>
+#include "Display.h"
+#include<glew\GL\glew.h>
+#include "shader.h"
+#include "mesh.h"
+#include "Texture.h"
 #include <string>
 
 #include "mainwaindow.h"

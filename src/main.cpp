@@ -2,6 +2,11 @@
 #include <QSurfaceFormat>
 
 #include <iostream>
+#include "Display.h"
+#include<glew\GL\glew.h>
+#include "shader.h"
+#include "mesh.h"
+#include "Texture.h"
 #include <string>
 #include <vector>
 #include "nullify.h"
@@ -11,8 +16,48 @@
 #include"vertexlinker.h"
 #include"qstring.h"
 #include"qfile.h"
+
+
+
 int main(int argc, char **argv)
 {
+    Display display(800,600,"hello");
+
+        Shader shader("./res/basic_shader");
+        Texture texture("./res/image1.jpg");
+        Vertex vertices[] = {
+
+            Vertex(glm::vec3(-0.5,-0.5,0),glm::vec2(0.0,1.0)) ,
+            Vertex(glm::vec3(-0.5,0.5,0),glm::vec2(0.0,0.0)),
+            Vertex(glm::vec3(0.5,-0.5,0),glm::vec2(1.0,1.0)),
+            Vertex(glm::vec3(-0.5,0.5,0),glm::vec2(0.0,0.0)),
+            Vertex(glm::vec3(0.5,-0.5,0),glm::vec2(1.0,1.0)),
+            Vertex(glm::vec3(0.5,0.5,0),glm::vec2(1.0,0.0)),
+};
+        Mesh mesh(vertices, sizeof(vertices) / sizeof(vertices[0]));//ammount of objects in array=size of array/size of objects
+            float counter= 0.0f;
+            Transform transform;
+            while (!display.isClosed())
+            {
+                counter += 0.1f;
+                transform.getLoc().x = sinf(counter);
+                //transform.getRot().z = counter/2;
+                transform.getRot().y = counter/2;
+                float cosCounter = cosf(counter);
+                //transform.setScale(.8, .8*cosCounter, 1);
+
+
+                display.clear(0.0f,0.1f,0.1f,1.0f);
+                shader.bind();
+                shader.update(transform);
+
+                texture.bind(0);
+
+                mesh.draw();
+
+                display.update();
+            }
+            return 0;
 
     uint8_t null_color[3] = {255, 255, 255};
     float threshold = 20;
