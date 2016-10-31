@@ -122,7 +122,6 @@ int main(int argc, char **argv)
               for (int j=0;j<height;j++){
               for (int k=0;k<depth;k++){
                   uint8_t* values=  shell->getValue(i,j,k).getValue();
-              //std::cout<<endl<<i<<":"<<j<<":"<<k<<":           ";
                   if((int)values[3]!=0){stream <<i<<" "<<j<<" "<<k<<" "<<endl;}
 
 
@@ -140,27 +139,27 @@ int main(int argc, char **argv)
            int dep=shell->getDepth();
            std::vector<GLfloat> facesByXYZ=std::vector<float>();
            std::vector<GLfloat> facesByRBG=std::vector<float>();
-
+//print all triangles and add their raw data into the face arrays
            foreach (vector<ColoredVertex> face , vl.getTriangles()){
                cout<<"triangle\n";
                for (int i=0;i<3;i++){
                ColoredVertex vert=face[i];
-               std::cout<<"a"<<endl;
+
                facesByXYZ.push_back(((float)vert.getX())/wid -.5);
                facesByXYZ.push_back(((float)vert.getY())/hei -.5);
                facesByXYZ.push_back(((float)vert.getZ())/hei -.5);
-               std::cout<<"b"<<endl;
+
                uint8_t* colors=vert.getValue();
                facesByRBG.push_back(((float)colors[0])/256);
                facesByRBG.push_back(((float)colors[1])/256);
                facesByRBG.push_back(((float)colors[2])/256);
-               std::cout<<"c"<<endl;
+
                face[i].printVert();
 
            }
                cout<<std::endl;
 
-           }
+           }           
            cout<<"faces\n";
            foreach (vector<ColoredVertex> face , vl.getSquares()){
                vector<ColoredVertex> triangles=vl.toTriangles(face);
@@ -187,16 +186,6 @@ int main(int argc, char **argv)
 
            QSurfaceFormat format;
            format.setSamples(16);
-
-
-           std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n***";
-
-
-
-           std::cout << "a"<<endl;
-
-
-           std::cout << "b"<<endl;
            MainWindow window(&facesByXYZ[0],&facesByRBG[0] );
            window.setFormat(format);
            window.resize(640, 480);

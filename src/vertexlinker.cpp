@@ -1,13 +1,17 @@
 #include "vertexlinker.h"
 
 void VertexLinker::makeShapes() {
+
+
+    //First: make loops
+    //ISUE: the paths are being made in ways that lead to choppy short paths in the wrong direction.
+    //      this occurs when the path can choose between x and z, I try to remedy this below but the results are unchanged*
 std::vector<std::vector<std::vector<ColoredVertex>>> levels = std::vector<std::vector<std::vector<ColoredVertex>>>();
-    std::vector<std::vector<ColoredVertex>> loops;//start empty and add loops on to it
-                                                                                               //taken: 3d matrix of bools corresponding to which vertice is taken by the loop making algorithm
+    std::vector<std::vector<ColoredVertex>> loops; //start empty and add loops on to it
+    //taken: 3d matrix of bools corresponding to which vertice is taken by the loop making algorithm
     taken = std::vector<std::vector<std::vector<bool>>>(matrix->getWidth(), std::vector<std::vector<bool>>(matrix->getHeight(), std::vector<bool>(matrix->getDepth(), false)));
     for (int y = 0; y < matrix_height; y++) {
         loops= std::vector<std::vector<ColoredVertex>>();
-
         for (int x = 0; x < matrix_width; x++) {
             for (int z = 0; z < matrix_depth; z++) {
 
@@ -29,7 +33,7 @@ std::vector<std::vector<std::vector<ColoredVertex>>> levels = std::vector<std::v
                     else {
                         std::cerr << "ERROR: alpha=" << (int)alpha;
                     }
-                }//else{cout<<"NULLIFIED"<<endl;}
+                }
 
             }
         }
@@ -38,20 +42,20 @@ std::vector<std::vector<std::vector<ColoredVertex>>> levels = std::vector<std::v
 
 
 
-
+ //Second: go accross each loop and connect each vertex in the loop and the next vertex with the vertices closest to the ones right above each
 
     //Heigharcy: levels hold loops holds loop holds vertices
     int x, y, z;
     int levels_size = levels.size();
 
-    std::vector<ColoredVertex>loop;
+    std::vector<ColoredVertex>loop;//holder to use later
+
 
     //for every level
     for (int i = 0; i < levels_size; i++) {
 
-        loops = levels[i];
+        loops = levels[i];//each level holds multiple loops
         int loops_size = loops.size();
-
 
         //for every loop in the level
          for (int j = 0; j < loops_size; j++) {
@@ -63,15 +67,16 @@ std::vector<std::vector<std::vector<ColoredVertex>>> levels = std::vector<std::v
         if (loop.size()==0) {continue;}
         y = loop[0].getY();
 
-ColoredVertex oldv=ColoredVertex();
-bool old_set=false;
+        ColoredVertex oldv=ColoredVertex();
+        bool old_set=false;
+
         //for every vertex in the loop
         foreach(ColoredVertex v, loop) {
 
             x = v.getX();
             z = v.getZ();
 
-
+            //best match and distance will be replaced by the closest vertices to the one directly above the current that is not null
             ColoredVertex best_match;
             int best_match_distance = 1000000;
 
@@ -82,13 +87,9 @@ bool old_set=false;
             }
             else {
                 buddy_loops = levels[i + 1];
-                cout << "C3  " <<buddy_loops.size() <<endl;
+                //look trouhg every loop on the next level
                 foreach(std::vector<ColoredVertex>b_loop,buddy_loops){
-
-                    cout << "C4  "<<b_loop.size() << endl;
                     foreach (ColoredVertex potential_partner,b_loop) {//find the closest match
-
-
                     float x_dis = potential_partner.getX() - x, z_dis = potential_partner.getZ() - z;
                     float dist = x_dis*x_dis + z_dis*z_dis;
                     if (dist < best_match_distance) {//< so it gives priority to earlier ones and takes less computation
@@ -101,17 +102,12 @@ bool old_set=false;
 
 
                 }
-                    try{
-                    }catch(...){}
                     //end of each vert in buddy_loop
-
-                    cout << "H" << endl;
 
                 }//end of each buddy_loop in buddy loops
 
                 if(buddy_loops.size()>0){
                 if (cur_face.size() == 0) {//initialize array,(only last 2 matter)
-                    cout<<"c32";
                     cur_face.push_back(v);
                     cur_face.push_back(best_match);
                     cur_face.push_back(v);
@@ -119,31 +115,20 @@ bool old_set=false;
 
 
                 }else {
-                    cout<<cur_face.size();
                     //hold vertices gotten last round in the last 2
                     cur_face[2] = cur_face[0];
                     cur_face[3] = cur_face[1];
 
-                    cout << "G" << endl;
                     //hold this vertex and its match in the first 2
                     cur_face[0] = v;
                     cur_face[1] =best_match;
-
-
-
-
-                    cout<<"FACE: ("<<cur_face[0].getX()<<","<<cur_face[0].getY()<<","<<cur_face[0].getZ()<<") ("
-                      <<cur_face[1].getX()<<","<<cur_face[1].getY()<<","<<cur_face[1].getZ()<<")("
-                     <<cur_face[2].getX()<<","<<cur_face[2].getY()<<","<<cur_face[2].getZ()<<")("
-                     <<cur_face[3].getX()<<","<<cur_face[3].getY()<<","<<cur_face[3].getZ()<<")"<<endl;
                     addSquare(cur_face);
 
-                }cout << "I" << endl;
+                }
 
             }
-                cout << "J" << endl;
+
             }
-            cout << "K" << endl;
             if(old_set){
                int old_x=oldv.getX();
                int old_y=oldv.getY();
@@ -156,10 +141,7 @@ bool old_set=false;
 
                         if( !(px.isNull()||px.getValue()[3]==0||o_px.isNull()||o_px.getValue()[3]==0) ){//if spots are neither empty or OOB
                             vector<ColoredVertex>face={v,oldv,px,o_px};
-                            cout<<"FLAT_FACE_X: ("<<v.getX()<<","<<v.getY()<<","<<v.getZ()<<") ("
-                              <<oldv.getX()<<","<<oldv.getY()<<","<<oldv.getZ()<<")("
-                             <<px.getX()<<","<<px.getY()<<","<<px.getZ()<<")("
-                             <<o_px.getX()<<","<<o_px.getY()<<","<<o_px.getZ()<<")"<<endl;
+
                             addSquare(face);
                         }
 
@@ -201,7 +183,6 @@ bool old_set=false;
             old_set=true;
 
         }     //end of foreach vertex v in loop
-       cout << "L" << endl;
 
          }
     }
@@ -210,7 +191,7 @@ bool old_set=false;
 bool VertexLinker::reccurFindNextVertex(int x, int y, int z) {
     //returns true if it reccurs or reaches the end
     if (x < 0 || y < 0 || z < 0 || x >= matrix_width || y >= matrix_height || z >= matrix_depth) {
-       cout<<" OOB \n";
+
         return false;//hit a side
     }
     ColoredVertex  active = vertices[x][y][z];
@@ -218,15 +199,13 @@ bool VertexLinker::reccurFindNextVertex(int x, int y, int z) {
 
     if ((int)alpha != 1) {
         if ((int)alpha == 0) {
-            cout<<" null \n ";
             return false;
         }
         else { std::cerr << "ERROR: alpha=" << (int)alpha << endl; }
     }
 
-    if (taken[x][y][z]) {cout<<" taken \n"<<x<<","<<y<<","<<z; return false; }//taken bit shouldnt need to be here after it is hollowed
+    if (taken[x][y][z]) { return false; }//taken bit shouldnt need to be here after it is hollowed
     //from now on return true because this was added to the loop
-    cout<<"added"<<x<<","<<y<<","<<z<<endl;
     cur_loop.push_back(active);
     taken[x][y][z] = true;
     //should not branch out durring recursion, so only go down one reccurion path
@@ -234,55 +213,37 @@ bool VertexLinker::reccurFindNextVertex(int x, int y, int z) {
 
 
     for (int i = 1; i < 5; i++) {
-        cout<<"loop:"<<x<<","<<y<<","<<z<<endl;
-
         for (int j = 0; j < 5; j++) {//find the shortest path up to 5 away
             float x_dist_from_center=abs((float)x-(float)matrix_width/2)/matrix_width;
             float z_dist_from_center=abs((float)z-(float)matrix_depth/2)/matrix_depth;
 
             if(x_dist_from_center>=z_dist_from_center){//try to keep loop convex by having a bias towards the outside
-            cout<<"a*:";
             if (reccurFindNextVertex(x + i, y, z)) {
-                cout<<x<<","<<y<<","<<z<<endl;
-                cout<<"A*"<<endl;
                 return true;
             }
-            cout<<"b*:";
             if (reccurFindNextVertex(x, y, z + j)) {
-                cout<<x<<","<<y<<","<<z<<endl;
-
-                cout<<"B*"<<endl;
                 return true;
             }
             }else{
 
-                cout<<"b2*:";
                 if (reccurFindNextVertex(x, y, z + j)) {
-                    cout<<x<<","<<y<<","<<z<<endl;
 
-                    cout<<"B2*"<<endl;
                     return true;
                 }
-                cout<<"a2*:";
+
                 if (reccurFindNextVertex(x + i, y, z)) {
-                    cout<<x<<","<<y<<","<<z<<endl;
-                    cout<<"A2*"<<endl;
+
                     return true;
                 }
 
             }
-            cout<<"c*:";
             if (reccurFindNextVertex(x + i, y, z + j)) {
-                cout<<x<<","<<y<<","<<z<<endl;
 
-                cout<<"C*"<<endl;
                 return true;
             }
-            cout<<"d*:";
-            if (reccurFindNextVertex(x + i, y, z - j)) {
-                cout<<x<<","<<y<<","<<z<<endl;
 
-                cout<<"D*"<<endl;
+            if (reccurFindNextVertex(x + i, y, z - j)) {
+
                 return true;
             }
         }
