@@ -4,9 +4,6 @@
 #include <iostream>
 #include "Display.h"
 #include<glew\GL\glew.h>
-#include "shader.h"
-#include "mesh.h"
-#include "Texture.h"
 #include <string>
 #include <vector>
 #include "nullify.h"
@@ -21,44 +18,6 @@
 
 int main(int argc, char **argv)
 {
-    Display display(800,600,"hello");
-
-        Shader shader("./res/basic_shader");
-        Texture texture("./res/image1.jpg");
-        Vertex vertices[] = {
-
-            Vertex(glm::vec3(-0.5,-0.5,0),glm::vec2(0.0,1.0)) ,
-            Vertex(glm::vec3(-0.5,0.5,0),glm::vec2(0.0,0.0)),
-            Vertex(glm::vec3(0.5,-0.5,0),glm::vec2(1.0,1.0)),
-            Vertex(glm::vec3(-0.5,0.5,0),glm::vec2(0.0,0.0)),
-            Vertex(glm::vec3(0.5,-0.5,0),glm::vec2(1.0,1.0)),
-            Vertex(glm::vec3(0.5,0.5,0),glm::vec2(1.0,0.0)),
-};
-        Mesh mesh(vertices, sizeof(vertices) / sizeof(vertices[0]));//ammount of objects in array=size of array/size of objects
-            float counter= 0.0f;
-            Transform transform;
-            while (!display.isClosed())
-            {
-                counter += 0.1f;
-                transform.getLoc().x = sinf(counter);
-                //transform.getRot().z = counter/2;
-                transform.getRot().y = counter/2;
-                float cosCounter = cosf(counter);
-                //transform.setScale(.8, .8*cosCounter, 1);
-
-
-                display.clear(0.0f,0.1f,0.1f,1.0f);
-                shader.bind();
-                shader.update(transform);
-
-                texture.bind(0);
-
-                mesh.draw();
-
-                display.update();
-            }
-            return 0;
-
     uint8_t null_color[3] = {255, 255, 255};
     float threshold = 20;
     std::cout << "3D Model Builder " << std::endl;
@@ -174,21 +133,77 @@ int main(int argc, char **argv)
            VertexLinker vl=VertexLinker(shell);
            vl.makeShapes();
 
-           foreach (vector<ColoredVertex*> face , vl.getTriangles()){
-                   cout<<"triangle\n";
-                   face[0]->printVert();
-                   face[1]->printVert();
-                   face[2]->printVert();
-                   cout<<std::endl;
+           float * vertArray= &shell->getListOfVertsAsFloats()[0];
+
+           int wid=shell->getWidth();
+           int hei=shell->getHeight();
+           int dep=shell->getDepth();
+           std::vector<GLfloat> facesByXYZ=std::vector<float>();
+           std::vector<GLfloat> facesByRBG=std::vector<float>();
+
+           foreach (vector<ColoredVertex> face , vl.getTriangles()){
+               cout<<"triangle\n";
+               for (int i=0;i<3;i++){
+               ColoredVertex vert=face[i];
+               std::cout<<"a"<<endl;
+               facesByXYZ.push_back(((float)vert.getX())/wid -.5);
+               facesByXYZ.push_back(((float)vert.getY())/hei -.5);
+               facesByXYZ.push_back(((float)vert.getZ())/hei -.5);
+               std::cout<<"b"<<endl;
+               uint8_t* colors=vert.getValue();
+               facesByRBG.push_back(((float)colors[0])/256);
+               facesByRBG.push_back(((float)colors[1])/256);
+               facesByRBG.push_back(((float)colors[2])/256);
+               std::cout<<"c"<<endl;
+               face[i].printVert();
+
            }
-           foreach (vector<ColoredVertex*> face , vl.getSquares()){
-               cout<<"square\n";
-                   face[0]->printVert();
-                   face[1]->printVert();
-                   face[2]->printVert();
-                   face[3]->printVert();
-                   cout<<std::endl;
+               cout<<std::endl;
+
            }
+           cout<<"faces\n";
+           foreach (vector<ColoredVertex> face , vl.getSquares()){
+               vector<ColoredVertex> triangles=vl.toTriangles(face);
+               cout<<"square    "<<triangles.size()<<"\n";
+
+               for (int i=0;i<6;i++){
+                   ColoredVertex  vert=triangles[i];
+
+               facesByXYZ.push_back(((float)vert.getX())/wid -.5);
+               facesByXYZ.push_back(((float)vert.getY())/wid -.5);
+               facesByXYZ.push_back(((float)vert.getZ())/wid -.5);
+
+               uint8_t* colors=vert.getValue();
+               facesByRBG.push_back(((float)colors[0])/256);
+               facesByRBG.push_back(((float)colors[1])/256);
+               facesByRBG.push_back(((float)colors[2])/256);
+                   triangles[i].printVert();
+
+           }
+               cout<<std::endl;
+
+           }
+           QGuiApplication app(argc, argv);
+
+           QSurfaceFormat format;
+           format.setSamples(16);
+
+
+           std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n***";
+
+
+
+           std::cout << "a"<<endl;
+
+
+           std::cout << "b"<<endl;
+           MainWindow window(&facesByXYZ[0],&facesByRBG[0] );
+           window.setFormat(format);
+           window.resize(640, 480);
+           window.show();
+
+           app.setQuitOnLastWindowClosed(true);
+           app.exec();
 
 
         } else if (input == "exit" || input == "quit") {

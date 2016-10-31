@@ -6,11 +6,11 @@ Mesh::Mesh(Vertex* vertices, unsigned int num_vertices)
 	m_draw_count = num_vertices;
 	// create array to store all vertices
 
-	glGenVertexArrays(1, &m_vertexArrayObject);//number of them to create,object
-	glBindVertexArray(m_vertexArrayObject);//makes any vertex array opperations be done on this object
-		
-	std::vector < glm::vec3> positions;
-	std::vector < glm::vec2> texture_coords;
+    glGenVertexArrays(1, &m_vertexArrayObject);//number of them to create,object
+    glBindVertexArray(m_vertexArrayObject);//makes any vertex array opperations be done on this object
+
+    std::vector < glm::vec3> positions;
+    std::vector < glm::vec2> texture_coords;
 
 	positions.reserve(num_vertices);
 	texture_coords.reserve(num_vertices);
@@ -21,7 +21,7 @@ Mesh::Mesh(Vertex* vertices, unsigned int num_vertices)
 		positions.push_back(vertices[i].getPos());
 		texture_coords.push_back(vertices[i].getTextureCoords());
 
-	}
+    }
 
 	//create a buffer and find a place for it and tell gl to send its vertices to it
 		glGenBuffers(NUM_BUFFERS, m_vertexArrayBuffers);//initializes the array, buffer

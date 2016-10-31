@@ -20,7 +20,6 @@ OpenGLWindow::~OpenGLWindow()
 
 void OpenGLWindow::initialize()
 {
-
 }
 
 void OpenGLWindow::render()

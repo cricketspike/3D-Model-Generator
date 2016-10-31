@@ -56,6 +56,10 @@ private:
 
 class ColoredVertex {//represents a color at a certain point on the Matrix
 public:
+    ColoredVertex(){
+        is_null=true;
+        //this is just  placeholder until he obejct is taken by an actual vertex
+    }
     ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm);
     uint8_t* getValue();
     void addVoter(MatrixNode voter) ;
@@ -66,11 +70,14 @@ public:
     int getZ();
     void printVert();
     ColoredVertex copy(ColoredVertexMatrix* cvm);
+    bool isNull(){return is_null;}
     void setValue(uint8_t* v);
 protected:
 
 
 private:
+    bool is_null=false;
+    bool smooth=true;
             ColoredVertexMatrix * cvm;
 	uint8_t* value;
 	std::vector<std::vector<ColoredVertex>> faces;
