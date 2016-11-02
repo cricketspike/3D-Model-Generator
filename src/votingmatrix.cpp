@@ -73,6 +73,12 @@ void VotingMatrix::initMatrix() {//creates a 3d matrix[width][height][depth] wti
 }
 
 MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
+    //BANANA: there is a return statement for each of the image depth dimensions (for example an image with x and y has depth z)
+        //each of these returns a new matrix node with a color value and a voting weight
+        //we need to add a weight multiplier based on a 2d graph of (probably int values from 0 to 100?) and later do the same for depth
+
+
+
     //based on the position in the array and the images angle finds the correct color from the image and sets the colored vertex's weight
     //init local vars
     int image_width = m_image.getImageWidth()/m_resolution_split;
@@ -106,8 +112,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
             }
 
             uint8_t *colors = m_image.getValue(i_wid, j_hei);
-
-            return new MatrixNode(colors[0], colors[1], colors[2], ((float)k_dep)/full_depth);
+            return new MatrixNode(colors[0], colors[1], colors[2], ((float)k_dep)/full_depth);//BANANA
 
         }
         else if (v == 'z') {//true for up and down views
@@ -122,7 +127,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
                 j_hei = full_height - 1 - j_hei;
             }
             uint8_t *colors = m_image.getValue(i_wid, k_dep);
-            return new MatrixNode(colors[0], colors[1], colors[2], ((float)j_hei)/full_height);
+            return new MatrixNode(colors[0], colors[1], colors[2], ((float)j_hei)/full_height);//BANANA
         }
        // std::cerr << "error: image does not have the right angles UV= " <<u<<", "<<v <<std::endl;
                 exit(1);
@@ -147,7 +152,7 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
         }else{
 }
         uint8_t *colors = m_image.getValue(k_dep, j_hei);
-        return new MatrixNode(colors[0], colors[1], colors[2], ((float)i_wid)/full_width);
+        return new MatrixNode(colors[0], colors[1], colors[2], ((float)i_wid)/full_width);//BANANA
     }
     else {
         std::cerr << "error: image does not have the right angles UV= " <<u<<", "<<v <<std::endl;
