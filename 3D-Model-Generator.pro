@@ -21,7 +21,8 @@ SOURCES += \
     src/votingmatrix.cpp \
     src/coloredvertex.cpp \
     src/Display.cpp \
-    src/stb_image.c
+    src/stb_image.c \
+    src/vertexline.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -34,7 +35,8 @@ HEADERS += \
     src/coloredvertexmatrix.h \
     src/coloredvertex.h \
     src/sheller.h \
-    src/stb_image.h
+    src/stb_image.h \
+    src/VertexLine.h
 
 RESOURCES += \
     resources/resources.qrc
