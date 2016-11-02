@@ -6,6 +6,7 @@
 #include<vector>
 #include"coloredvertex.h"
 #include"coloredvertexmatrix.h"
+#include<math.h>
 
 class VertexLinker {
 public:
@@ -17,21 +18,38 @@ public:
         matrix_depth = matrix->getDepth();
     }
 
-    void addSquare(std::vector<ColoredVertex*> square) {// add group of 4 vertices to the list "squares"
+    void addSquare(std::vector<ColoredVertex> square) {// add group of 4 vertices to the list "squares"
+
         squares.push_back(square);
 
+
+
+
     }
-    void addTriangle(std::vector<ColoredVertex*> triangle) {// add group of 4 vertices to the list "triangles"
+    std::vector<ColoredVertex>  toTriangles(std::vector<ColoredVertex> square){
+         std::vector<ColoredVertex> doubleTriangles=std::vector<ColoredVertex>();
+        doubleTriangles.push_back(square[0]);
+        doubleTriangles.push_back(square[1]);
+        doubleTriangles.push_back(square[2]);
+
+        doubleTriangles.push_back(square[1]);
+        doubleTriangles.push_back(square[2]);
+        doubleTriangles.push_back(square[3]);
+        return doubleTriangles;
+
+
+    }
+    void addTriangle(std::vector<ColoredVertex> triangle) {// add group of 4 vertices to the list "triangles"
         triangles.push_back(triangle);
 
     }
-    std::vector<std::vector<ColoredVertex*>>  getTriangles(){return triangles;}
+    std::vector<std::vector<ColoredVertex>>  getTriangles(){return triangles;}
 
-    std::vector<std::vector<ColoredVertex*>>  getSquares(){return squares;}
-    void addTriangle(ColoredVertex* vA, ColoredVertex* vB, ColoredVertex* vC) {//group the 3 vertices passed in and add that group to the list "triangles"
+    std::vector<std::vector<ColoredVertex>>  getSquares(){return squares;}
+    void addTriangle(ColoredVertex vA, ColoredVertex vB, ColoredVertex vC) {//group the 3 vertices passed in and add that group to the list "triangles"
 
 
-        std::vector<ColoredVertex*>flat = std::vector<ColoredVertex*>();
+        std::vector<ColoredVertex>flat = std::vector<ColoredVertex>();
         flat.push_back(vA);
         flat.push_back(vB);
         flat.push_back(vC);
@@ -41,8 +59,8 @@ public:
 
 
 private:
-    std::vector<std::vector<ColoredVertex*>> squares;
-    std::vector<std::vector<ColoredVertex*>> triangles;
+    std::vector<std::vector<ColoredVertex>> squares;
+    std::vector<std::vector<ColoredVertex>> triangles;
     std::vector<ColoredVertex> cur_loop;
     std::vector<std::vector<std::vector<ColoredVertex>>>vertices;
     ColoredVertexMatrix * matrix;

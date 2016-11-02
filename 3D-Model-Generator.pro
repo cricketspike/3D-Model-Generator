@@ -21,10 +21,7 @@ SOURCES += \
     src/votingmatrix.cpp \
     src/coloredvertex.cpp \
     src/Display.cpp \
-    src/Texture.cpp \
-    src/Shader.cpp \
-    src/stb_image.c \
-    src/Mesh.cpp
+    src/stb_image.c
 
 HEADERS += \
     src/openglwindow.h \
@@ -37,12 +34,12 @@ HEADERS += \
     src/coloredvertexmatrix.h \
     src/coloredvertex.h \
     src/sheller.h \
-    src/Display.h \
-    src/stb_image.h \
-    src/Texture.h \
-    src/Shader.h \
-    src/Transform.h \
-    src/Mesh.h
+    src/stb_image.h
 
 RESOURCES += \
     resources/resources.qrc
+INCLUDEPATH += "C:/Qt/5.6/msvc2015_64/include/"
+
+unix|win32: LIBS += -lopengl32 -lglew32 -lglew32s -lSDL2 -lSDL2main -lSDL2test
+INCLUDEPATH += $$PWD/include
+DEPENDPATH += $$PWD/include

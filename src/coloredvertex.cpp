@@ -1,5 +1,6 @@
 #include"ColoredVertex.h"
 #include "ColoredVertexMatrix.h"
+
        ColoredVertex::ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm) {
         width = w;
         height = h;
@@ -62,7 +63,7 @@
                        if(
                           width+i<0||height+j<0||depth+k<0||
                           width+i>=tot_w||height+j>=tot_h||depth+k>=tot_d||
-                          (i==0&&j==0&&k==0)||(i!=0&&j!=0&&k!=0)||((i!=0&&j!=0)||(j!=0&&k!=0)||(i!=0&&k!=0))//dont want ones where only the very corner touches (maybe make this and this with only 2 non zeros options for smoothness later)
+                          (i==0&&j==0&&k==0)||(i!=0&&j!=0&&k!=0)||(smooth&&(i!=0&&j!=0)||(j!=0&&k!=0)||(i!=0&&k!=0))//dont want ones where only the very corner touches (maybe make this and this with only 2 non zeros options for smoothness later)
                           ){continue;}
                         else {
                        if(((int)cvm->getValue(width+i,height+j,depth+k).getValue()[3])==0){

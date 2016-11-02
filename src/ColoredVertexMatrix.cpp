@@ -65,3 +65,19 @@ ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original){
         return shell;
     }
 
+std::vector <float> ColoredVertexMatrix :: getListOfVertsAsFloats(){
+    std::vector <float>list= std::vector<float>();
+    for (unsigned int i = 0; i < m_width; i++) {
+        for (unsigned int j = 0; j < m_height; j++) {
+            for (unsigned int k = 0; k < m_depth; k++) {
+                uint8_t* position=getValue(i,j,k).getValue();
+                                if (getValue(i,j,k).getValue()[3] !=1){
+                                list.push_back(position[0]);
+                                list.push_back(position[1]);
+                                list.push_back(position[2]);
+        }
+        }
+        }
+    }
+    return list;
+}
