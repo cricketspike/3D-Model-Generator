@@ -2,8 +2,6 @@
 #include <QSurfaceFormat>
 
 #include <iostream>
-#include "Display.h"
-#include<glew\GL\glew.h>
 #include <string>
 #include <vector>
 #include "nullify.h"
