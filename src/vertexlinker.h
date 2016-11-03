@@ -4,9 +4,9 @@
 
 #pragma once
 #include<vector>
-#include"coloredvertex.h"
-#include"coloredvertexmatrix.h"
+#include"VertexLine.h"
 #include<math.h>
+
 
 class VertexLinker {
 public:
@@ -20,6 +20,14 @@ public:
 
     void addSquare(std::vector<ColoredVertex> square) {// add group of 4 vertices to the list "squares"
 
+        squares.push_back(square);
+
+
+
+
+    }
+    void addSquare(ColoredVertex corner_a,ColoredVertex corner_b,ColoredVertex corner_c,ColoredVertex corner_d) {// add group of 4 vertices to the list "squares"
+        vector<ColoredVertex>square{corner_a,corner_b,corner_c,corner_d};
         squares.push_back(square);
 
 
@@ -56,9 +64,8 @@ public:
         addTriangle(flat); //adds a horizontal face
     }
     void makeShapes() ;
-
-
 private:
+    std::vector<std::vector<Vect3D>> all_verts;
     std::vector<std::vector<ColoredVertex>> squares;
     std::vector<std::vector<ColoredVertex>> triangles;
     std::vector<ColoredVertex> cur_loop;

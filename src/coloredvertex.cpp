@@ -6,7 +6,8 @@
         height = h;
         depth = d;
                 cvm=par_cvm;
-    }
+
+       }
     uint8_t* ColoredVertex::getValue(){return value;}
     void ColoredVertex::addVoter(MatrixNode voter) { voters.push_back(voter); }
     void ColoredVertex::setValueFromVoters(int grouping_tollerance) {

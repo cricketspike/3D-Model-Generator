@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "Display.h"
-#include<glew\GL\glew.h>
 #include <string>
 #include <vector>
 #include "nullify.h"
@@ -162,6 +161,7 @@ int main(int argc, char **argv)
            }           
            cout<<"faces\n";
            foreach (vector<ColoredVertex> face , vl.getSquares()){
+               cout<<"***1"<<endl;
                vector<ColoredVertex> triangles=vl.toTriangles(face);
                cout<<"square    "<<triangles.size()<<"\n";
 
@@ -182,11 +182,15 @@ int main(int argc, char **argv)
                cout<<std::endl;
 
            }
+           cout<<"***2"<<endl;
+
            QGuiApplication app(argc, argv);
 
            QSurfaceFormat format;
            format.setSamples(16);
-           MainWindow window(&facesByXYZ[0],&facesByRBG[0] );
+           MainWindow window(&facesByXYZ[0],&facesByRBG[0],facesByXYZ.size() );
+           cout<<"***3"<<endl;
+
            window.setFormat(format);
            window.resize(640, 480);
            window.show();

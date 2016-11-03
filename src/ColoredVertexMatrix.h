@@ -13,13 +13,17 @@
 #include <vector>
 class ColoredVertexMatrix {
 public:
-
+    ColoredVertexMatrix(){};
     ColoredVertexMatrix(unsigned int width, unsigned int height, unsigned int depth, std::vector<VotingMatrix> images,float resolution_split);
     ColoredVertexMatrix(ColoredVertexMatrix * original);
 
     ColoredVertex getValue(int x, int y, int z){
         if(x>matrix.size()||y>matrix[0].size()||z>matrix[0][0].size()){return ColoredVertex();}
         return matrix[x][y][z];}
+    ColoredVertex* getValueRef(int x, int y, int z){
+        if(x>matrix.size()||y>matrix[0].size()||z>matrix[0][0].size()){return &matrix[x][y][z];}
+        return &matrix[x][y][z];}
+
 	void setValue(int x, int y, int z, MatrixNode value);
     void setNull(int x,int y,int z){
         matrix[x][y][z].getValue()[3]=0;
@@ -31,12 +35,12 @@ public:
 	int color_contrast_tollerance;
     std::vector<std::vector<std::vector<ColoredVertex>>>  getVertices(){return matrix;}
     ColoredVertexMatrix * getShell();
-
-protected:
+    bool isValid(int x,int y, int z);
+    protected:
 
 
 private:
-	std::vector<std::vector<std::vector<ColoredVertex>>> matrix;
+        std::vector<std::vector<std::vector<ColoredVertex>>> matrix;
         unsigned int m_width;
         unsigned int m_height;
         unsigned int m_depth;

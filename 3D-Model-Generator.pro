@@ -20,7 +20,6 @@ SOURCES += \
     src/vertexlinker.cpp \
     src/votingmatrix.cpp \
     src/coloredvertex.cpp \
-    src/Display.cpp \
     src/stb_image.c \
     src/vertexline.cpp
 

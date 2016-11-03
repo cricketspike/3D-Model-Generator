@@ -4,6 +4,7 @@
 #include<iostream>
 #include"votingmatrix.h"
 #include <vector>
+class VertexLine;
 class ColoredVertexMatrix;
 class VotingNode {
 public:
@@ -72,6 +73,17 @@ public:
     ColoredVertex copy(ColoredVertexMatrix* cvm);
     bool isNull(){return is_null;}
     void setValue(uint8_t* v);
+    bool line_x=false;//use these to check if an existing line already croses through a certain way
+    bool line_z=false;
+    bool line_a=false;
+    bool line_b=false;
+
+    void setLX(){line_x=true;}
+    void setLZ(){line_z=true;}
+
+    void setLA(){line_a=true;}
+    void setLB(){line_b=true;}
+
 protected:
 
 
