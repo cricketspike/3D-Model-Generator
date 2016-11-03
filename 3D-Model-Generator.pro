@@ -20,9 +20,9 @@ SOURCES += \
     src/vertexlinker.cpp \
     src/votingmatrix.cpp \
     src/coloredvertex.cpp \
-    src/Display.cpp \
     src/stb_image.c \
-    src/vertexline.cpp
+    src/vertexline.cpp \
+    src/importwindow.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -36,7 +36,8 @@ HEADERS += \
     src/coloredvertex.h \
     src/sheller.h \
     src/stb_image.h \
-    src/VertexLine.h
+    src/VertexLine.h \
+    src/importwindow.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -45,3 +46,6 @@ INCLUDEPATH += "C:/Qt/5.6/msvc2015_64/include/"
 unix|win32: LIBS += -lopengl32 -lglew32 -lglew32s -lSDL2 -lSDL2main -lSDL2test
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
+
+FORMS += \
+    src/importwindow.ui
