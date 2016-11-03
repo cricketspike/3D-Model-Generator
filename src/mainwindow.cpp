@@ -27,10 +27,10 @@ static const char* fragmentShaderSource =
 MainWindow::MainWindow()
     : m_program(0)
 {}
-MainWindow::MainWindow(GLfloat* verts,GLfloat*cols)
+MainWindow::MainWindow(GLfloat* verts,GLfloat*cols,GLuint num_verts)
     : m_program(0)
 {
-
+    number_vertices=num_verts;
     vertices=verts;
     colors=cols;
     // Pass in settings to affect the render
@@ -43,7 +43,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::initialize()
 {
-
+    glEnable(GL_DEPTH_TEST);
     // Create shader program
     m_program = new QOpenGLShaderProgram(this);
     m_program->addShaderFromSourceCode(QOpenGLShader::Vertex, vertexShaderSource);
@@ -59,11 +59,12 @@ void MainWindow::initialize()
 
 void MainWindow::render()
 {
+
 glDepthFunc(GL_LEQUAL);
     rot_z++;
     const qreal retinaScale = devicePixelRatio();
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
-
+    glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT);
 
     m_program->bind();
@@ -81,8 +82,7 @@ glDepthFunc(GL_LEQUAL);
 
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-
-    glDrawArrays(GL_TRIANGLES, 0, rot_z*3);//last arg= how many vertices get shown
+    glDrawArrays(GL_TRIANGLES, 0, number_vertices);//last arg= how many vertices get shown
 
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(0);

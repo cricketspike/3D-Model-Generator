@@ -157,7 +157,7 @@ int main(int argc, char **argv)
            }
                cout<<std::endl;
 
-           }           
+           }
            cout<<"faces\n";
            foreach (vector<ColoredVertex> face , vl.getSquares()){
                vector<ColoredVertex> triangles=vl.toTriangles(face);
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
 
            QSurfaceFormat format;
            format.setSamples(16);
-           MainWindow window(&facesByXYZ[0],&facesByRBG[0] );
+           MainWindow window(&facesByXYZ[0],&facesByRBG[0],facesByXYZ.size()/3);
            window.setFormat(format);
            window.resize(640, 480);
            window.show();

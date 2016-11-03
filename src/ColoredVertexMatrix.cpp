@@ -41,6 +41,17 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
 	}
 
 }
+bool ColoredVertexMatrix::isValid(int x,int y,int z){
+    if(x<0||x>=m_width||y<0||y>=m_height||z<0||z>m_depth){
+        return false;
+    }
+    ColoredVertex vert=getValue(x,y,z);
+    if( vert.isNull() ||vert.getValue()[3]!=1){
+        return false;
+    }
+    return true;
+
+}
 ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original){
     m_width=original->getWidth();
     m_height=original->getHeight();
