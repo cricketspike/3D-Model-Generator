@@ -7,21 +7,22 @@
 #include "nullify.h"
 #include "src/ImportedImage.h"
 #include "src/mainwaindow.h"
+#include "src/importwindow.h"
 #include "coloredvertexmatrix.h"
 #include"vertexlinker.h"
 #include"qstring.h"
 #include"qfile.h"
+#include<QApplication>
 
 
-
-int main(int argc, char **argv)
-{
+int main(int argc, char **argv) {
     uint8_t null_color[3] = {255, 255, 255};
     float threshold = 20;
     std::cout << "3D Model Builder " << std::endl;
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
     std::cout << "          render " << std::endl;
+    std::cout << "          window " << std::endl;
     std::cout << "          image " << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
@@ -42,6 +43,18 @@ int main(int argc, char **argv)
 
             std::cout << "Hello" << std::endl;
 
+        } else if (input == "window") {
+            QApplication app(argc, argv);
+
+            //QSurfaceFormat format;
+            //format.setSamples(16);
+            importwindow import;
+            //import.setFormat(format);
+            //import.resize(640, 480);
+            import.show();
+
+            //app.setQuitOnLastWindowClosed(true);
+            app.exec();
         } else if (input == "render") {
 
             QGuiApplication app(argc, argv);

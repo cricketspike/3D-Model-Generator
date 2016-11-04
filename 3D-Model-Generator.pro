@@ -43,7 +43,7 @@ RESOURCES += \
     resources/resources.qrc
 INCLUDEPATH += "C:/Qt/5.6/msvc2015_64/include/"
 
-unix|win32: LIBS += -lopengl32 -lglew32 -lglew32s -lSDL2 -lSDL2main -lSDL2test
+unix|win32: LIBS += -lopengl32
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
 
