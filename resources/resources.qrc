@@ -7,4 +7,8 @@
         <file>image5.jpg</file>
         <file>image3.jpg</file>
     </qresource>
+    <qresource prefix="/shaders">
+        <file>cubepreviewwidget.frag</file>
+        <file>cubepreviewwidget.vert</file>
+    </qresource>
 </RCC>
