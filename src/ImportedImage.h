@@ -11,7 +11,7 @@ using namespace std;
 //and all the parts to it
 class ImportedImage {
   private:
-    QImage pic; //Original image
+    QImage* pic; //Original image
     int face;//0=front,1bottom,2back,3up,4left,5right
     vector<vector<uint8_t*>> pixels; //2D vector to represent pixels
     bool invert_u;
@@ -24,13 +24,13 @@ class ImportedImage {
 
   public:
     //Initializeation functions
-    ImportedImage(QImage image){
+    ImportedImage(QImage* image){
       pic=image;
-      img_width=image.width();
-      img_height=image.height();
+      img_width=image->width();
+      img_height=image->height();
     }
     ImportedImage(){}
-    void setPic(QImage newPic) {pic = newPic;}
+    void setPic(QImage* newPic) {pic = newPic;}
     void setFace(int newFace) {face = newFace;}
     void setInvertU(bool newValue) {invert_u = newValue;}
     void setInvertV(bool newValue) {invert_v = newValue;}
@@ -40,7 +40,7 @@ class ImportedImage {
     void setPixels();
 
     //View functions
-    QImage getImage() {return pic;}
+    QImage* getImage() {return pic;}
     int getImageWidth() {return img_width;}
     int getImageHeight() {return img_height;}
     int getFace() {return face;}
@@ -67,8 +67,16 @@ class box {
   private:
     vector<ImportedImage> sides; //Vector to hold all sides
   public:
+    void setPixelsAt(int index){
+        sides[index].setPixels();
+    }
+    void setSide(int index, ImportedImage side_in){
+        sides[index]=side_in;
+
+    }
     void addSide(ImportedImage side){sides.push_back(side);} //add sides to the box
     box(vector<QImage> images);
+    box(){}
     vector<ImportedImage> getSides() {return sides;} //Get the sides
 };
 
