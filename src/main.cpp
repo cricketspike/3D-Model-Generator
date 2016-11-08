@@ -17,7 +17,7 @@
 int main(int argc, char **argv)
 {
     uint8_t null_color[3] = {255, 255, 255};
-    float threshold = 20;
+    float threshold = 40;
     std::cout << "3D Model Builder " << std::endl;
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 
             }
 
-            float resolution_split=10;
+            float resolution_split=16;
 
             cout<<endl<<"FINAL: "<<model_width<<" "<<model_height<<" "<<model_depth<<endl;
 
@@ -102,7 +102,7 @@ int main(int argc, char **argv)
                                      model_width, model_height, model_depth,b.getSides()[i],resolution_split)
                                   );
             }
-           ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split );
+           ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split,null_color );
 
            nullify(vertices, null_color, threshold);
 

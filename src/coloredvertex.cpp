@@ -10,12 +10,17 @@
        }
     uint8_t* ColoredVertex::getValue(){return value;}
     void ColoredVertex::addVoter(MatrixNode voter) { voters.push_back(voter); }
-    void ColoredVertex::setValueFromVoters(int grouping_tollerance) {
+    void ColoredVertex::setValueFromVoters(int grouping_tollerance, uint8_t* bg_color) {
         //group together nodes based on similar colors
         std::vector<VotingNode> groupedVoters;
         for (int i = 0; i < voters.size(); i++) {
+            int bg_contrast=(voters[i].colorContrast(bg_color[0],bg_color[1],bg_color[2]));
+            if(voters.size()>0){
+                if(bg_contrast<grouping_tollerance){
+                    voters[i].multiplier=1.5f ;//this only counts towards weight
+                }
+            }
             int closest_group_index = -1, closest_size = -1;//find the group that matches the color the best
-
             for (int j = 0; j < groupedVoters.size(); j++) {
                 int contrast = (voters[i].colorContrast(groupedVoters[j].getColor(0), groupedVoters[j].getColor(1), groupedVoters[j].getColor(2)));
                 if (contrast <= grouping_tollerance) {

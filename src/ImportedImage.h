@@ -43,7 +43,7 @@ class ImportedImage {
     void setV (char newV) {v = newV;}
     void setMaxDepth(int image_depth){
         max_depth=image_depth;
-        depth_of_peak=max_depth/3;
+        depth_of_peak=max_depth/2-1;
     }
     void setPixels();
 

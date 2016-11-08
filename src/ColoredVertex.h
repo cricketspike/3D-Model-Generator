@@ -35,7 +35,7 @@ public:
 	float getWeight() {
 		float weight = 0;
         foreach(MatrixNode v , voters) {
-			weight += v.getWeight();
+                        weight += v.getWeight()*v.multiplier;
 		}
 		return weight;
 
@@ -48,8 +48,7 @@ public:
 
 private:
 	std::vector<MatrixNode> voters;
-	uint8_t colors[3];
-
+        uint8_t colors[3];
 
 
 };
@@ -64,7 +63,7 @@ public:
     ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm);
     uint8_t* getValue();
     void addVoter(MatrixNode voter) ;
-    void setValueFromVoters(int grouping_tollerance);
+    void setValueFromVoters(int grouping_tollerance,uint8_t* bg_color);
     bool isInside();
     int getX();
     int getY();

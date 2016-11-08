@@ -14,7 +14,7 @@
 class ColoredVertexMatrix {
 public:
     ColoredVertexMatrix(){};
-    ColoredVertexMatrix(unsigned int width, unsigned int height, unsigned int depth, std::vector<VotingMatrix> images,float resolution_split);
+    ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split,uint8_t * background );
     ColoredVertexMatrix(ColoredVertexMatrix * original);
 
     ColoredVertex getValue(int x, int y, int z){

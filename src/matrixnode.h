@@ -4,14 +4,17 @@
 #include<cassert>
 
 class MatrixNode {
+
+
 public:
-    MatrixNode(uint8_t red, uint8_t blue, uint8_t green,float weight_value) {
+	MatrixNode(uint8_t red, uint8_t blue, uint8_t green,float weight_value) {
 		colors = new uint8_t[3];
 		colors[0] = red;
 		colors[1] = blue;
 		colors[2] = green;
-        weight = weight_value;
+		weight = weight_value;
 	}
+            float multiplier=1;//used for background bias
     uint8_t getColor(int RGorB_ZeroToTwo) {
 		//0R 1G 2B
 		if (RGorB_ZeroToTwo > 2)
@@ -35,7 +38,7 @@ public:
 		dif += colors[2] - blue;
 		return abs(dif);
 	}
-	float getWeight() { return weight; }
+        float getWeight() { return weight*multiplier; }
     void printValues(){
 
 std::cout<<"R:"<<(int)colors[0]<<" G:"<<(int)colors[1]<<" B:"<<(int)colors[2]<<weight<<std::endl;
