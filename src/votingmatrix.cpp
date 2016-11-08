@@ -2,8 +2,19 @@
 #include "votingmatrix.h"
 #include <vector>
 
-VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivided_depth, ImportedImage image,float resolution_split) {
 
+float getDescent(float cur_depth,float peak, float full_depth){//returns a value from 0 to 1 based on how far away from the peak the current point is
+    if(cur_depth>peak){
+       // cout<<"("<<full_depth<<"-"<<cur_depth<<")"<<"/("<<full_depth<<"-"<<peak<<")="<<(full_depth-cur_depth)/(full_depth-peak)<<endl;
+        return (full_depth-cur_depth)/(full_depth-peak);
+    }else{
+        return cur_depth/peak;
+    }
+}
+
+
+
+VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivided_depth, ImportedImage image,float resolution_split) {
     m_width = undivided_width/resolution_split;
     m_height = undivided_height/resolution_split;
     m_depth = undivided_depth/resolution_split;
@@ -13,7 +24,6 @@ VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivi
     initMatrix();
     for (int i = 0; i < m_width; i++) {
         for (int j = 0; j < m_height; j++) {
-
             for (int k = 0; k < m_depth; k++) {
 
                 matrix[i][j][k]=createElement(i*resolution_split,j*resolution_split,k*resolution_split);
@@ -22,6 +32,7 @@ VotingMatrix::VotingMatrix(int undivided_width, int undivided_height, int undivi
     }
 
 }
+
 
 MatrixNode VotingMatrix::getValue(int x, int y, int z) {
     if (x < 0 || x >= m_width) {
@@ -83,8 +94,10 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
     //init local vars
     int image_width = m_image.getImageWidth()/m_resolution_split;
     int image_height = m_image.getImageHeight()/m_resolution_split;
-    char u = m_image.getU();//images U and V values represent which of the cube's dimensions match with which of the image's
+    char u = m_image.getU(); //images U and V values represent which of the cube's dimensions match with which of the image's
     char v = m_image.getV();
+    unsigned int depth_of_peak=m_image.getDepthOfPeak(u,v);  //depth will be how far in this goes into the image from 0 to imagelength-2 (need at least one space because opposite sides cant cross over)
+    uint8_t weight=m_image.getWeight(u,v);
     float full_width=m_width*m_resolution_split;//width, height and depth of photo if it had full resolution
     float full_height=m_height*m_resolution_split;
     float full_depth=m_depth*m_resolution_split;
@@ -112,7 +125,12 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
             }
 
             uint8_t *colors = m_image.getValue(i_wid, j_hei);
-            return new MatrixNode(colors[0], colors[1], colors[2], ((float)k_dep)/full_depth);//BANANA
+
+            m_image.setMaxDepth(full_depth);
+            unsigned int depth_of_peak=m_image.getDepthOfPeak(u,v);  //depth will be how far in this goes into the image from 0 to imagelength-2 (need at least one space because opposite sides cant cross over)
+
+
+            return new MatrixNode(colors[0], colors[1], colors[2],getDescent((float)k_dep,depth_of_peak, full_depth)*weight);//multiply by weight
 
         }
         else if (v == 'z') {//true for up and down views
@@ -127,7 +145,12 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
                 j_hei = full_height - 1 - j_hei;
             }
             uint8_t *colors = m_image.getValue(i_wid, k_dep);
-            return new MatrixNode(colors[0], colors[1], colors[2], ((float)j_hei)/full_height);//BANANA
+
+            m_image.setMaxDepth(full_height);
+            unsigned int depth_of_peak=m_image.getDepthOfPeak(u,v);  //depth will be how far in this goes into the image from 0 to imagelength-2 (need at least one space because opposite sides cant cross over)
+
+
+            return new MatrixNode(colors[0], colors[1], colors[2], getDescent((float)j_hei,depth_of_peak, full_height)*weight);//BANANA
         }
        // std::cerr << "error: image does not have the right angles UV= " <<u<<", "<<v <<std::endl;
                 exit(1);
@@ -152,7 +175,13 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
         }else{
 }
         uint8_t *colors = m_image.getValue(k_dep, j_hei);
-        return new MatrixNode(colors[0], colors[1], colors[2], ((float)i_wid)/full_width);//BANANA
+
+
+        m_image.setMaxDepth(full_width);
+        unsigned int depth_of_peak=m_image.getDepthOfPeak(u,v);  //depth will be how far in this goes into the image from 0 to imagelength-2 (need at least one space because opposite sides cant cross over)
+
+
+        return new MatrixNode(colors[0], colors[1], colors[2], getDescent((float)i_wid,depth_of_peak, full_width)*weight);//BANANA
     }
     else {
         std::cerr << "error: image does not have the right angles UV= " <<u<<", "<<v <<std::endl;

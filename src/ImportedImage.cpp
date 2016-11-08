@@ -43,7 +43,7 @@ void ImportedImage::setPixels() {
 box::box(vector<QImage> images) {
   //Go through all the images and set all the data
   for (int count = 0; count < 6; count++) {
-    ImportedImage side = ImportedImage(images[count]);
+    ImportedImage side = ImportedImage(images[count],100);
     side.setFace(count);
     side.setPixels();
     if(count == 0) {//front
@@ -87,11 +87,28 @@ box::box(vector<QImage> images) {
   }
 }
 
-//Getvalue returns the size of the picture
+//returns the color value of a spot on the image
 uint8_t* ImportedImage::getValue (int u, int v){
     if(u>=pixels.size())
     {std::cout<<"U="<<u<<endl;}
     if(v>=pixels.size())
     {std::cout<<"V="<<v<<endl;}
 
-    return pixels[u][v];}
+    return pixels[u][v];
+}
+uint8_t ImportedImage::getWeight (int u, int v){
+    if(u>=pixels.size())
+    {std::cout<<"U="<<u<<endl;}
+    if(v>=pixels.size())
+    {std::cout<<"V="<<v<<endl;}
+
+return weight;}//later factor in u and v
+
+
+uint8_t ImportedImage::getDepthOfPeak(int u, int v){
+    if(u>=pixels.size())
+    {std::cout<<"U="<<u<<endl;}
+    if(v>=pixels.size())
+    {std::cout<<"V="<<v<<endl;}
+    return depth_of_peak;}//later factor in u and v
+

@@ -7,6 +7,8 @@
 
 VertexLine:: VertexLine(Vect3D start , ColoredVertexMatrix* matrix_in,char dir_in){
     name="good";
+    cout<<"B"<<endl;
+
     matrix=matrix_in;
     direction=dir_in;
     line=std::vector<Vect3D>();
@@ -18,7 +20,7 @@ VertexLine:: VertexLine(Vect3D start , ColoredVertexMatrix* matrix_in,char dir_i
 
 }
 void VertexLine::checkVert(int x,int y,int z,bool negative_dir){//recursive check of a vertex which checks the next one in a given direction
-
+cout<<"A"<<endl;
     if(!matrix->isValid(x,y,z)){
         return;
     }//reached end of line

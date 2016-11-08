@@ -19,15 +19,19 @@ class ImportedImage {
     bool invert_depth; //Values to represent inversion to the array
     char u;//width
     char v;//height
-    int img_width;
-    int img_height;
-
+    unsigned int img_width;
+    unsigned int img_height;
+    unsigned int max_depth;
+    unsigned int depth_of_peak;//0 to min(depth - 2 , depth - 1 - the other side's depth_of_peak) replace this with a 2D array
+    //when doing the paint tool its probably a good idea to mask any spot that matches the background color so it stays at the front for simplification
+    uint8_t weight;//0 to 100 replace this with a 2D array
   public:
     //Initializeation functions
-    ImportedImage(QImage image){
+    ImportedImage(QImage image,uint8_t a_weight){
       pic=image;
       img_width=image.width();
       img_height=image.height();
+      weight=a_weight;
     }
     ImportedImage(){}
     void setPic(QImage newPic) {pic = newPic;}
@@ -37,13 +41,19 @@ class ImportedImage {
     void setInvertDepth(bool newValue){invert_depth= newValue;}
     void setU (char newU) {u = newU;}
     void setV (char newV) {v = newV;}
+    void setMaxDepth(int image_depth){
+        max_depth=image_depth;
+        depth_of_peak=max_depth/3;
+    }
     void setPixels();
 
     //View functions
     QImage getImage() {return pic;}
-    int getImageWidth() {return img_width;}
-    int getImageHeight() {return img_height;}
-    int getFace() {return face;}
+    unsigned int getImageWidth() {return img_width;}
+    unsigned int getImageHeight() {return img_height;}
+    unsigned int getFace() {return face;}
+    uint8_t getWeight (int u, int v);
+    uint8_t getDepthOfPeak (int u, int v);
     vector<vector<uint8_t*>> getPixels() {return pixels;}
     uint8_t* getValue (int u, int v);
     bool uIsInverted() {return invert_u;}

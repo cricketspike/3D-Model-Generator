@@ -27,7 +27,7 @@ private:
 	std::vector<std::vector<std::vector<MatrixNode*>>> matrix;
 	int m_width;
 	int m_height;
-	int m_depth;
+        int m_depth;
     ImportedImage m_image;
 	MatrixNode *createElement(int wid, int hei, int dep);
 
