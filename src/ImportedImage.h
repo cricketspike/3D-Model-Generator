@@ -27,18 +27,10 @@ class ImportedImage {
     uint8_t weight;//0 to 100 replace this with a 2D array
   public:
     //Initializeation functions
-<<<<<<< HEAD
-    ImportedImage(QImage image,uint8_t a_weight){
-      pic=image;
-      img_width=image.width();
-      img_height=image.height();
-      weight=a_weight;
-=======
     ImportedImage(QImage* image){
       pic=image;
       img_width=image->width();
       img_height=image->height();
->>>>>>> 22728e8d4d3d8847b21841a9db7d7207c21d5c2a
     }
     ImportedImage(){}
     void setPic(QImage* newPic) {pic = newPic;}
@@ -55,19 +47,14 @@ class ImportedImage {
     void setPixels();
 
     //View functions
-<<<<<<< HEAD
-    QImage getImage() {return pic;}
+
+    QImage* getImage() {return pic;}
     unsigned int getImageWidth() {return img_width;}
     unsigned int getImageHeight() {return img_height;}
     unsigned int getFace() {return face;}
     uint8_t getWeight (int u, int v);
     uint8_t getDepthOfPeak (int u, int v);
-=======
-    QImage* getImage() {return pic;}
-    int getImageWidth() {return img_width;}
-    int getImageHeight() {return img_height;}
-    int getFace() {return face;}
->>>>>>> 22728e8d4d3d8847b21841a9db7d7207c21d5c2a
+
     vector<vector<uint8_t*>> getPixels() {return pixels;}
     uint8_t* getValue (int u, int v);
     bool uIsInverted() {return invert_u;}

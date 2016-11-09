@@ -44,7 +44,6 @@ MainWindow::~MainWindow()
 void MainWindow::initialize()
 {
     glEnable(GL_DEPTH_TEST);
-    glShadeModel(GL_SMOOTH);
 
     // Create shader program
     m_program = new QOpenGLShaderProgram(this);

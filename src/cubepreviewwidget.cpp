@@ -205,7 +205,7 @@ void CubePreviewWidget::texturesFromBox(box& b)
 {
     std::vector<ImportedImage> imgs = b.getSides();
     for (int i=0; i<imgs.size(); i++) {
-        textures[i] = new QOpenGLTexture(imgs[i].getImage().mirrored());
+        textures[i] = new QOpenGLTexture(imgs[i].getImage()->mirrored());
         textures[i]->setMinificationFilter(QOpenGLTexture::Nearest);
         textures[i]->setMagnificationFilter(QOpenGLTexture::Linear);
     }

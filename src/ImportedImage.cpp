@@ -43,11 +43,8 @@ void ImportedImage::setPixels() {
 box::box(vector<QImage> images) {
   //Go through all the images and set all the data
   for (int count = 0; count < 6; count++) {
-<<<<<<< HEAD
-    ImportedImage side = ImportedImage(images[count],100);
-=======
-    ImportedImage side = ImportedImage(&images[count]);
->>>>>>> 22728e8d4d3d8847b21841a9db7d7207c21d5c2a
+
+    ImportedImage side= ImportedImage(&images[count]);
     side.setFace(count);
     side.setPixels();
     if(count == 0) {//front
