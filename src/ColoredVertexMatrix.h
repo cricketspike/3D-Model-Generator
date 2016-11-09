@@ -18,7 +18,7 @@ public:
     ColoredVertexMatrix(ColoredVertexMatrix * original);
 
     ColoredVertex getValue(int x, int y, int z){
-        if(x>matrix.size()||y>matrix[0].size()||z>matrix[0][0].size()){return ColoredVertex();}
+        if(x>=matrix.size()||y>=matrix[0].size()||z>=matrix[0][0].size()){return ColoredVertex();}
         return matrix[x][y][z];}
     ColoredVertex* getValueRef(int x, int y, int z){
         if(x>matrix.size()||y>matrix[0].size()||z>matrix[0][0].size()){return &matrix[x][y][z];}

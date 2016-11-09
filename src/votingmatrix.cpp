@@ -75,7 +75,6 @@ void VotingMatrix::initMatrix() {//creates a 3d matrix[width][height][depth] wti
             std::vector<std::vector<MatrixNode*>>(
                 m_height,
                 std::vector<MatrixNode*>(
-
                     m_depth, nullptr
 
                     )
@@ -196,8 +195,6 @@ void VotingMatrix::print(){//prints out every node in the resulting voting matri
             std::cout<<"    y="<<j<<endl;
 
             for(int k=0; k<m_depth;k++){
-
-                std::cout<<"        z="<<k<<endl;
                 MatrixNode * node=matrix[i][j][k];
                 std::cout<<"r:"<<(int)node->getColor(0)<<"g:"<<(int)node->getColor(1)<<"b:"<<(int)node->getColor(2)<<endl;
 

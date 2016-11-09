@@ -36,7 +36,7 @@ public:
 		dif += colors[2] - blue;
 		return abs(dif);
 	}
-	float getWeight() { return weight; }
+        float getWeight() { return weight*multiplier; }
     void printValues(){
 
 std::cout<<"R:"<<(int)colors[0]<<" G:"<<(int)colors[1]<<" B:"<<(int)colors[2]<<weight<<std::endl;

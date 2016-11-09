@@ -17,7 +17,7 @@
             int bg_contrast=(voters[i].colorContrast(bg_color[0],bg_color[1],bg_color[2]));
             if(voters.size()>0){
                 if(bg_contrast<grouping_tollerance){
-                    voters[i].multiplier=1.5f ;//this only counts towards weight
+                    voters[i].multiplier=2.0f ;//this only counts towards weight
                 }
             }
             int closest_group_index = -1, closest_size = -1;//find the group that matches the color the best

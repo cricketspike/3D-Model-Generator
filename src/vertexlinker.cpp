@@ -91,7 +91,6 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
 
         foreach(Vect3D v_coord, line.getLine()) {
 
-
             x = v_coord.X();
             z = v_coord.Z();
 
@@ -100,7 +99,6 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
             int best_match_distance = 1000000;
 
             ColoredVertex cur_vert=matrix->getValue(x,y,z);
-
 
             vector<int*> potential_buddies;//this will be the level above it tries to connect with
 
@@ -116,7 +114,6 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
 
 
             }
-
             if (i + 1 >= levels_size||all_verts[i + 1].size()==0) {
                 //no verts above it
                 //only do one direction to prevent overlap
@@ -129,7 +126,6 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
 
                 //also do this for the bottom
             } else {//if there are verts above
-
                 vector<Vect3D>next_level = all_verts[i + 1];
 
 
@@ -138,16 +134,16 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
                     float x_dis = ((float)potential_partner.X()) -(float) x,
                           z_dis = ((float)potential_partner.Z()) - (float)z;
                     float dist = x_dis*x_dis + z_dis*z_dis;
+
                     if (dist < best_match_distance) {//< so it gives priority to earlier ones and takes less computation
                         best_match = potential_partner;
                         best_match_distance = dist;
 
                     }
 
-
                 }
-                    ColoredVertex matching_vert=matrix->getValue(best_match.X(),best_match.Y(),best_match.Z());
 
+                    ColoredVertex matching_vert=matrix->getValue(best_match.X(),best_match.Y(),best_match.Z());
                     //end of each vert in next level
                 if(next_level.size()>0){
                 if (cur_face.size() == 0) {//initialize array,(only last 2 matter)
@@ -181,16 +177,13 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
                         ColoredVertex px=matrix->getValue(x+1,y,z);//+x
 
                         ColoredVertex o_px=matrix->getValue(old_x+1,old_y,old_z);
-
                         if( !(px.isNull()||px.getValue()[3]==0||o_px.isNull()||o_px.getValue()[3]==0) ){//if spots are neither empty or OOB
                             vector<ColoredVertex>face={cur_vert,oldv,px,o_px};
-
                             addSquare(face);
                         }
 
 
                     }else if(old_z==z){
-
                         ColoredVertex pz=matrix->getValue(x,y,z+1);//+x
 
                         ColoredVertex o_pz=matrix->getValue(old_x,old_y,old_z+1);
@@ -202,23 +195,26 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
                         }
 
                     }else if(old_x==x-1&&old_z==z+1){
+
+                          cout<<"c";
                         ColoredVertex mxpz=matrix->getValue(x-1,y,z+1);//+x
 
                         ColoredVertex o_mxpz=matrix->getValue(old_x-1,old_y,old_z+1);
                         if( !(mxpz.isNull()||mxpz.getValue()[3]==0||o_mxpz.isNull()||o_mxpz.getValue()[3]==0) ){//if spots are neither empty or OOB
+                           cout<<"d";
                             vector<ColoredVertex>face={cur_vert,oldv,mxpz,o_mxpz};
                             addSquare(face);
                         }
 
 
                     }else if(old_x==x+1&&old_z==z-1){
-
                         ColoredVertex pxmz=matrix->getValue(x+1,y,z-1);//+x
 
                         ColoredVertex o_pxmz=matrix->getValue(old_x+1,old_y,old_z-1);
                         if( !(pxmz.isNull()||pxmz.getValue()[3]==0||o_pxmz.isNull()||o_pxmz.getValue()[3]==0) ){//if spots are neither empty or OOB
                             vector<ColoredVertex>face={cur_vert,oldv,pxmz,o_pxmz};
                             addSquare(face);
+
                         }
                 }
             }

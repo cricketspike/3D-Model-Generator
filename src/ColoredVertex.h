@@ -35,7 +35,7 @@ public:
 	float getWeight() {
 		float weight = 0;
         foreach(MatrixNode v , voters) {
-                        weight += v.getWeight()*v.multiplier;
+                        weight += v.getWeight();
 		}
 		return weight;
 
