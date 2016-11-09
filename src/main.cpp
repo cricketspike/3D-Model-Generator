@@ -1,21 +1,20 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QSurfaceFormat>
+#include <QTextStream>
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include "nullify.h"
 #include "src/ImportedImage.h"
-#include "src/mainwaindow.h"
+#include "src/cubepreviewwidgetdemo.h"
 #include "coloredvertexmatrix.h"
 #include"vertexlinker.h"
 #include"qstring.h"
 #include"qfile.h"
-
-
-
 int main(int argc, char **argv)
 {
+
     uint8_t null_color[3] = {255, 255, 255};
     float threshold = 40;
     std::cout << "3D Model Builder " << std::endl;
@@ -44,17 +43,16 @@ int main(int argc, char **argv)
 
         } else if (input == "render") {
 
-            QGuiApplication app(argc, argv);
+            QApplication app(argc, argv);
 
             QSurfaceFormat format;
-            format.setSamples(16);
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
 
-            MainWindow window;
-            window.setFormat(format);
-            window.resize(640, 480);
-            window.show();
+            CubePreviewWidgetDemo widget;
+            widget.show();
 
-            app.setQuitOnLastWindowClosed(true);
             app.exec();
 
         } else if (input == "image") {
@@ -120,6 +118,7 @@ int main(int argc, char **argv)
               for (int j=0;j<height;j++){
               for (int k=0;k<depth;k++){
                   uint8_t* values=  shell->getValue(i,j,k).getValue();
+              //std::cout<<endl<<i<<":"<<j<<":"<<k<<":           ";
                   if((int)values[3]!=0){stream <<i<<" "<<j<<" "<<k<<" "<<endl;}
 
 
@@ -130,67 +129,21 @@ int main(int argc, char **argv)
            VertexLinker vl=VertexLinker(shell);
            vl.makeShapes();
 
-           float * vertArray= &shell->getListOfVertsAsFloats()[0];
-
-           int wid=shell->getWidth();
-           int hei=shell->getHeight();
-           int dep=shell->getDepth();
-           std::vector<GLfloat> facesByXYZ=std::vector<float>();
-           std::vector<GLfloat> facesByRBG=std::vector<float>();
-//print all triangles and add their raw data into the face arrays
            foreach (vector<ColoredVertex> face , vl.getTriangles()){
-               cout<<"triangle\n";
-               for (int i=0;i<3;i++){
-               ColoredVertex vert=face[i];
-
-               facesByXYZ.push_back(((float)vert.getX())/wid -.5);
-               facesByXYZ.push_back(((float)vert.getY())/hei -.5);
-               facesByXYZ.push_back(((float)vert.getZ())/hei -.5);
-
-               uint8_t* colors=vert.getValue();
-               facesByRBG.push_back(((float)colors[0])/256);
-               facesByRBG.push_back(((float)colors[1])/256);
-               facesByRBG.push_back(((float)colors[2])/256);
-
-               face[i].printVert();
-
+                   cout<<"triangle\n";
+                   face[0].printVert();
+                   face[1].printVert();
+                   face[2].printVert();
+                   cout<<std::endl;
            }
-               cout<<std::endl;
-
-           }
-           cout<<"faces\n";
            foreach (vector<ColoredVertex> face , vl.getSquares()){
-               vector<ColoredVertex> triangles=vl.toTriangles(face);
-               cout<<"square    "<<triangles.size()<<"\n";
-
-               for (int i=0;i<6;i++){
-                   ColoredVertex  vert=triangles[i];
-
-               facesByXYZ.push_back(((float)vert.getX())/wid -.5);
-               facesByXYZ.push_back(((float)vert.getY())/wid -.5);
-               facesByXYZ.push_back(((float)vert.getZ())/wid -.5);
-
-               uint8_t* colors=vert.getValue();
-               facesByRBG.push_back(((float)colors[0])/256);
-               facesByRBG.push_back(((float)colors[1])/256);
-               facesByRBG.push_back(((float)colors[2])/256);
-                   triangles[i].printVert();
-
+               cout<<"square\n";
+                   face[0].printVert();
+                   face[1].printVert();
+                   face[2].printVert();
+                   face[3].printVert();
+                   cout<<std::endl;
            }
-               cout<<std::endl;
-
-           }
-           QGuiApplication app(argc, argv);
-
-           QSurfaceFormat format;
-           format.setSamples(16);
-           MainWindow window(&facesByXYZ[0],&facesByRBG[0],facesByXYZ.size()/3);
-           window.setFormat(format);
-           window.resize(640, 480);
-           window.show();
-
-           app.setQuitOnLastWindowClosed(true);
-           app.exec();
 
 
         } else if (input == "exit" || input == "quit") {

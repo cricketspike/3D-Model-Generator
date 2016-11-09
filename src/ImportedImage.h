@@ -11,7 +11,7 @@ using namespace std;
 //and all the parts to it
 class ImportedImage {
   private:
-    QImage pic; //Original image
+    QImage* pic; //Original image
     int face;//0=front,1bottom,2back,3up,4left,5right
     vector<vector<uint8_t*>> pixels; //2D vector to represent pixels
     bool invert_u;
@@ -27,14 +27,21 @@ class ImportedImage {
     uint8_t weight;//0 to 100 replace this with a 2D array
   public:
     //Initializeation functions
+<<<<<<< HEAD
     ImportedImage(QImage image,uint8_t a_weight){
       pic=image;
       img_width=image.width();
       img_height=image.height();
       weight=a_weight;
+=======
+    ImportedImage(QImage* image){
+      pic=image;
+      img_width=image->width();
+      img_height=image->height();
+>>>>>>> 22728e8d4d3d8847b21841a9db7d7207c21d5c2a
     }
     ImportedImage(){}
-    void setPic(QImage newPic) {pic = newPic;}
+    void setPic(QImage* newPic) {pic = newPic;}
     void setFace(int newFace) {face = newFace;}
     void setInvertU(bool newValue) {invert_u = newValue;}
     void setInvertV(bool newValue) {invert_v = newValue;}
@@ -48,12 +55,19 @@ class ImportedImage {
     void setPixels();
 
     //View functions
+<<<<<<< HEAD
     QImage getImage() {return pic;}
     unsigned int getImageWidth() {return img_width;}
     unsigned int getImageHeight() {return img_height;}
     unsigned int getFace() {return face;}
     uint8_t getWeight (int u, int v);
     uint8_t getDepthOfPeak (int u, int v);
+=======
+    QImage* getImage() {return pic;}
+    int getImageWidth() {return img_width;}
+    int getImageHeight() {return img_height;}
+    int getFace() {return face;}
+>>>>>>> 22728e8d4d3d8847b21841a9db7d7207c21d5c2a
     vector<vector<uint8_t*>> getPixels() {return pixels;}
     uint8_t* getValue (int u, int v);
     bool uIsInverted() {return invert_u;}
@@ -77,8 +91,16 @@ class box {
   private:
     vector<ImportedImage> sides; //Vector to hold all sides
   public:
+    void setPixelsAt(int index){
+        sides[index].setPixels();
+    }
+    void setSide(int index, ImportedImage side_in){
+        sides[index]=side_in;
+
+    }
     void addSide(ImportedImage side){sides.push_back(side);} //add sides to the box
     box(vector<QImage> images);
+    box(){}
     vector<ImportedImage> getSides() {return sides;} //Get the sides
 };
 
