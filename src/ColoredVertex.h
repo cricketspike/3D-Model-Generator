@@ -82,6 +82,7 @@ public:
 
     void setLA(){line_a=true;}
     void setLB(){line_b=true;}
+    void print(){cout<<"x: "<<width<<"y: "<<height<<"z: "<<depth<<endl;}
 
 protected:
 

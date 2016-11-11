@@ -29,9 +29,9 @@ public:
         matrix[x][y][z].getValue()[3]=0;
     }
     std::vector<float> getListOfVertsAsFloats();
-    int getWidth(){return m_width;}
-    int getHeight(){return m_height;}
-    int getDepth(){return m_depth;}
+    unsigned int getWidth(){return m_width;}
+    unsigned int getHeight(){return m_height;}
+    unsigned int getDepth(){return m_depth;}
 	int color_contrast_tollerance;
     std::vector<std::vector<std::vector<ColoredVertex>>>  getVertices(){return matrix;}
     ColoredVertexMatrix * getShell();

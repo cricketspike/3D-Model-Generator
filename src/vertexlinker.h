@@ -63,7 +63,7 @@ public:
         flat.push_back(vC);
         addTriangle(flat); //adds a horizontal face
     }
-    void makeShapes() ;
+    void makeShapes(int loop_split) ;
 private:
     std::vector<std::vector<Vect3D>> all_verts;
     std::vector<std::vector<ColoredVertex>> squares;
@@ -80,7 +80,7 @@ private:
 
 
     int matrix_width, matrix_height, matrix_depth;
-    bool reccurFindNextVertex(int x, int y, int z) ;//used to find loops by going through verices on the same y level
+    bool reccurFindNextVertex(int x, int y, int z,int loop_split);//used to find loops by going through verices on the same y level
     void setFoundAtOffset(int x, int y, int z, int x_offset, int y_offset, int z_offset);
 
     void setFoundStraightUp(int x, int y, int z) ; //foundStraightUp holds bools based on edges bewtween the current vertex an vertices above it and to the front/right

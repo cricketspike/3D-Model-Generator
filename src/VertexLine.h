@@ -33,14 +33,14 @@ public:
     string name;
     bool dont_fill=false;
     VertexLine(){}
-    VertexLine(Vect3D start , ColoredVertexMatrix* matrix_in,char dir_in);
-    bool checkForPrune();
+    VertexLine(Vect3D start , ColoredVertexMatrix* matrix_in,char dir_in,int loop_split);
+    bool checkForPrune(int loop_split);
     std::vector<Vect3D>getLine(){return line;}
 
 private:
     bool vertical;//make vertical faces from this line or horizontal?
     char direction;//x y or z
-    void checkVert(int x,int y,int z,bool negative_dir);//recursive check of a vertex which checks the next one in a given direction
+    void checkVert(int x,int y,int z,bool negative_dir,int loop_split);//recursive check of a vertex which checks the next one in a given direction
     ColoredVertexMatrix *matrix;
     std::vector<Vect3D> line;
 

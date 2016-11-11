@@ -24,7 +24,8 @@ SOURCES += \
     src/vertexline.cpp \
     src/importwindow.cpp \
     src/cubepreviewwidget.cpp \
-    src/cubepreviewwidgetdemo.cpp
+    src/cubepreviewwidgetdemo.cpp \
+    src/verticessmoothing.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -41,7 +42,8 @@ HEADERS += \
     src/VertexLine.h \
     src/importwindow.h \
     src/cubepreviewwidget.h \
-    src/cubepreviewwidgetdemo.h
+    src/cubepreviewwidgetdemo.h \
+    src/verticessmoothing.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -54,3 +56,5 @@ DEPENDPATH += $$PWD/include
 FORMS += \
     src/importwindow.ui \
     src/cubepreviewwidgetdemo.ui
+INCLUDEPATH += "C:/Qt/5.6/msvc2015_64/include/"
+unix|win32: LIBS += -lopengl32 -lglew32 -lglew32s -lSDL2 -lSDL2main -lSDL2test

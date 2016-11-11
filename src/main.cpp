@@ -19,7 +19,7 @@
 #include "src/ImportedImage.h"
 #include "src/cubepreviewwidgetdemo.h"
 #include "coloredvertexmatrix.h"
-
+#include "verticessmoothing.h"
 #include"mainwaindow.h"
 int main(int argc, char **argv)
 {
@@ -98,8 +98,8 @@ int main(int argc, char **argv)
 
             }
 
-            float resolution_split=10;
-
+            float resolution_split=4;//lower=slower, more accurate
+            int vertices_density_split=3;//lower= more faces
             cout<<endl<<"FINAL: "<<model_width<<" "<<model_height<<" "<<model_depth<<endl;
 
             vector<VotingMatrix> voters=vector<VotingMatrix>();
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split,null_color );
 
            nullify(vertices, null_color, threshold);
-
+           smooth (vertices, vertices_density_split);
 
            ColoredVertexMatrix *shell= vertices.getShell();
 
@@ -136,7 +136,7 @@ int main(int argc, char **argv)
            }
 
            VertexLinker vl=VertexLinker(shell);
-           vl.makeShapes();
+           vl.makeShapes(vertices_density_split);
 
 
 
@@ -149,9 +149,12 @@ int main(int argc, char **argv)
            std::vector<GLfloat> facesByRBG=std::vector<float>();
            //print all triangles and add their raw data into the face arrays
                       foreach (vector<ColoredVertex> face , vl.getTriangles()){
-                          cout<<"triangle\n";
+                          cout<<"TESTA"<<endl;
+                          cout<<"triangle "<<face.size()<<"\n";
                           for (int i=0;i<3;i++){
+                           cout<<"TEST+"<<endl;
                           ColoredVertex vert=face[i];
+                          cout<<"TEST-"<<endl;
 
                           facesByXYZ.push_back(((float)vert.getX())/wid -.5);
                           facesByXYZ.push_back(((float)vert.getY())/hei -.5);
@@ -163,14 +166,13 @@ int main(int argc, char **argv)
                           facesByRBG.push_back(((float)colors[2])/256);
 
                           face[i].printVert();
-
-}
+                          cout<<"TESTB"<<endl;
+                          }
+                          cout<<"TESTC"<<endl;
                       }
              cout<<"faces\n";
              foreach (vector<ColoredVertex> face , vl.getSquares()){
                  vector<ColoredVertex> triangles=vl.toTriangles(face);
-                 cout<<"square    "<<triangles.size()<<"\n";
-
                  for (int i=0;i<6;i++){
                      ColoredVertex  vert=triangles[i];
 
