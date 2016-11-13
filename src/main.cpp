@@ -17,7 +17,7 @@
 #include <vector>
 #include "nullify.h"
 #include "src/ImportedImage.h"
-#include "src/cubepreviewwidgetdemo.h"
+#include "src/CubeMapEditor.h"
 #include "coloredvertexmatrix.h"
 #include "verticessmoothing.h"
 #include"mainwaindow.h"
@@ -29,8 +29,8 @@ int main(int argc, char **argv)
     std::cout << "3D Model Builder " << std::endl;
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
-    std::cout << "          render " << std::endl;
-    std::cout << "          image " << std::endl;
+    std::cout << "          editor " << std::endl;
+    std::cout << "          image  " << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
     while (true) {
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
             std::cout << "Hello" << std::endl;
 
-        } else if (input == "render") {
+        } else if (input == "editor") {
 
             QApplication app(argc, argv);
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
             format.setStencilBufferSize(8);
             QSurfaceFormat::setDefaultFormat(format);
 
-            CubePreviewWidgetDemo widget;
+            CubeMapEditor widget;
             widget.show();
 
             app.exec();

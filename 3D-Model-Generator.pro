@@ -25,7 +25,10 @@ SOURCES += \
     src/importwindow.cpp \
     src/cubepreviewwidget.cpp \
     src/cubepreviewwidgetdemo.cpp \
-    src/verticessmoothing.cpp
+    src/verticessmoothing.cpp \
+    src/cubemapeditordisplay.cpp \
+    src/cubemapeditorimage.cpp \
+    src/cubemapeditor.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -43,7 +46,10 @@ HEADERS += \
     src/importwindow.h \
     src/cubepreviewwidget.h \
     src/cubepreviewwidgetdemo.h \
-    src/verticessmoothing.h
+    src/verticessmoothing.h \
+    src/cubemapeditordisplay.h \
+    src/cubemapeditorimage.h \
+    src/cubemapeditor.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -55,6 +61,5 @@ DEPENDPATH += $$PWD/include
 
 FORMS += \
     src/importwindow.ui \
-    src/cubepreviewwidgetdemo.ui
-INCLUDEPATH += "C:/Qt/5.6/msvc2015_64/include/"
-unix|win32: LIBS += -lopengl32 -lglew32 -lglew32s -lSDL2 -lSDL2main -lSDL2test
+    src/cubepreviewwidgetdemo.ui \
+    src/cubemapeditor.ui

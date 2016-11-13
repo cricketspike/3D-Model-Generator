@@ -10,5 +10,7 @@
     <qresource prefix="/shaders">
         <file>cubepreviewwidget.frag</file>
         <file>cubepreviewwidget.vert</file>
+        <file>cubemapeditordisplay.frag</file>
+        <file>cubemapeditordisplay.vert</file>
     </qresource>
 </RCC>
