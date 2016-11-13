@@ -14,10 +14,16 @@
 #include "cubemapeditorimage.h"
 
 /*
- * This class displays the cube map in CubeMapEditor,
- * and facilitates mouse-driven manipulations of the cube map.
- *
+ * This class provides an interactive display
+ * of the cube map in CubeMapEditor.
  */
+
+typedef struct {
+    enum Orientation { Horizontal, Vertical };
+
+    Orientation orientation;
+    double normalized_offset;
+} DisplayRuler;
 
 class CubeMapEditorDisplay : public QOpenGLWidget,
                              protected QOpenGLFunctions
@@ -61,6 +67,9 @@ private:
     // Cube map images
     CubeMapEditorImage* images;
 
+    // Display rulers
+    QList<DisplayRuler> rulers;
+
     // Focus
     double zoom;
     QPointF offset;
@@ -76,6 +85,11 @@ private:
     CubeMapEditor::Face selected_face;
 
     QPoint last_mouse_pos;
+
+    // Rulers
+    void addRuler(DisplayRuler r);
+    void removeRuler(DisplayRuler r);
+    void drawRulers(QPainter& p);
 };
 
 #endif // CUBEMAPEDITORDISPLAY_H

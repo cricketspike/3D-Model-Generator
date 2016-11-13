@@ -6,7 +6,7 @@
 
 
 /*
- * This class contains the image and editing state for one face
+ * This class contains the image and editing state of one face
  * of the cube map in CubeMapEditor.
  *
  */

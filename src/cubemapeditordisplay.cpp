@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <QPainter>
+#include <QGuiApplication>
 #include "cubemapeditor.h"
 #include "cubemapeditordisplay.h"
 
@@ -203,6 +205,10 @@ void CubeMapEditorDisplay::paintGL()
 
     program->release();
     vao.release();
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+    drawRulers(painter);
 }
 
 void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
@@ -236,10 +242,35 @@ void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
 
 void CubeMapEditorDisplay::mousePressEvent(QMouseEvent* event)
 {
-    if (event->buttons() == Qt::LeftButton)                 // Left-click: basis for mouse-drag motion vector
-        last_mouse_pos = event->pos();
-    else if (selected_face != CubeMapEditor::Face::NONE) {  // Right-click: rotate selected face
-        images[selected_face].rotate();
+
+    if (event->modifiers().testFlag(Qt::ShiftModifier)) {                       // Shift pressed
+
+        double nx = ((double)event->pos().x())/width();
+        double ny = ((double)event->pos().y())/height();
+
+        DisplayRuler match_ruler;
+        if (event->modifiers().testFlag(Qt::ControlModifier)) {                 //    Control pressed
+           match_ruler.orientation = DisplayRuler::Orientation::Vertical;
+           match_ruler.normalized_offset = nx;
+        } else {                                                                //    Control not pressed
+            match_ruler.orientation = DisplayRuler::Orientation::Horizontal;
+            match_ruler.normalized_offset = ny;
+        }
+
+        if (event->buttons() == Qt::LeftButton) {                               //    Left-click
+            addRuler(match_ruler);
+        } else {                                                                //    Right-click
+            removeRuler(match_ruler);
+        }
+
+    } else {                                                                    // Shift not pressed
+
+        if (event->buttons() == Qt::LeftButton) {                               //    Left-click
+            last_mouse_pos = event->pos();
+        } else if (selected_face != CubeMapEditor::Face::NONE) {                //    Right-click
+            images[selected_face].rotate();
+        }
+
     }
 }
 
@@ -258,5 +289,36 @@ void CubeMapEditorDisplay::wheelEvent(QWheelEvent* event)
 
         zoom += (double)(event->angleDelta().y())/1200.0;
         setFocus(zoom, offset);
+    }
+}
+void CubeMapEditorDisplay::addRuler(DisplayRuler r) {
+    rulers.append(r);
+}
+
+void CubeMapEditorDisplay::removeRuler(DisplayRuler r)
+{
+    QMutableListIterator<DisplayRuler> i(rulers);
+    while (i.hasNext()) {
+        DisplayRuler ri = i.next();
+
+        if (ri.orientation == r.orientation)
+            if (abs(ri.normalized_offset - r.normalized_offset) <= 0.05)
+                i.remove();
+    }
+}
+
+void CubeMapEditorDisplay::drawRulers(QPainter& p)
+{
+    p.setPen(QPen(QColor(0,255,255)));
+
+    QListIterator<DisplayRuler> i(rulers);
+    while (i.hasNext()) {
+        DisplayRuler ri = i.next();
+
+        if (ri.orientation == DisplayRuler::Orientation::Horizontal) {
+            p.drawLine(0, ri.normalized_offset*height(), width(), ri.normalized_offset*height());
+        } else {
+            p.drawLine(ri.normalized_offset*width(), 0, ri.normalized_offset*width(), height());
+        }
     }
 }
