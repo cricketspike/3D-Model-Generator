@@ -69,12 +69,18 @@ public:
     int getX();
     int getY();
     int getZ();
+    float getNormalX();
+    float getNormalY();
+    float getNormalZ();
     int getLabel();
     void printVert();
     ColoredVertex copy(ColoredVertexMatrix* cvm);
     bool isNull(){return is_null;}
     void setValue(uint8_t* v);
     void setLable(int labelNum);
+    void setX(float newValue);
+    void setY(float newValue);
+    void setZ(float newValue);
     bool line_x=false;//use these to check if an existing line already crosses through a certain way
     bool line_z=false;
     bool line_a=false;
@@ -97,6 +103,7 @@ private:
 	std::vector<std::vector<ColoredVertex>> faces;
 	std::vector<MatrixNode> voters;
     int width, height, depth, label;
+    float normalWidth, normalHeight, normalDepth;
 
 };
 #endif

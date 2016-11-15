@@ -89,6 +89,12 @@
     int ColoredVertex::getX(){return width;}
     int ColoredVertex::getY(){return height;}
     int ColoredVertex::getZ(){return depth;}
+    float ColoredVertex::getNormalX(){return normalWidth;}
+    float ColoredVertex::getNormalY(){return normalHeight;}
+    float ColoredVertex::getNormalZ(){return normalDepth;}
     int ColoredVertex::getLabel(){return label;}
+    void ColoredVertex::setX(float newValue){normalWidth = newValue;}
+    void ColoredVertex::setY(float newValue){normalHeight = newValue;}
+    void ColoredVertex::setZ(float newValue){normalDepth = newValue;}
     void ColoredVertex::printVert(){std::cout<<"x: "<<width<<"y: "<<height<<"z: "<<depth<<" Color:"<<(int)value[0]<<":"<<(int)value[1]<<":"<<(int)value[2]<<":"<<(int)value[3]<<":"<<endl;}
 

@@ -8,26 +8,52 @@
 ObjFileWriter::ObjFileWriter(){};
 ObjFileWriter::~ObjFileWriter(){};
 
-void ObjFileWriter::initialize(string fileName, ColoredVertexMatrix * CoordinateMap){
-	objFile.open(fileName);
+ColoredVertexMatrix & ObjFileWriter::initialize(ColoredVertexMatrix & CoordinateMap){
 	CoordinateMatrix = CoordinateMap;
-	vertexLabel = 1
+	vertexLabel = 1;
 	normalizeVertices(CoordinateMatrix);
-	for(int x = 0; x < CoordinateMatrix->getWidth(); x++){
-		for(int y = 0; y < CoordinateMatrix->getHeight(); y++){
-			for(int z = 0; z < CoordinateMatrix->getDepth(); z++){
-                Coordinate = CoordinateMatrix->getValueRef(x, y, z);
-			    Coordinate->setLabel(vertexLabel++);
+	return CoordinateMatrix;
+}	
 
-			}
-		}
-	}
+void ObjFileWriter::execute(string fileName, ColoredVertexMatrix & CoordinateMap){
+	printVerticesToFile(fileName, initialize(CoordinateMap));
 }
 
-ColoredVertexMatrix * ObjFileWriter::normalizeVertices(ColoredVertexMatrix * CoordinateMap){
+ColoredVertexMatrix & ObjFileWriter::normalizeVertices(ColoredVertexMatrix & CoordinateMap){
 	float xMax, yMax, zMax;
+	float normalWidth, normalHeight, normalDepth;
+	
+	
 	xMax = CoordinateMap->getWidth();
 	yMax = CoordinateMap->getHeight();
 	zMax = CoordinateMap->getDepth();
+	
+	for(int x = 0; x < xMax; x++){
+		for(int y = 0; y < yMax; y++){
+		    for(int z = 0; z < zMax; z++){
+		    	Coordinate = CoordinateMatrix->getValueRef(x, y, z);
+		    	Coordinate->setLabel(vertexLabel++);
+		    	normalWidth = (Coordinate->getX())/xMax;
+		    	normalHeight = (Coordinate->getY())/yMax;
+		    	normalDepth = (Coordinate->getZ())/zMax;
+		    	Coordinate->setX(normalWidth);
+		    	Coordinate->setY(normalHeight);
+		    	Coordinate->setZ(normalDepth);
+			}
+		}
+	}
+	return CoordinateMap;
+}
 
+void ObjFileWriter::printVerticesToFile(string fileName, ColoredVertexMatrix & CoordinateMap){
+	objFile.open(fileName);
+	for(int x = 0; x < xMax; x++){
+			for(int y = 0; y < yMax; y++){
+			    for(int z = 0; z < zMax; z++){
+			    	Coordinate = CoordinateMatrix->getValueRef(x, y, z);
+			    	objFile << "v " << Coordinate->getNormalX() << " " << Coordinate->getNormalY() << " " << Coordinate->getNormalZ() << endl;
+			    	
+				}
+			}
+		}
 }

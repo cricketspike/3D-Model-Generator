@@ -21,14 +21,15 @@ private:
     int vertexLabel;
     
     // Helper Methods
-    ColoredVertexMatrix * normalizeVertices(ColoredVertexMatrix * CoordinateMap)
+    ColoredVertexMatrix & normalizeVertices(ColoredVertexMatrix & CoordinateMap);
+    void printVerticesToFile(ColoredVertexMatrix & CoordinateMap);
 
 public:
     ObjFileWriter();
     ~ObjFileWriter();
 
-    void initiliaze(string fileName, ColoredVertexMatrix * CoordinateList);
-    void execute();
+    ColoredVertexMatrix & initiliaze(string fileName, ColoredVertexMatrix & CoordinateList);
+    void execute(string fileName, ColoredVertexMatrix & CoordinateList);
     
 }
 
