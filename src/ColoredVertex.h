@@ -35,7 +35,7 @@ public:
 	float getWeight() {
 		float weight = 0;
         foreach(MatrixNode v , voters) {
-                        weight += v.getWeight();
+			weight += v.getWeight();
 		}
 		return weight;
 
@@ -48,7 +48,8 @@ public:
 
 private:
 	std::vector<MatrixNode> voters;
-        uint8_t colors[3];
+	uint8_t colors[3];
+
 
 
 };
@@ -63,16 +64,18 @@ public:
     ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm);
     uint8_t* getValue();
     void addVoter(MatrixNode voter) ;
-    void setValueFromVoters(int grouping_tollerance,uint8_t* bg_color);
+    void setValueFromVoters(int grouping_tollerance);
     bool isInside();
     int getX();
     int getY();
     int getZ();
+    int getLabel();
     void printVert();
     ColoredVertex copy(ColoredVertexMatrix* cvm);
     bool isNull(){return is_null;}
     void setValue(uint8_t* v);
-    bool line_x=false;//use these to check if an existing line already croses through a certain way
+    void setLable(int labelNum);
+    bool line_x=false;//use these to check if an existing line already crosses through a certain way
     bool line_z=false;
     bool line_a=false;
     bool line_b=false;
@@ -82,7 +85,6 @@ public:
 
     void setLA(){line_a=true;}
     void setLB(){line_b=true;}
-    void print(){cout<<"x: "<<width<<"y: "<<height<<"z: "<<depth<<endl;}
 
 protected:
 
@@ -94,7 +96,7 @@ private:
 	uint8_t* value;
 	std::vector<std::vector<ColoredVertex>> faces;
 	std::vector<MatrixNode> voters;
-    int width, height, depth;
+    int width, height, depth, label;
 
 };
 #endif

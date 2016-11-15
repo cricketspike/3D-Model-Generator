@@ -14,11 +14,11 @@
 class ColoredVertexMatrix {
 public:
     ColoredVertexMatrix(){};
-    ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split,uint8_t * background );
+    ColoredVertexMatrix(unsigned int width, unsigned int height, unsigned int depth, std::vector<VotingMatrix> images,float resolution_split);
     ColoredVertexMatrix(ColoredVertexMatrix * original);
 
     ColoredVertex getValue(int x, int y, int z){
-        if(x>=matrix.size()||y>=matrix[0].size()||z>=matrix[0][0].size()){return ColoredVertex();}
+        if(x>matrix.size()||y>matrix[0].size()||z>matrix[0][0].size()){return ColoredVertex();}
         return matrix[x][y][z];}
     ColoredVertex* getValueRef(int x, int y, int z){
         if(x>matrix.size()||y>matrix[0].size()||z>matrix[0][0].size()){return &matrix[x][y][z];}
@@ -29,9 +29,9 @@ public:
         matrix[x][y][z].getValue()[3]=0;
     }
     std::vector<float> getListOfVertsAsFloats();
-    unsigned int getWidth(){return m_width;}
-    unsigned int getHeight(){return m_height;}
-    unsigned int getDepth(){return m_depth;}
+    int getWidth(){return m_width;}
+    int getHeight(){return m_height;}
+    int getDepth(){return m_depth;}
 	int color_contrast_tollerance;
     std::vector<std::vector<std::vector<ColoredVertex>>>  getVertices(){return matrix;}
     ColoredVertexMatrix * getShell();
