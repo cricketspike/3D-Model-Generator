@@ -15,8 +15,10 @@ ColoredVertexMatrix & ObjFileWriter::initialize(ColoredVertexMatrix & Coordinate
 	return CoordinateMatrix;
 }	
 
-void ObjFileWriter::execute(string fileName, ColoredVertexMatrix & CoordinateMap){
-	printVerticesToFile(fileName, initialize(CoordinateMap));
+void ObjFileWriter::execute(string fileName, ColoredVertexMatrix & CoordinateMap, vector<int> faces){
+	ColoredVertexMatrix normalCoordinateMap = initialize(CoordinateMap);
+	printVerticesToFile(fileName, normalCoordinateMap);
+	printFacesToFile(fileName, normalCoordinateMap, vl);
 }
 
 ColoredVertexMatrix & ObjFileWriter::normalizeVertices(ColoredVertexMatrix & CoordinateMap){
@@ -56,4 +58,14 @@ void ObjFileWriter::printVerticesToFile(string fileName, ColoredVertexMatrix & C
 				}
 			}
 		}
+}
+
+void ObjFileWriter::printFacesToFile(string fileName, ColoredVertexMatrix & CoordinateMap, vertexlinker vl){
+	foreach (vector<ColoredVertex> face , vl.getSquares()){
+	    objFile << "f ";
+		foreach (ColoredVertex vertex, face){
+	        objFile << vertex->getLabel() <<"/";
+	    }
+		objFile << "\n";
+	}
 }
