@@ -42,7 +42,6 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
 
 }
 bool ColoredVertexMatrix::isValid(int x,int y,int z){
-    cout<<"C";
     if(x<0||x>=m_width||y<0||y>=m_height||z<0||z>=m_depth){
         return false;
     }
