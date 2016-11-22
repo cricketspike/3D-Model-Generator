@@ -39,10 +39,12 @@ private:
     bool reccurFindNextVertex(int x, int y, int z);
     void addVerticesBetweenKeys(vector<ColoredVertex> loop, vector<ColoredVertex> keys);//add this later
     void SetKeyPoints(int vertices_density_split);
+    void addHorzFace(vector<ColoredVertex> loop);
 
 
     void addSquare(std::vector<ColoredVertex> square) ;
     void addSquare(ColoredVertex corner_a,ColoredVertex corner_b,ColoredVertex corner_c,ColoredVertex corner_d);
+    void addTriangle(ColoredVertex vA, ColoredVertex vB, ColoredVertex vC);
 
 };
 

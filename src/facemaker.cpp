@@ -44,6 +44,8 @@ void FaceMaker::makeFaces(int vertices_density_split) {
                                 foreach (ColoredVertex v, cur_loop) {
                                     v.printVert();
                                 }
+                                cout<<"/LOOP:"<<endl<<endl;
+
                                 loops.push_back(cur_loop);//create and add loop to level
 
                             }
@@ -291,6 +293,24 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
 
             vector<ColoredVertex>key_loop=vector<ColoredVertex>();
             //add in the key vertices clockwise
+            cout<<endl<<"loop"<<endl;
+            cout<<"center_left";
+            center_left.printVert();
+            cout<<"left_forward";
+            left_forward.printVert();
+            cout<<"center_forward";
+            center_forward.printVert();
+            cout<<"forward_right";
+            forward_right.printVert();
+            cout<<"center_right";
+            center_right.printVert();
+            cout<<"right_back";
+            right_back.printVert();
+            cout<<"center_back";
+            center_back.printVert();
+            cout<<"back_left";
+            back_left.printVert();
+
             key_loop.push_back(center_left);
             key_loop.push_back(left_forward);
             key_loop.push_back(center_forward);
@@ -414,30 +434,42 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 cout<<"Test @"<<endl;
 
+    vector<int> last_taken_list;
     for (int i=0;i<m_finished_loops.size();i+=vertices_density_split) {//for each level
-        vector<vector<unsigned int*>> match_lists;//loop_num: placement: match   -will hold all matches of each loop, in order, to be compared
+        vector<vector<unsigned int*>> match_lists;//loop_num: placement: match   -will hold all matches of each loop in THIS level, in order, to be compared
         vector<vector<float>> distance_lists;//loop_num: placement: distance of match   -will hold distance to each match
+        bool top=false;
 
-        if(i+vertices_density_split>=m_finished_loops.size()){
-            cout<<"TOP"<<endl;
-            //if top level just make flat faces
-        }else{
-            for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop find all matches
-                cout<<"part2: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
-                cout<<"LOOP finding all matches"<<endl;
-                vector<unsigned int*> matches;//size 2: {level of loop, loop's index in level}
-                vector<float> distances;//used for comparison of matches, will not cary over
+         vector<int> taken_list;
+        if(i+vertices_density_split<m_finished_loops.size()){
+             taken_list=vector<int> (m_finished_loops[i+vertices_density_split].size(), -1);
+        }
+        //this is a list of -1s representing all the loops on the next level
+        //if not -1 index is already best matched by the loop at index, so you need to compare them
 
+
+        for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop find all matches
+            cout<<"part2: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
+            cout<<"LOOP finding all matches"<<endl;
+            vector<unsigned int*> matches;//size 2: {level of loop, loop's index in level}
+            vector<float> distances;//used for comparison of matches, will not cary over
+            if(i+vertices_density_split>=m_finished_loops.size()){
+                cout<<"TOP"<<endl;
+                top=true;
+                addHorzFace(m_finished_loops[i][j]);
+            }else{
                 for (int jj=0; jj< m_finished_loops[i+vertices_density_split].size();jj++) {//for each loop in next level
 
                     vector<ColoredVertex>current_loop = m_finished_loops[i][j];
                     vector<ColoredVertex>next_loop = m_finished_loops[i+vertices_density_split][jj];
                      cout<<"index of this loop in loops: "<<i<<", "<<j<<"  size of this loop: "<<current_loop.size()<<endl;
                      cout<<"index of next loop in loops: "<<next_loop.size()<<endl;
+                    float cur_distance=//diagonal distance 
+                        pow ((loop_center_positions[i/vertices_density_split][j][0]-loop_center_positions[i/vertices_density_split+1][jj][0]),2)+//x distance squared
+                            pow ((loop_center_positions[i/vertices_density_split][j][2]-loop_center_positions[i/vertices_density_split+1][jj][2]),2);// + z distance squared
 
-                    float cur_distance=//diagonal distance
-                        pow ((loop_center_positions[i/vertices_density_split][j][0]-loop_center_positions[(i+vertices_density_split)/vertices_density_split][jj][0]),2)+//x distance squared
-                            pow ((loop_center_positions[i/vertices_density_split][j][2]-loop_center_positions[(i+vertices_density_split)/vertices_density_split][jj][2]),2);// + z distance squared
+
+
                     cout<<"is"<<cur_distance<<"<"<<m_max_dist<<endl;
                     bool closeEnough= cur_distance <m_max_dist;
                     if(closeEnough){
@@ -479,30 +511,50 @@ cout<<"Test @"<<endl;
             }
 
             //Now every loop has a first, second and third best match
-            //we need co check the next level
+            //we need to check the next level
 
 
             bool found_any_this_place=true; //will be false if we run off all vectors;
-                vector<int> taken_list =vector<int> (m_finished_loops[i+vertices_density_split].size(), -1);
-                //this is a list of -1s representing all the loops on the next level
 
-                //if not -1 index is already best matched by the loop at index, so you need to compare them
+
 
                 vector<bool> locked=vector<bool> (m_finished_loops[i+vertices_density_split].size(), false);
                 //this is a list of bools representing which claims to an index on the taken list can be contested
                 //taken list is locked each place so that every loop is more likely to get its first pick
+
+
                 for (int placement=0;found_any_this_place ;placement++){//compare the first place of every loop then then second, etc
                 cout<<"placement ="<<placement<<endl;
-                if (match_lists.size()==0){ break;}
+                if (match_lists.size()==0){
+                        break;
+                    ;}
                 found_any_this_place=false;
 
 
 
                 for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop given a certain placement (find best of all matches)
                     cout<<"part 3: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
-                    if (match_lists[j].size()==0||placement>=match_lists[j].size()){
-                        //if the list is empty or the algorithm runs off when looking for the next place, break
-                        break;}
+
+                    if(last_taken_list.size()==0||last_taken_list[j]==-1){//if nothing connects from below to this loop
+                        cout<<"flatface 1"<<endl;
+                        string a;
+                        cin>>a;
+                        addHorzFace(m_finished_loops[i][j]);
+                    }
+                    if (match_lists[j].size()==0){
+                        cout<<"flatface 2"<<endl;
+                        string a;
+                        cin>>a;
+                        addHorzFace(m_finished_loops[i][j]);
+                    }else{
+                        cout<<"not flat face"<<i<<endl;
+                        string a;
+
+                        cin>>a;
+
+                    }
+                    if(placement>=match_lists[j].size()){ break;} //if the list is empty or the algorithm runs off when looking for the next place, break
+
 
 
                     unsigned int* match= match_lists[j][placement]; //the nth best match of this loop where n=placement
@@ -562,9 +614,13 @@ cout<<"Test @"<<endl;
 
              cout<<"CONNECT FACES"<<"------------------------"<<endl;
             for (int e_index=0; e_index<taken_list.size();e_index++ ){//for each element e in taken list:
+
                 cout<<"taken list size "<<taken_list.size()<<">0"<<endl;
                 int e=taken_list[e_index];
+                vector<ColoredVertex> upper_loop=m_finished_loops[i+vertices_density_split][e_index];
+
                 if(e!=-1){//if element was connected to
+
                     cout<<"element"<<e <<"in the taken list was taken"<<endl;
                     //connect loops[e] to loops[e's index] with 8*n faces (be sure to loop arround)
                     cout<<"Taken List:"<<e_index<<"/"<<taken_list.size();
@@ -573,7 +629,6 @@ cout<<"Test @"<<endl;
                     vector<ColoredVertex> lower_loop=m_finished_loops[i][e];
                     cout<<e<<"/"<<m_finished_loops[i].size()<<endl;
 
-                    vector<ColoredVertex> upper_loop=m_finished_loops[i+vertices_density_split][e_index];
 
                     assert(lower_loop.size()==upper_loop.size());
                     cout<<"test %";
@@ -585,18 +640,45 @@ cout<<"Test @"<<endl;
                     addSquare(lower_loop[lower_loop.size()-1],upper_loop[lower_loop.size()-1],upper_loop[0],lower_loop[0]);//wrap arround to begining
                 }
 
-                string adss;
-
+                cout<<" a1"<<"------------------------"<<endl;
 
             }
+            cout<<" a2"<<"------------------------"<<endl;
+
 
         }
+        cout<<" a3"<<"------------------------"<<endl;
+
+        last_taken_list=taken_list;
+        cout<<"a5"<<endl;
     }
+    cout<<"a4"<<"------------------------"<<endl;
+
 }
 
 
+void FaceMaker::addTriangle(ColoredVertex vA, ColoredVertex vB, ColoredVertex vC) {//group the 3 vertices passed in and add that group to the list "triangles"
 
 
+    std::vector<ColoredVertex>flat = std::vector<ColoredVertex>();
+    flat.push_back(vA);
+    flat.push_back(vB);
+    flat.push_back(vC);
+    triangles.push_back(flat); //adds a horizontal face
+}
+
+void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
+    assert(loop.size()>=8);
+    addTriangle(loop[0],loop[2],loop[6]);
+    addTriangle(loop[6],loop[4],loop[2]);
+    addTriangle(loop[0],loop[1],loop[2]);
+    addTriangle(loop[2],loop[3],loop[4]);
+    addTriangle(loop[4],loop[5],loop[6]);
+    addTriangle(loop[6],loop[7],loop[0]);
+
+
+
+}
 
     void FaceMaker:: addSquare(std::vector<ColoredVertex> square) {// add group of 4 vertices to the list "squares"
         cout<<"SQUARE ADDED0 "<<endl;
