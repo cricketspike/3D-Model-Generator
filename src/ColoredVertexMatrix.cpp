@@ -41,7 +41,7 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
         }
 
 }
-bool ColoredVertexMatrix::isValid(int x,int y,int z){
+bool ColoredVertexMatrix::isValid(unsigned int x,unsigned int y,unsigned int z){
     if(x<0||x>=m_width||y<0||y>=m_height||z<0||z>=m_depth){
         return false;
     }
@@ -52,7 +52,7 @@ bool ColoredVertexMatrix::isValid(int x,int y,int z){
     return true;
 
 }
-ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original){
+ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original,int vertices_density_split){
     m_width=original->getWidth();
     m_height=original->getHeight();
     m_depth=original->getDepth();
@@ -63,7 +63,7 @@ ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original){
             matrix[i].push_back(std::vector<ColoredVertex>());
             for (unsigned int k = 0; k < m_depth; k++) {
                 ColoredVertex temp_vert=original->getValue(i,j, k).copy(this);
-                if(original->getValue(i,j, k).isInside()){
+                if(original->getValue(i,j, k).isInside(vertices_density_split)){
                     temp_vert.getValue()[3]=0;
                 }
                 matrix[i][j].push_back( temp_vert);
@@ -71,8 +71,8 @@ ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original){
         }
     }
 }
- ColoredVertexMatrix* ColoredVertexMatrix::getShell(){
-        ColoredVertexMatrix *shell= new ColoredVertexMatrix(this);
+ ColoredVertexMatrix* ColoredVertexMatrix::getShell(int vertices_density_split){
+        ColoredVertexMatrix *shell= new ColoredVertexMatrix(this,vertices_density_split);
         return shell;
     }
 

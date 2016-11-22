@@ -1,6 +1,8 @@
 QT += core
 QT += gui
 QT += widgets
+QT += opengl
+LIBS += -lopengl32
 
 CONFIG += c++11
 
@@ -28,7 +30,12 @@ SOURCES += \
     src/verticessmoothing.cpp \
     src/cubemapeditordisplay.cpp \
     src/cubemapeditorimage.cpp \
-    src/cubemapeditor.cpp
+    src/cubemapeditor.cpp \
+    src/modelwindow.cpp \
+    src/modelpreviewwidget.cpp \
+    src/modeleditor.cpp \
+    src/facemaker.cpp \
+    src/precisetrimming.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -49,7 +56,12 @@ HEADERS += \
     src/verticessmoothing.h \
     src/cubemapeditordisplay.h \
     src/cubemapeditorimage.h \
-    src/cubemapeditor.h
+    src/cubemapeditor.h \
+    src/modelwindow.h \
+    src/modelpreviewwidget.h \
+    src/modeleditor.h \
+    src/facemaker.h \
+    src/precisetrimming.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -59,7 +71,9 @@ INCLUDEPATH += "C:/Qt/5.6/msvc2015_64/include/"
 INCLUDEPATH += $$PWD/include
 DEPENDPATH += $$PWD/include
 
+
 FORMS += \
     src/importwindow.ui \
     src/cubepreviewwidgetdemo.ui \
-    src/cubemapeditor.ui
+    src/cubemapeditor.ui \
+    src/modelwindow.ui

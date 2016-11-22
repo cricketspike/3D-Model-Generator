@@ -64,7 +64,7 @@ public:
     uint8_t* getValue();
     void addVoter(MatrixNode voter) ;
     void setValueFromVoters(int grouping_tollerance,uint8_t* bg_color);
-    bool isInside();
+    bool isInside(int vertices_density_split);
     int getX();
     int getY();
     int getZ();
@@ -83,13 +83,13 @@ public:
     void setLA(){line_a=true;}
     void setLB(){line_b=true;}
     void print(){cout<<"x: "<<width<<"y: "<<height<<"z: "<<depth<<endl;}
-
+    void setSmooth(bool smooth){m_smooth=smooth;}
 protected:
 
 
 private:
     bool is_null=false;
-    bool smooth=true;
+    bool m_smooth=true;
             ColoredVertexMatrix * cvm;
 	uint8_t* value;
 	std::vector<std::vector<ColoredVertex>> faces;

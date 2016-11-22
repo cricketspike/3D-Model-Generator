@@ -3,7 +3,7 @@
 #include <QFileDialog>
 #include "cubemapeditor.h"
 #include "ui_cubemapeditor.h"
-
+#include "modelwindow.h"
 CubeMapEditor::CubeMapEditor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CubeMapEditor)
@@ -57,4 +57,35 @@ void CubeMapEditor::on_pushButton_loadImage_clicked()
     QImage image;
     image.load(imagePath);
     ui->display->loadImage(image);
+}
+
+void CubeMapEditor::on_pushButton_clicked()
+{
+
+
+    QImage img0(":/images/image0.jpg" );
+    QImage img1( ":/images/image1.jpg" );
+    QImage img2( ":/images/image2.jpg" );
+    QImage img3( ":/images/image3.jpg" );
+    QImage img4( ":/images/image4.jpg" );
+    QImage img5( ":/images/image5.jpg" );
+
+    vector<QImage> images;
+    images.push_back(img0);
+    images.push_back(img1);
+    images.push_back(img2);
+    images.push_back(img3);
+    images.push_back(img4);
+    images.push_back(img5);
+
+    box b = box(images);
+
+
+    ModelWindow mwin;
+    mwin.setModal(true);
+    mwin.createModel(b);
+
+    mwin.exec();
+
+
 }

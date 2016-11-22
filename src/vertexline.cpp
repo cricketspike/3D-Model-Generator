@@ -7,27 +7,21 @@
 
 VertexLine:: VertexLine(Vect3D start , ColoredVertexMatrix* matrix_in,char dir_in,int loop_split){
     name="good";
-    cout<<"B"<<endl;
 
     matrix=matrix_in;
     direction=dir_in;
     line=std::vector<Vect3D>();
     checkVert(start.X(),start.Y(),start.Z(),true, loop_split);
     checkVert(start.X(),start.Y(),start.Z(),false, loop_split);
-    foreach (Vect3D a ,line)
-        cout<<a.X()<<","<<a.Y()<<","<<a.Z()<<"----00------"<<endl;
 
 
 }
 void VertexLine::checkVert(int x,int y,int z,bool negative_dir,int loop_split){//recursive check of a vertex which checks the next one in a given direction
-cout<<"A"<<endl;
     if(!matrix->isValid(x,y,z)){
         return;
     }//reached end of line
 
-    cout<<x<<","<<y<<","<<z<<"----------"<<endl;
     Vect3D pos= Vect3D(x,y,z);
-cout<<pos.X()<<","<<pos.Y()<<","<<pos.Z()<<"------**----"<<endl;
     ColoredVertex *v=matrix->getValueRef(x,y,z);
     line.push_back(pos);
     name="great";

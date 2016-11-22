@@ -6,7 +6,7 @@
 #include"vertexlinker.h"
 #include"qstring.h"
 #include"qfile.h"
-
+#include "precisetrimming.h"
 
 #include <QApplication>
 #include <QSurfaceFormat>
@@ -19,6 +19,7 @@
 #include "src/ImportedImage.h"
 #include "src/CubeMapEditor.h"
 #include "coloredvertexmatrix.h"
+#include "facemaker.h"
 #include "verticessmoothing.h"
 #include"mainwaindow.h"
 int main(int argc, char **argv)
@@ -97,29 +98,34 @@ int main(int argc, char **argv)
 
             }
 
-            float resolution_split=4;//lower=slower, more accurate
-            int vertices_density_split=3;//lower= more faces
+            float resolution_split=6;//lower=slower, more accurate
+            int vertices_density_split=4;//lower= more faces
             cout<<endl<<"FINAL: "<<model_width<<" "<<model_height<<" "<<model_depth<<endl;
 
             vector<VotingMatrix> voters=vector<VotingMatrix>();
             for(int i=0;i<6;i++){
                 cout<<"Voting Matrix"<<i<<":"<<endl;
-                if(i!=2){voters.push_back(VotingMatrix(
+               voters.push_back(VotingMatrix(
                     model_width, model_height, model_depth,b.getSides()[i],resolution_split)
                 );
 
-            }else{cout<<"SKIPPING BACK FOR NOW";}
+
 
             }
            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split,null_color );
 
            nullify(vertices, null_color, threshold);
+
            smooth (vertices, vertices_density_split);
 
-           ColoredVertexMatrix *shell= vertices.getShell();
+           ColoredVertexMatrix *shell= vertices.getShell(vertices_density_split);
+
+           PreciseTrimming pt = PreciseTrimming(shell);
+
 
            QString filename="testVertsShell";
-           QFile file(filename);
+
+            QFile file(filename);
            if(file.open(QIODevice::ReadWrite)){
                QTextStream stream( &file );
                int width= shell->getWidth();
@@ -129,20 +135,28 @@ int main(int argc, char **argv)
               for (int j=0;j<height;j++){
               for (int k=0;k<depth;k++){
                   uint8_t* values=  shell->getValue(i,j,k).getValue();
-              //std::cout<<endl<<i<<":"<<j<<":"<<k<<":           ";
-                  if((int)values[3]!=0){stream <<i<<" "<<j<<" "<<k<<" "<<endl;}
+
+                  if((int)values[3]!=0){
+
+                      std::cout<<endl<<i<<":"<<j<<":"<<k<<": "<<values[3];
+                      stream <<i<<" "<<j<<" "<<k<<" "<<endl;}
 
 
               }}}
 
            }
 
+
+
+           FaceMaker fm=FaceMaker(shell);
+           fm.makeFaces(vertices_density_split);
+/*
            VertexLinker vl=VertexLinker(shell);
            vl.makeShapes(vertices_density_split);
+*/
 
 
-
-           float * vertArray= &shell->getListOfVertsAsFloats()[0];
+           //float * vertArray= &shell->getListOfVertsAsFloats()[0];
 
            int wid=shell->getWidth();
            int hei=shell->getHeight();
@@ -150,8 +164,8 @@ int main(int argc, char **argv)
            std::vector<GLfloat> facesByXYZ=std::vector<float>();
            std::vector<GLfloat> facesByRBG=std::vector<float>();
            //print all triangles and add their raw data into the face arrays
-                      foreach (vector<ColoredVertex> face , vl.getTriangles()){
-                          //cout<<"TESTA"<<endl;
+                      foreach (vector<ColoredVertex> face , fm.getTriangles()){
+                          cout<<"TESTA"<<endl;
                           //cout<<"triangle "<<face.size()<<"\n";
                           for (int i=0;i<3;i++){
                            //cout<<"TEST+"<<endl;
@@ -172,9 +186,11 @@ int main(int argc, char **argv)
                           }
                           //cout<<"TESTC"<<endl;
                       }
-//             cout<<"faces\n";
-             foreach (vector<ColoredVertex> face , vl.getSquares()){
-                 vector<ColoredVertex> triangles=vl.toTriangles(face);
+            cout<<"faces\n";
+             foreach (vector<ColoredVertex> face , fm.getSquares()){
+                 cout<<"test";
+                 vector<ColoredVertex> triangles=fm.toTriangles(face);
+                 //cout<<triangles.size();
                  for (int i=0;i<6;i++){
                      ColoredVertex  vert=triangles[i];
 
@@ -189,7 +205,7 @@ int main(int argc, char **argv)
   //                   triangles[i].printVert();
 
              }
-                 cout<<std::endl;
+
 
              }
              QGuiApplication app(argc, argv);

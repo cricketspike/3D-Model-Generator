@@ -17,7 +17,7 @@
             int bg_contrast=(voters[i].colorContrast(bg_color[0],bg_color[1],bg_color[2]));
             if(voters.size()>0){
                 if(bg_contrast<grouping_tollerance){
-                    voters[i].multiplier=2.0f ;//this only counts towards weight
+                    voters[i].multiplier=2.5f ;//this only counts towards weight
                 }
             }
             int closest_group_index = -1, closest_size = -1;//find the group that matches the color the best
@@ -60,23 +60,24 @@
     }
 
 
-    bool ColoredVertex::isInside(){
+    bool ColoredVertex::isInside(int vertices_density_split){
            int tot_w= cvm->getWidth() , tot_h= cvm->getHeight() , tot_d = cvm->getDepth() ;
            for ( int i = -1; i <=1; i++) {
-               for ( int j = -1; j <=1; j++) {
                    for ( int k = -1; k <=1; k++) {
                       //make sure not out of bounds or the vertex itself
                        if(
-                          width+i<0||height+j<0||depth+k<0||
-                          width+i>=tot_w||height+j>=tot_h||depth+k>=tot_d||
-                          (i==0&&j==0&&k==0)||(i!=0&&j!=0&&k!=0)||(smooth&&(i!=0&&j!=0)||(j!=0&&k!=0)||(i!=0&&k!=0))//dont want ones where only the very corner touches (maybe make this and this with only 2 non zeros options for smoothness later)
-                          ){continue;}
+                          width+i<0||height<0||depth+k<0||
+                          width+i>=tot_w||height>=tot_h||depth+k>=tot_d
+                               ||(i==0&&k==0)//exact center
+                               ||(i!=0&&k!=0)//2D corner if smooth
+                               )
+                         {continue;}//skip these, they dont count as a null neighbor
                         else {
-                       if(((int)cvm->getValue(width+i,height+j,depth+k).getValue()[3])==0){
+                       if(((int)cvm->getValue(width+i,height,depth+k).getValue()[3])==0){
                            //if in bounds and it finds a peice of background touching it,
                            //then it is not an inside and should not be nullified;
                            return false;
-                       }
+
                    }
                }
            }

@@ -119,22 +119,22 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
                 vector<Vect3D>next_level = all_verts[i + loop_split];
 
 
-                //look trouhg every loop on the next level
+                //look trough every loop on the next level
 
                 ColoredVertex matching_vert;
                 if(matrix->isValid(x,y+loop_split,z)){
 
                     if((matrix->isValid(x+loop_split,y+loop_split,z))&&!(matrix->isValid(x+loop_split,y,z))){
-                        addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x+loop_split,y+loop_split,z));
+                      //  addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x+loop_split,y+loop_split,z));
                     }
                     if((matrix->isValid(x,y+loop_split,z+loop_split))&&!(matrix->isValid(x,y,z+loop_split))){
-                        addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x,y+loop_split,z+loop_split));
+                     //   addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x,y+loop_split,z+loop_split));
                     }
                     if((matrix->isValid(x-loop_split,y+loop_split,z))&&!(matrix->isValid(x-loop_split,y,z))){
-                        addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x-loop_split,y+loop_split,z));
+                       // addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x-loop_split,y+loop_split,z));
                     }
                     if((matrix->isValid(x,y+loop_split,z-loop_split))&&!(matrix->isValid(x,y,z-loop_split))){
-                        addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x,y+loop_split,z-loop_split));
+                       // addTriangle(cur_vert,matrix->getValue(x,y+loop_split,z), matrix->getValue(x,y+loop_split,z-loop_split));
                     }
 
                 }
@@ -170,7 +170,7 @@ std::vector<std::vector<VertexLine>> levels =std::vector<std::vector<VertexLine>
                     //hold this vertex and its match in the first 2
                     cur_face[0] =cur_vert;
                     cur_face[1] =matching_vert;
-                    addSquare(cur_face);
+                    addSquare(cur_face);  //loop connect faces
 
                 }
 

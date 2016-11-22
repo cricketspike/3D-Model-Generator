@@ -1,11 +1,20 @@
 #include <QVector3D>
 
-#include "cubepreviewwidget.h"
+#include "modelpreviewwidget.h"
 
 #include <iostream>
 using namespace std;
 
-CubePreviewWidget::CubePreviewWidget(QWidget *parent) : QOpenGLWidget(parent),
+
+void ModelPreviewWidget::renderModel(vector<GLfloat> faces,vector<GLfloat> colors){
+    m_faces=faces;//need this to keep array in scope
+    m_faces_by_vertices= &m_faces[0];
+    m_faces_by_colors= &colors[0];
+    m_num_verts=faces.size();
+    cout<<"TEST SLOT "<< faces.size() <<endl;
+}
+
+ModelPreviewWidget::ModelPreviewWidget(QWidget *parent) : QOpenGLWidget(parent),
                                                             m_vbo(QOpenGLBuffer::VertexBuffer),
                                                             m_program(0),
                                                             m_haveTextures(false),
@@ -16,7 +25,7 @@ CubePreviewWidget::CubePreviewWidget(QWidget *parent) : QOpenGLWidget(parent),
     memset(textures, 0, sizeof(textures));
 }
 
-CubePreviewWidget::~CubePreviewWidget()
+ModelPreviewWidget::~ModelPreviewWidget()
 {
     makeCurrent();
 
@@ -29,7 +38,7 @@ CubePreviewWidget::~CubePreviewWidget()
 
     doneCurrent();
 }
-void CubePreviewWidget::initializeGL()
+void ModelPreviewWidget::initializeGL()
 {
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
@@ -45,53 +54,14 @@ void CubePreviewWidget::initializeGL()
     m_vao.create();
     m_vao.bind();
 
-    GLfloat vertices[] = {
-    /*
-     *    X |  Y  |  Z  |       U | V
-     * --------------------------------
-     */
-         0.5, -0.5,  0.5,       0,  0,      // Right
-         0.5,  0.5,  0.5,       0,  1,
-         0.5, -0.5, -0.5,       1,  0,
-         0.5,  0.5, -0.5,       1,  1,
-
-         0.5, -0.5, -0.5,       0,  0,      // Back
-         0.5,  0.5, -0.5,       0,  1,
-        -0.5, -0.5, -0.5,       1,  0,
-        -0.5,  0.5, -0.5,       1,  1,
-
-        -0.5, -0.5, -0.5,       0,  0,      // Left
-        -0.5,  0.5, -0.5,       0,  1,
-        -0.5, -0.5,  0.5,       1,  0,
-        -0.5,  0.5,  0.5,       1,  1,
-
-
-        -0.5, -0.5,  0.5,       0,  0,      // Front
-        -0.5,  0.5,  0.5,       0,  1,
-         0.5, -0.5,  0.5,       1,  0,
-         0.5,  0.5,  0.5,       1,  1,
-
-
-        -0.5, -0.5, -0.5,       0,  0,      // Bottom
-        -0.5, -0.5,  0.5,       0,  1,
-         0.5, -0.5, -0.5,       1,  0,
-         0.5, -0.5,  0.5,       1,  1,
-
-
-        -0.5,  0.5,  0.5,       0, 0,       // Top
-        -0.5,  0.5, -0.5,       0, 1,
-         0.5,  0.5,  0.5,       1, 0,
-         0.5,  0.5, -0.5,       1, 1,
-    };
-
     m_vbo.create();
     m_vbo.bind();
-    m_vbo.setUsagePattern(QOpenGLBuffer::UsagePattern::StaticDraw);
-    m_vbo.allocate(vertices, 6*4*5*sizeof(GLfloat));
+    m_vbo.setUsagePattern(QOpenGLBuffer::UsagePattern::DynamicDraw);
+    m_vbo.allocate(m_faces_by_vertices,m_num_verts*3);
 
     m_program = new QOpenGLShaderProgram(this);
-    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/cubepreviewwidget.vert");
-    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/cubepreviewwidget.frag");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/ModelPreviewWidget.vert");
+    m_program->addShaderFromSourceFile(QOpenGLShader::Fragment, ":/shaders/ModelPreviewWidget.frag");
     m_program->link();
     m_program->bind();
 
@@ -100,8 +70,8 @@ void CubePreviewWidget::initializeGL()
     m_uniform_projection = m_program->uniformLocation("projection");
     m_uniform_useTexture = m_program->uniformLocation("useTexture");
 
-    m_program->setAttributeBuffer( "positionCoords", GL_FLOAT, 0, 3, sizeof(GLfloat)*5 );
-    m_program->setAttributeBuffer( "textureCoords", GL_FLOAT, sizeof(GLfloat)*3, 2, sizeof(GLfloat)*5 );
+    m_program->setAttributeBuffer( "positionCoords", GL_FLOAT, 0, 3, sizeof(GLfloat)*3 );
+    m_program->setAttributeBuffer( "textureCoords", GL_FLOAT, sizeof(GLfloat)*3, 3, sizeof(GLfloat)*3 );
     m_program->enableAttributeArray( "positionCoords" );
     m_program->enableAttributeArray( "textureCoords" );
 
@@ -134,17 +104,30 @@ void CubePreviewWidget::initializeGL()
     //texturesFromBox(b);
 
     connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
+    spin=0;
 }
 
-void CubePreviewWidget::resizeGL(int w, int h)
+void ModelPreviewWidget::resizeGL(int w, int h)
 {
     m_projection.setToIdentity();
-    m_projection.perspective(45.0, (float) w / (float) h, 0.1, 1000);
+    m_projection.perspective(40.0f, (float) w / (float) h, 0.1f, 1000);
 }
 
-void CubePreviewWidget::paintGL()
+void ModelPreviewWidget::paintGL()
 {
+tilt_y+=.01;
+spin+=9;
+string x;
+//cin>>x;
+    m_program->setAttributeBuffer( "positionCoords", GL_FLOAT, 0, 3, sizeof(GLfloat)*3 );
+    m_program->setAttributeBuffer( "textureCoords", GL_FLOAT, sizeof(GLfloat)*3, 3, sizeof(GLfloat)*3 );
+    m_program->enableAttributeArray( "positionCoords" );
+    m_program->enableAttributeArray( "textureCoords" );
     m_vao.bind();
+    m_vbo.bind();
+
+    m_vbo.allocate(m_faces_by_vertices,m_num_verts*verts_per_triangle);
+
     m_program->bind();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -162,46 +145,54 @@ void CubePreviewWidget::paintGL()
     m_program->setUniformValue(m_uniform_projection, m_projection);
     m_program->setUniformValue(m_uniform_useTexture, (m_useTextures && m_haveTextures ? 1 : 0));
 
-    for (int i=0; i<6; i++) {
+    cout<<"TEST10 "<<m_num_verts<<endl;
+
+    for (int i=0;(i< m_num_verts); i++) {
+       //cout <<"vert"<<i<<": "<<m_faces[i]<<", "<<m_faces[i+1]<<", "<<m_faces[i+2]<<endl;
+
         if (m_useTextures && m_haveTextures)
+        {
             textures[i]->bind();
-        glDrawArrays(GL_TRIANGLE_STRIP,  i*4, 4);
-    }
+        }
+
+        glDrawArrays(GL_TRIANGLES,  i * verts_per_triangle, verts_per_triangle);
+    }cout<<endl;
     m_program->release();
     m_vao.release();
+    m_vbo.release();
 }
 
-void CubePreviewWidget::setTilt_z(double value)
+void ModelPreviewWidget::setTilt_z(double value)
 {
     tilt_z = value;
 }
 
-void CubePreviewWidget::setTilt_y(double value)
+void ModelPreviewWidget::setTilt_y(double value)
 {
     tilt_y = value;
 }
 
-void CubePreviewWidget::setTilt_x(double value)
+void ModelPreviewWidget::setTilt_x(double value)
 {
     tilt_x = value;
 }
 
-void CubePreviewWidget::setZoom(double value)
+void ModelPreviewWidget::setZoom(double value)
 {
     zoom = value;
 }
 
-bool CubePreviewWidget::getUseTexture() const
+bool ModelPreviewWidget::getUseTexture() const
 {
     return m_useTextures;
 }
 
-void CubePreviewWidget::setUseTexture(bool value)
+void ModelPreviewWidget::setUseTexture(bool value)
 {
     m_useTextures = value;
 }
 
-void CubePreviewWidget::texturesFromBox(box& b)
+void ModelPreviewWidget::texturesFromBox(box& b)
 {
     std::vector<ImportedImage> imgs = b.getSides();
     for (int i=0; i<imgs.size(); i++) {
