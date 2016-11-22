@@ -537,20 +537,16 @@ cout<<"Test @"<<endl;
 
                     if(last_taken_list.size()==0||last_taken_list[j]==-1){//if nothing connects from below to this loop
                         cout<<"flatface 1"<<endl;
-                        string a;
-                        cin>>a;
+
                         addHorzFace(m_finished_loops[i][j]);
                     }
                     if (match_lists[j].size()==0){
                         cout<<"flatface 2"<<endl;
-                        string a;
-                        cin>>a;
+
                         addHorzFace(m_finished_loops[i][j]);
                     }else{
                         cout<<"not flat face"<<i<<endl;
-                        string a;
 
-                        cin>>a;
 
                     }
                     if(placement>=match_lists[j].size()){ break;} //if the list is empty or the algorithm runs off when looking for the next place, break
