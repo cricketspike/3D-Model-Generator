@@ -61,10 +61,10 @@ void weighteditor::mousePressEvent(QMouseEvent* event)
     double x = ((double)event->pos().x());
     double y = ((double)event->pos().y());
     if (event->buttons() == Qt::LeftButton) {
-        image->addWeight(x,y);
+        // image->addWeight(x,y);
     }
     if (event->buttons() == Qt::RightButton) {
-        image->subtractWeight(x,y);
+       // image->subtractWeight(x,y);
     }
 }
 

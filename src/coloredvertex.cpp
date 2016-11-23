@@ -11,6 +11,8 @@
     uint8_t* ColoredVertex::getValue(){return value;}
     void ColoredVertex::addVoter(MatrixNode voter) { voters.push_back(voter); }
     void ColoredVertex::setValueFromVoters(int grouping_tollerance) {
+        uint8_t bg_color[] = { 255, 255, 255 };
+
         //group together nodes based on similar colors
         std::vector<VotingNode> groupedVoters;
         for (int i = 0; i < voters.size(); i++) {

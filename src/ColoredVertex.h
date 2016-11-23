@@ -64,7 +64,7 @@ public:
     ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm);
     uint8_t* getValue();
     void addVoter(MatrixNode voter) ;
-    void setValueFromVoters(int grouping_tollerance,uint8_t* bg_color);
+    void setValueFromVoters(int grouping_tollerance);
     bool isInside(int vertices_density_split);
     int getX();
     int getY();

@@ -12,7 +12,7 @@
 
 #include "cubemapeditor.h"
 #include "cubemapeditorimage.h"
-#include <vector>
+
 /*
  * This class provides an interactive display
  * of the cube map in CubeMapEditor.
@@ -33,7 +33,11 @@ class CubeMapEditorDisplay : public QOpenGLWidget,
 
 public:
 
+    enum ProjectionMode { None, LeftAndRight, TopAndBottom };
+
+
     explicit CubeMapEditorDisplay(QWidget *parent = 0);
+
     ~CubeMapEditorDisplay();
 
     // The following four methods operate on selected_face
@@ -46,8 +50,9 @@ public:
     void setFocus(double zoom, QPointF offset);
 
     void loadImage(QImage image);
-    CubeMapEditorImage* getImage();
-    //vector<vector<uint8_t*>> getWeight();
+
+    void setProjectionMode(ProjectionMode mode);
+
 
 protected:
     void initializeGL();
@@ -58,6 +63,8 @@ protected:
     void wheelEvent(QWheelEvent* event);
 
 private:
+    void updateVertices();
+
     QOpenGLVertexArrayObject vao;
     QOpenGLBuffer vbo;
     QOpenGLShaderProgram* program;
@@ -81,6 +88,8 @@ private:
     GLuint uniform_view;
     GLuint uniform_projection;
     GLuint uniform_haveTexture;
+    GLuint uniform_isProjection;
+    GLuint uniform_rotation;
     GLuint uniform_zoom;
     GLuint uniform_offset;
 
@@ -92,6 +101,8 @@ private:
     void addRuler(DisplayRuler r);
     void removeRuler(DisplayRuler r);
     void drawRulers(QPainter& p);
+
+    ProjectionMode projection_mode;
 };
 
 #endif // CUBEMAPEDITORDISPLAY_H

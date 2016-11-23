@@ -10,7 +10,8 @@ CubeMapEditorDisplay::CubeMapEditorDisplay(QWidget* parent) : QOpenGLWidget(pare
                                                               program(0),
                                                               zoom(1.0),
                                                               offset(0.0, 0.0),
-                                                              selected_face(CubeMapEditor::Face::NONE)
+                                                              selected_face(CubeMapEditor::Face::NONE),
+                                                              projection_mode(ProjectionMode::None)
 {
     images = new CubeMapEditorImage[6];
 }
@@ -37,9 +38,11 @@ void CubeMapEditorDisplay::loadImage(QImage image)
     images[selected_face].setImage(image);
 }
 
-CubeMapEditorImage* CubeMapEditorDisplay::getImage()
+void CubeMapEditorDisplay::setProjectionMode(CubeMapEditorDisplay::ProjectionMode mode)
 {
-    return &images[selected_face];
+    projection_mode = mode;
+
+    updateVertices();
 }
 
 void CubeMapEditorDisplay::getFocus(double& zoom, QPointF& offset)
@@ -88,24 +91,32 @@ void CubeMapEditorDisplay::setFocus(double zoom, QPointF offset)
     }
 }
 
-void CubeMapEditorDisplay::initializeGL()
+void CubeMapEditorDisplay::updateVertices()
 {
-    initializeOpenGLFunctions();
-
-    glClearColor(0,0,0,1);
-
-    vao.create();
-    vao.bind();
-
     GLfloat vertices[] = {
     /*
      *    X |  Y  |  Z  |       U | V
      * --------------------------------
      */
+        -1.5, -0.5,  0.0,       0,  0,      // Left
+        -1.5,  0.5,  0.0,       0,  1,
+        -0.5, -0.5,  0.0,       1,  0,
+        -0.5,  0.5,  0.0,       1,  1,
+
+        -0.5,  0.5,  0.0,       0,  0,      // Top
+        -0.5,  1.5,  0.0,       0,  1,
+         0.5,  0.5,  0.0,       1,  0,
+         0.5,  1.5,  0.0,       1,  1,
+
         -0.5, -0.5,  0.0,       0,  0,      // Front
         -0.5,  0.5,  0.0,       0,  1,
          0.5, -0.5,  0.0,       1,  0,
          0.5,  0.5,  0.0,       1,  1,
+
+        -0.5, -1.5,  0.0,       0,  0,      // Bottom
+        -0.5, -0.5,  0.0,       0,  1,
+         0.5, -1.5,  0.0,       1,  0,
+         0.5, -0.5,  0.0,       1,  1,
 
          0.5, -0.5,  0.0,       0,  0,      // Right
          0.5,  0.5,  0.0,       0,  1,
@@ -117,6 +128,114 @@ void CubeMapEditorDisplay::initializeGL()
          2.5, -0.5,  0.0,       1,  0,
          2.5,  0.5,  0.0,       1,  1,
 
+        -1.5,  0.5,  0.0,       0,  0,      // Projection Top Left
+        -1.5,  1.5,  0.0,       0,  1,
+        -0.5,  0.5,  0.0,       1,  0,
+        -0.5,  1.5,  0.0,       1,  1,
+
+        -1.5, -1.5,  0.0,       0,  0,      // Projection Bottom Left
+        -1.5, -0.5,  0.0,       0,  1,
+        -0.5, -1.5,  0.0,       1,  0,
+        -0.5, -0.5,  0.0,       1,  1,
+
+         0.5,  0.5,  0.0,       0,  0,      // Projection Top Right
+         0.5,  1.5,  0.0,       0,  1,
+         1.5,  0.5,  0.0,       1,  0,
+         1.5,  1.5,  0.0,       1,  1,
+
+         0.5, -1.5,  0.0,       0,  0,      // Projection Bottom Right
+         0.5, -0.5,  0.0,       0,  1,
+         1.5, -1.5,  0.0,       1,  0,
+         1.5, -0.5,  0.0,       1,  1,
+
+         1.5,  0.5,  0.0,       0,  0,      // Projection Top Far Right
+         1.5,  1.5,  0.0,       0,  1,
+         2.5,  0.5,  0.0,       1,  0,
+         2.5,  1.5,  0.0,       1,  1,
+
+         1.5, -1.5,  0.0,       0,  0,      // Projection Bottom Far Right
+         1.5, -0.5,  0.0,       0,  1,
+         2.5, -1.5,  0.0,       1,  0,
+         2.5, -0.5,  0.0,       1,  1,
+
+
+    };
+
+    if (projection_mode == ProjectionMode::LeftAndRight) {
+        vertices[120+3] = 1; vertices[120+4] = 0;
+        vertices[125+3] = 0; vertices[125+4] = 0;
+        vertices[130+3] = 1; vertices[130+4] = 1;
+        vertices[135+3] = 0; vertices[135+4] = 1;
+
+        vertices[140+3] = 0; vertices[140+4] = 1;
+        vertices[145+3] = 1; vertices[145+4] = 1;
+        vertices[150+3] = 0; vertices[150+4] = 0;
+        vertices[155+3] = 1; vertices[155+4] = 0;
+
+        vertices[160+3] = 0; vertices[160+4] = 1;
+        vertices[165+3] = 1; vertices[165+4] = 1;
+        vertices[170+3] = 0; vertices[170+4] = 0;
+        vertices[175+3] = 1; vertices[175+4] = 0;
+
+        vertices[180+3] = 1; vertices[180+4] = 0;
+        vertices[185+3] = 0; vertices[185+4] = 0;
+        vertices[190+3] = 1; vertices[190+4] = 1;
+        vertices[195+3] = 0; vertices[195+4] = 1;
+    } else if (projection_mode == ProjectionMode::TopAndBottom) {
+
+        vertices[120+3] = 0; vertices[120+4] = 1;
+        vertices[125+3] = 1; vertices[125+4] = 1;
+        vertices[130+3] = 0; vertices[130+4] = 0;
+        vertices[135+3] = 1; vertices[135+4] = 0;
+
+        vertices[140+3] = 1; vertices[140+4] = 0;
+        vertices[145+3] = 0; vertices[145+4] = 0;
+        vertices[150+3] = 1; vertices[150+4] = 1;
+        vertices[155+3] = 0; vertices[155+4] = 1;
+
+        vertices[160+3] = 1; vertices[160+4] = 0;
+        vertices[165+3] = 0; vertices[165+4] = 0;
+        vertices[170+3] = 1; vertices[170+4] = 1;
+        vertices[175+3] = 0; vertices[175+4] = 1;
+
+        vertices[180+3] = 0; vertices[180+4] = 1;
+        vertices[185+3] = 1; vertices[185+4] = 1;
+        vertices[190+3] = 0; vertices[190+4] = 0;
+        vertices[195+3] = 1; vertices[195+4] = 0;
+
+        vertices[200+3] = 1; vertices[200+4] = 1;
+        vertices[205+3] = 1; vertices[205+4] = 0;
+        vertices[210+3] = 0; vertices[210+4] = 1;
+        vertices[215+3] = 0; vertices[215+4] = 0;
+
+        vertices[220+3] = 1; vertices[220+4] = 1;
+        vertices[225+3] = 1; vertices[225+4] = 0;
+        vertices[230+3] = 0; vertices[230+4] = 1;
+        vertices[235+3] = 0; vertices[235+4] = 0;
+    }
+
+    vbo.bind();
+    vbo.write(0, vertices, 12*4*5*sizeof(GLfloat));
+    vbo.release();
+}
+
+void CubeMapEditorDisplay::initializeGL()
+{
+    initializeOpenGLFunctions();
+
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+
+    glClearColor(0,0,0,1);
+
+    vao.create();
+    vao.bind();
+
+    GLfloat vertices[] = {
+    /*
+     *    X |  Y  |  Z  |       U | V
+     * --------------------------------
+     */
         -1.5, -0.5,  0.0,       0,  0,      // Left
         -1.5,  0.5,  0.0,       0,  1,
         -0.5, -0.5,  0.0,       1,  0,
@@ -127,16 +246,63 @@ void CubeMapEditorDisplay::initializeGL()
          0.5,  0.5,  0.0,       1,  0,
          0.5,  1.5,  0.0,       1,  1,
 
+        -0.5, -0.5,  0.0,       0,  0,      // Front
+        -0.5,  0.5,  0.0,       0,  1,
+         0.5, -0.5,  0.0,       1,  0,
+         0.5,  0.5,  0.0,       1,  1,
+
         -0.5, -1.5,  0.0,       0,  0,      // Bottom
         -0.5, -0.5,  0.0,       0,  1,
          0.5, -1.5,  0.0,       1,  0,
          0.5, -0.5,  0.0,       1,  1,
+
+         0.5, -0.5,  0.0,       0,  0,      // Right
+         0.5,  0.5,  0.0,       0,  1,
+         1.5, -0.5,  0.0,       1,  0,
+         1.5,  0.5,  0.0,       1,  1,
+
+         1.5, -0.5,  0.0,       0,  0,      // Back
+         1.5,  0.5,  0.0,       0,  1,
+         2.5, -0.5,  0.0,       1,  0,
+         2.5,  0.5,  0.0,       1,  1,
+
+        -1.5,  0.5,  0.0,       0,  0,      // Projection Top Left
+        -1.5,  1.5,  0.0,       0,  1,
+        -0.5,  0.5,  0.0,       1,  0,
+        -0.5,  1.5,  0.0,       1,  1,
+
+        -1.5, -1.5,  0.0,       0,  0,      // Projection Bottom Left
+        -1.5, -0.5,  0.0,       0,  1,
+        -0.5, -1.5,  0.0,       1,  0,
+        -0.5, -0.5,  0.0,       1,  1,
+
+         0.5,  0.5,  0.0,       0,  0,      // Projection Top Right
+         0.5,  1.5,  0.0,       0,  1,
+         1.5,  0.5,  0.0,       1,  0,
+         1.5,  1.5,  0.0,       1,  1,
+
+         0.5, -1.5,  0.0,       0,  0,      // Projection Bottom Right
+         0.5, -0.5,  0.0,       0,  1,
+         1.5, -1.5,  0.0,       1,  0,
+         1.5, -0.5,  0.0,       1,  1,
+
+         1.5,  0.5,  0.0,       0,  0,      // Projection Top Far Right
+         1.5,  1.5,  0.0,       0,  1,
+         2.5,  0.5,  0.0,       1,  0,
+         2.5,  1.5,  0.0,       1,  1,
+
+         1.5, -1.5,  0.0,       0,  0,      // Projection Bottom Far Right
+         1.5, -0.5,  0.0,       0,  1,
+         2.5, -1.5,  0.0,       1,  0,
+         2.5, -0.5,  0.0,       1,  1,
+
+
     };
 
     vbo.create();
     vbo.bind();
     vbo.setUsagePattern(QOpenGLBuffer::UsagePattern::StaticDraw);
-    vbo.allocate(vertices, 6*4*5*sizeof(GLfloat));
+    vbo.allocate(vertices, 12*4*5*sizeof(GLfloat));
 
     program = new QOpenGLShaderProgram(this);
     program->addShaderFromSourceFile(QOpenGLShader::Vertex, ":/shaders/cubemapeditordisplay.vert");
@@ -148,6 +314,8 @@ void CubeMapEditorDisplay::initializeGL()
     uniform_view = program->uniformLocation("view");
     uniform_projection = program->uniformLocation("projection");
     uniform_haveTexture = program->uniformLocation("haveTexture");
+    uniform_isProjection = program->uniformLocation("isProjection");
+    uniform_rotation = program->uniformLocation("rotation");
     uniform_zoom = program->uniformLocation("zoom");
     uniform_offset = program->uniformLocation("offset");
 
@@ -194,18 +362,105 @@ void CubeMapEditorDisplay::paintGL()
     // Projection matrix (viewport scaling & positioning)
     program->setUniformValue(uniform_projection, matrix_projection);
 
+    // Starting with the faces, not their projections
+    program->setUniformValue(uniform_isProjection, 0);
+
     // Draw each face
     for (int i=0; i<6; i++) {
         double zoom;
         QPointF offset;
         images[i].getFocus(zoom, offset);
 
+        program->setUniformValue(uniform_rotation, images[i].getRotation());
         program->setUniformValue(uniform_haveTexture, (images[i].haveImage() ? 1 : 0)); // Whether image set for this face
         program->setUniformValue(uniform_zoom, (GLfloat)zoom);                          // Image zoom (scaling)
         program->setUniformValue(uniform_offset, offset);                               // Image offset (positioning)
         images[i].bindTexture();
 
-        glDrawArrays(GL_TRIANGLE_STRIP,  i*4, 4);
+        glDrawArrays(GL_TRIANGLE_STRIP, i*4, 4);
+    }
+
+    if (projection_mode != ProjectionMode::None) {
+        program->setUniformValue(uniform_isProjection, 1);
+
+        if (projection_mode == ProjectionMode::LeftAndRight) {
+
+            double zoom;
+            QPointF offset;
+
+            CubeMapEditorImage* image = &images[CubeMapEditor::Left];
+            image->getFocus(zoom, offset);
+
+            program->setUniformValue(uniform_rotation, image->getRotation());
+            program->setUniformValue(uniform_haveTexture, (image->haveImage() ? 1 : 0));
+            program->setUniformValue(uniform_zoom, (GLfloat)zoom);
+            program->setUniformValue(uniform_offset, offset);
+            image->bindTexture();
+
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+0)*4, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+1)*4, 4);
+
+
+
+            image = &images[CubeMapEditor::Right];
+            image->getFocus(zoom, offset);
+
+            program->setUniformValue(uniform_rotation, image->getRotation());
+            program->setUniformValue(uniform_haveTexture, (image->haveImage() ? 1 : 0));
+            program->setUniformValue(uniform_zoom, (GLfloat)zoom);
+            program->setUniformValue(uniform_offset, offset);
+            image->bindTexture();
+
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+2)*4, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+3)*4, 4);
+
+
+
+//            image = &images[CubeMapEditor::Back];
+//            image->getFocus(zoom, offset);
+
+//            program->setUniformValue(uniform_rotation, image->getRotation());
+//            program->setUniformValue(uniform_haveTexture, (image->haveImage() ? 1 : 0));
+//            program->setUniformValue(uniform_zoom, (GLfloat)zoom);
+//            program->setUniformValue(uniform_offset, offset);
+//            image->bindTexture();
+
+//            glDrawArrays(GL_TRIANGLE_STRIP, (6+4)*4, 4);
+//            glDrawArrays(GL_TRIANGLE_STRIP, (6+5)*4, 4);
+
+        } else if (projection_mode == ProjectionMode::TopAndBottom) {
+
+            double zoom;
+            QPointF offset;
+
+            CubeMapEditorImage* image = &images[CubeMapEditor::Top];
+            image->getFocus(zoom, offset);
+
+            program->setUniformValue(uniform_rotation, image->getRotation());
+            program->setUniformValue(uniform_haveTexture, (image->haveImage() ? 1 : 0));
+            program->setUniformValue(uniform_zoom, (GLfloat)zoom);
+            program->setUniformValue(uniform_offset, offset);
+            image->bindTexture();
+
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+0)*4, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+2)*4, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+4)*4, 4);
+
+
+
+            image = &images[CubeMapEditor::Bottom];
+            image->getFocus(zoom, offset);
+
+            program->setUniformValue(uniform_rotation, image->getRotation());
+            program->setUniformValue(uniform_haveTexture, (image->haveImage() ? 1 : 0));
+            program->setUniformValue(uniform_zoom, (GLfloat)zoom);
+            program->setUniformValue(uniform_offset, offset);
+            image->bindTexture();
+
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+1)*4, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+3)*4, 4);
+            glDrawArrays(GL_TRIANGLE_STRIP, (6+5)*4, 4);
+        }
     }
 
     program->release();
