@@ -26,6 +26,7 @@
 
 #include "verticessmoothing.h"
 #include"mainwaindow.h"
+#include "objfilewriter.h"
 class ModelEditor: public QObject
 {
     Q_OBJECT
@@ -34,6 +35,7 @@ signals:
     void renderModel(vector<GLfloat> faces,vector<GLfloat> colors);
 
 public:
+
     ModelEditor();
     void SetupModel(box image_box,int resolution_split,int vert_loop_dist);//set all the variables
     void setImageAccuracy(unsigned int newAmmount);
@@ -43,7 +45,8 @@ public:
     void setBackgroundTrimmingWeight(float newAmmount);
     //void setPictures(box b); this should take in input from previous class
     void defaultStart();
-    void createModel();//generate infromation for model and run opengl
+    void renderStart(string path);
+    void createModel(bool exprt=false,string path_in="exported_image");//generate infromation for model and run opengl
     void resetModel();//recalculate and apply changes
     void setResolution(    float resolution_split){   m_resolution_split= resolution_split;}
     void setDesnitySplit(    int vertices_density_split){   m_vertices_density_split= vertices_density_split;}

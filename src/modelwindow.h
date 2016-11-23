@@ -17,7 +17,7 @@ public:
     ~ModelWindow();
 
     void createModel(box b,int density_split,int loop_dist);
-
+    void exportModel(box b,int density_split,int loop_dist, string path);
 private slots:
     void on_openGLWidget_resized();
 

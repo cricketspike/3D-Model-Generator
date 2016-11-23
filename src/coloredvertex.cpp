@@ -102,6 +102,7 @@
     float ColoredVertex::getNormalY(){return normalHeight;}
     float ColoredVertex::getNormalZ(){return normalDepth;}
     int ColoredVertex::getLabel(){return label;}
+    void ColoredVertex::setLabel(int labelNum){label=labelNum;}
     void ColoredVertex::setX(float newValue){normalWidth = newValue;}
     void ColoredVertex::setY(float newValue){normalHeight = newValue;}
     void ColoredVertex::setZ(float newValue){normalDepth = newValue;}

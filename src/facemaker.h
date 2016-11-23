@@ -7,7 +7,7 @@
 #include<vector>
 #include<assert.h>
 #include <math.h>
-#include "ColoredVertexMatrix.h";
+#include "ColoredVertexMatrix.h"
 
 class FaceMaker
 {

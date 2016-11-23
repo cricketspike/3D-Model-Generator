@@ -40,7 +40,8 @@ SOURCES += \
     src/tools.cpp \
     src/color.cpp \
     src/scene.cpp \
-    src/modelsettings.cpp
+    src/modelsettings.cpp \
+    src/ObjFileWriter.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -71,7 +72,8 @@ HEADERS += \
     src/tools.h \
     src/color.h \
     src/scene.h \
-    src/modelsettings.h
+    src/modelsettings.h \
+    src/objfilewriter.h
 
 RESOURCES += \
     resources/resources.qrc

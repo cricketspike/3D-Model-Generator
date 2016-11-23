@@ -22,6 +22,8 @@ private slots:
 
     void on_Level_dist_valueChanged(int arg1);
 
+    void on_pushButton_clicked();
+
 private:
     int m_res_split;
     int m_loop_dis;

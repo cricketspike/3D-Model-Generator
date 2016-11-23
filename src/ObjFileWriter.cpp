@@ -5,31 +5,31 @@
 
 #include "ObjFileWriter.h"
 
-ObjFileWriter::ObjFileWriter(){};
-ObjFileWriter::~ObjFileWriter(){};
+ObjFileWriter::ObjFileWriter(ColoredVertexMatrix * CoordinateMap,string path){
+   CoordinateMatrix=CoordinateMap;
+   m_path=path;
+   vertexLabel = 1;
+   xMax = CoordinateMatrix->getWidth();
+   yMax = CoordinateMatrix->getHeight();
+   zMax = CoordinateMatrix->getDepth();
+   normalizeVertices();
 
-ColoredVertexMatrix & ObjFileWriter::initialize(ColoredVertexMatrix & CoordinateMap){
-	CoordinateMatrix = CoordinateMap;
-	vertexLabel = 1;
-	normalizeVertices(CoordinateMatrix);
-	return CoordinateMatrix;
-}	
 
-void ObjFileWriter::execute(string fileName, ColoredVertexMatrix & CoordinateMap, vector<int> faces){
-	ColoredVertexMatrix normalCoordinateMap = initialize(CoordinateMap);
-	printVerticesToFile(fileName, normalCoordinateMap);
-	printFacesToFile(fileName, normalCoordinateMap, vl);
+}
+ObjFileWriter::~ObjFileWriter(){}
+
+
+
+void ObjFileWriter::execute(FaceMaker * fm){
+    objFile.open(m_path);
+    printVerticesToFile();
+    printFacesToFile(fm);
+    objFile.close();
 }
 
-ColoredVertexMatrix & ObjFileWriter::normalizeVertices(ColoredVertexMatrix & CoordinateMap){
-	float xMax, yMax, zMax;
+void ObjFileWriter::normalizeVertices(){
+
 	float normalWidth, normalHeight, normalDepth;
-	
-	
-	xMax = CoordinateMap->getWidth();
-	yMax = CoordinateMap->getHeight();
-	zMax = CoordinateMap->getDepth();
-	
 	for(int x = 0; x < xMax; x++){
 		for(int y = 0; y < yMax; y++){
 		    for(int z = 0; z < zMax; z++){
@@ -44,12 +44,13 @@ ColoredVertexMatrix & ObjFileWriter::normalizeVertices(ColoredVertexMatrix & Coo
 			}
 		}
 	}
-	return CoordinateMap;
 }
 
-void ObjFileWriter::printVerticesToFile(string fileName, ColoredVertexMatrix & CoordinateMap){
-	objFile.open(fileName);
-	for(int x = 0; x < xMax; x++){
+void ObjFileWriter::printVerticesToFile(){
+
+
+
+    for(int x = 0; x < xMax; x++){
 			for(int y = 0; y < yMax; y++){
 			    for(int z = 0; z < zMax; z++){
 			    	Coordinate = CoordinateMatrix->getValueRef(x, y, z);
@@ -60,12 +61,19 @@ void ObjFileWriter::printVerticesToFile(string fileName, ColoredVertexMatrix & C
 		}
 }
 
-void ObjFileWriter::printFacesToFile(string fileName, ColoredVertexMatrix & CoordinateMap, vertexlinker & vl){
-	foreach (vector<ColoredVertex> face , vl.getSquares()){
+void ObjFileWriter::printFacesToFile(FaceMaker * fm){
+    foreach (vector<ColoredVertex> face , fm->getSquares()){
 	    objFile << "f ";
 		foreach (ColoredVertex vertex, face){
-	        objFile << vertex->getLabel() <<"/";
+            objFile << vertex.getLabel() <<"/";
 	    }
 		objFile << "\n";
 	}
+    foreach (vector<ColoredVertex> face , fm->getTriangles()){
+        objFile << "f ";
+        foreach (ColoredVertex vertex, face){
+            objFile << vertex.getLabel() <<"/";
+        }
+        objFile << "\n";
+    }
 }

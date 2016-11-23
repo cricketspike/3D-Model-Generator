@@ -1,3 +1,4 @@
+
 /*
  * ObjFileWriter.h
  * Henry Chang
@@ -7,33 +8,36 @@
 #define OBJFILEWRITER_H
 
 #include "ColoredVertexMatrix.h"
-#include "vertexlinker.h"
+#include "facemaker.h"
 #include "stdlib.h"
-#include <ofstream>
+#include <fstream>
 #include <vector>
 
 using namespace std;
 
 class ObjFileWriter{
 private:
-	ColoredVertexMatrix * CoordinateMatrix;
+    ColoredVertexMatrix * CoordinateMatrix;
     ColoredVertex * Coordinate;
     ofstream objFile;
     int vertexLabel;
     vector<int> faces;
-    
-    // Helper Methods
-    ColoredVertexMatrix & normalizeVertices(ColoredVertexMatrix & CoordinateMap);
-    void printVerticesToFile(string fileName, ColoredVertexMatrix & CoordinateMap);¡¢
-    void printFacesToFile(string fileName, ColoredVertexMatrix & CoordinateMap, vertexlinker & vl);
+    string m_path;
 
+
+    // Helper Methods
+    void normalizeVertices();
+    void printVerticesToFile();
+    void printFacesToFile(FaceMaker * fm);
+
+
+    float xMax, yMax, zMax;
 public:
-    ObjFileWriter();
+    ObjFileWriter(ColoredVertexMatrix * CoordinateMap,string path);
     ~ObjFileWriter();
 
-    ColoredVertexMatrix & initiliaze(string fileName, ColoredVertexMatrix & CoordinateList);
-    void execute(string fileName, ColoredVertexMatrix & CoordinateList, vertexlinker & vl);
-    
-}
+    void execute(FaceMaker * fm);
+
+};
 
 #endif //OBJFILEWRITER_H

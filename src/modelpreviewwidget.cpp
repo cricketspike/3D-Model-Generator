@@ -17,8 +17,6 @@ void ModelPreviewWidget::renderModel(vector<GLfloat> faces,vector<GLfloat> color
     m_colors_vec=colors;//need this so array works
     m_colors= &m_colors_vec[0];
     m_number_vertices=faces.size()/3;
-    cout<<m_number_vertices;
-    cout<<"TEST SLOT "<< faces.size() <<endl;
 }
 
 
@@ -77,7 +75,6 @@ void ModelPreviewWidget::initializeGL()
 
 void ModelPreviewWidget::paintGL()
 {
-    cout<<"TESTY";
     glDepthFunc(GL_LEQUAL);
         spin++;
         const qreal retinaScale = devicePixelRatio();
@@ -95,10 +92,6 @@ void ModelPreviewWidget::paintGL()
 
 
 
-
-        cout<<sizeof(m_vertices);
-        cout<<sizeof(m_colors);
-        std::cout<<":" <<m_colors[44]<<endl;
         glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
         glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, m_colors);
 

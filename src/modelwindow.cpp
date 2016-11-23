@@ -36,6 +36,24 @@ void ModelWindow::createModel(box b,int density_split,int loop_dist){
 
 }
 
+
+void ModelWindow::exportModel(box b,int density_split,int loop_dist, string path){
+
+    ModelEditor * editor= new ModelEditor();
+    connect(editor,SIGNAL(renderModel(vector<GLfloat>,vector<GLfloat>)),ui->openGLWidget,SLOT(renderModel(vector<GLfloat>,vector<GLfloat>)));
+
+    editor->SetupModel(b,density_split,loop_dist);
+
+
+    editor->renderStart(path);
+
+
+
+
+}
+
+
+
 void ModelWindow::on_ModelWindow_accepted()
 {
 

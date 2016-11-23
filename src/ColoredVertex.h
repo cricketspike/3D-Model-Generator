@@ -77,7 +77,7 @@ public:
     ColoredVertex copy(ColoredVertexMatrix* cvm);
     bool isNull(){return is_null;}
     void setValue(uint8_t* v);
-    void setLable(int labelNum);
+    void setLabel(int labelNum);
     void setX(float newValue);
     void setY(float newValue);
     void setZ(float newValue);

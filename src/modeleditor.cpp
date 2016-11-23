@@ -11,7 +11,7 @@ void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_di
     m_vertices_density_split=vert_loop_dist;//lower= more faces
 
 }
-void ModelEditor::createModel(){
+void ModelEditor::createModel(bool exprt,string path_in){
 
     uint8_t null_col[3] = {255, 255, 255};
     m_null_color=null_col;
@@ -99,6 +99,14 @@ void ModelEditor::createModel(){
                   }
 
               }
+              if(exprt){
+                  path_in+=".obj";
+                  ObjFileWriter *writer= new ObjFileWriter(shell,path_in);
+
+                  writer->execute(&fm);
+                  delete(writer);
+
+              }
 
      foreach (vector<ColoredVertex> face , fm.getSquares()){
          vector<ColoredVertex> triangles=fm.toTriangles(face);
@@ -136,6 +144,20 @@ void ModelEditor::defaultStart(){
 
 
 }
+
+
+void ModelEditor::renderStart(string path){
+    //call a bunch of setters here or in cm's args
+    createModel(true,path);
+    GLfloat* f=&m_face_color_data[0];
+
+    renderModel(m_face_vertices_data,m_face_color_data);
+
+
+
+
+}
+
 
 
 void ModelEditor::resetModel(){
