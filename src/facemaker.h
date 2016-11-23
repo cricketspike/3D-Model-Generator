@@ -18,7 +18,7 @@ public:
     std::vector<std::vector<ColoredVertex>>  getTriangles(){return triangles;}
 
     std::vector<std::vector<ColoredVertex>>  getSquares(){return squares;}
-    std::vector<ColoredVertex>  FaceMaker::toTriangles(std::vector<ColoredVertex> square);
+    std::vector<ColoredVertex>  toTriangles(std::vector<ColoredVertex> square);
 
 private:
     unsigned int verts_between_keys;

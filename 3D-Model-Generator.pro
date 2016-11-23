@@ -31,11 +31,15 @@ SOURCES += \
     src/cubemapeditordisplay.cpp \
     src/cubemapeditorimage.cpp \
     src/cubemapeditor.cpp \
+    src/weighteditor.cpp \
     src/modelwindow.cpp \
     src/modelpreviewwidget.cpp \
     src/modeleditor.cpp \
     src/facemaker.cpp \
-    src/precisetrimming.cpp
+    src/precisetrimming.cpp \
+    src/tools.cpp \
+    src/color.cpp \
+    src/scene.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -57,11 +61,15 @@ HEADERS += \
     src/cubemapeditordisplay.h \
     src/cubemapeditorimage.h \
     src/cubemapeditor.h \
+    src/weighteditor.h \
     src/modelwindow.h \
     src/modelpreviewwidget.h \
     src/modeleditor.h \
     src/facemaker.h \
-    src/precisetrimming.h
+    src/precisetrimming.h \
+    src/tools.h \
+    src/color.h \
+    src/scene.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -76,4 +84,6 @@ FORMS += \
     src/importwindow.ui \
     src/cubepreviewwidgetdemo.ui \
     src/cubemapeditor.ui \
+    src/weighteditor.ui \
+    src/modelwindow.ui
     src/modelwindow.ui

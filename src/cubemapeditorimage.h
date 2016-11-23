@@ -24,12 +24,15 @@ public:
     void setImage(QImage image);
     bool haveImage() const;
     QImage getImage() const;
+    void addWeight(double x, double y);
+    void subtractWeight(double x, double y);
 
     // Focus: positioning & scaling/zoom
     void getFocus(double& zoom, QPointF& offset) const;
     void setFocus(double zoom, QPointF offset);
 
     void rotate();
+    int getRotation();
 
     void bindTexture();
 
@@ -45,6 +48,9 @@ private:
     // Focus
     double zoom;
     QPointF offset;
+
+    int rotation;
+    std::vector<std::vector<uint8_t>> weight;
 
 signals:
 

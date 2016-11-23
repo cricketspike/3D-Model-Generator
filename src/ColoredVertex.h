@@ -48,7 +48,8 @@ public:
 
 private:
 	std::vector<MatrixNode> voters;
-        uint8_t colors[3];
+	uint8_t colors[3];
+
 
 
 };
@@ -63,16 +64,24 @@ public:
     ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm);
     uint8_t* getValue();
     void addVoter(MatrixNode voter) ;
-    void setValueFromVoters(int grouping_tollerance,uint8_t* bg_color);
+    void setValueFromVoters(int grouping_tollerance);
     bool isInside(int vertices_density_split);
     int getX();
     int getY();
     int getZ();
+    float getNormalX();
+    float getNormalY();
+    float getNormalZ();
+    int getLabel();
     void printVert();
     ColoredVertex copy(ColoredVertexMatrix* cvm);
     bool isNull(){return is_null;}
     void setValue(uint8_t* v);
-    bool line_x=false;//use these to check if an existing line already croses through a certain way
+    void setLable(int labelNum);
+    void setX(float newValue);
+    void setY(float newValue);
+    void setZ(float newValue);
+    bool line_x=false;//use these to check if an existing line already crosses through a certain way
     bool line_z=false;
     bool line_a=false;
     bool line_b=false;
@@ -94,7 +103,8 @@ private:
 	uint8_t* value;
 	std::vector<std::vector<ColoredVertex>> faces;
 	std::vector<MatrixNode> voters;
-    int width, height, depth;
+    int width, height, depth, label;
+    float normalWidth, normalHeight, normalDepth;
 
 };
 #endif

@@ -9,9 +9,11 @@
 #include <QOpenGLShader>
 #include <QOpenGLTexture>
 #include <QWheelEvent>
+#include <QColorDialog>
 
 #include "cubemapeditor.h"
 #include "cubemapeditorimage.h"
+#include "tools.h"
 
 /*
  * This class provides an interactive display
@@ -33,7 +35,11 @@ class CubeMapEditorDisplay : public QOpenGLWidget,
 
 public:
 
+    enum ProjectionMode { None, LeftAndRight, TopAndBottom };
+
+
     explicit CubeMapEditorDisplay(QWidget *parent = 0);
+
     ~CubeMapEditorDisplay();
 
     // The following four methods operate on selected_face
@@ -46,6 +52,10 @@ public:
     void setFocus(double zoom, QPointF offset);
 
     void loadImage(QImage image);
+    CubeMapEditorImage* getImage();
+
+    void setProjectionMode(ProjectionMode mode);
+
 
 protected:
     void initializeGL();
@@ -53,9 +63,14 @@ protected:
 
     void mouseMoveEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
+	void mouseReleaseEvent(QMouseEvent* event);
     void wheelEvent(QWheelEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
 
 private:
+    void updateVertices();
+
     QOpenGLVertexArrayObject vao;
     QOpenGLBuffer vbo;
     QOpenGLShaderProgram* program;
@@ -79,6 +94,8 @@ private:
     GLuint uniform_view;
     GLuint uniform_projection;
     GLuint uniform_haveTexture;
+    GLuint uniform_isProjection;
+    GLuint uniform_rotation;
     GLuint uniform_zoom;
     GLuint uniform_offset;
 
@@ -90,6 +107,8 @@ private:
     void addRuler(DisplayRuler r);
     void removeRuler(DisplayRuler r);
     void drawRulers(QPainter& p);
+
+    ProjectionMode projection_mode;
 };
 
 #endif // CUBEMAPEDITORDISPLAY_H
