@@ -35,7 +35,7 @@ signals:
 
 public:
     ModelEditor();
-    void SetupModel(box image_box);//set all the variables
+    void SetupModel(box image_box,int resolution_split,int vert_loop_dist);//set all the variables
     void setImageAccuracy(unsigned int newAmmount);
     void setVertexSparseness(unsigned int newAmmount);
     void setBackgroundColor(uint8_t* color);

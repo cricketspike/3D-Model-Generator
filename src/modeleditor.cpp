@@ -5,8 +5,11 @@ ModelEditor::ModelEditor()
 
 }
 
-void ModelEditor::SetupModel(box image_box){
+void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_dist){
     m_image_box=image_box;
+    m_resolution_split=resolution_split;//lower=slower, more accurate, more faces
+    m_vertices_density_split=vert_loop_dist;//lower= more faces
+
 }
 void ModelEditor::createModel(){
 
@@ -29,8 +32,6 @@ void ModelEditor::createModel(){
 
     }
 
-     m_resolution_split=4;//lower=slower, more accurate, more faces
-    int m_vertices_density_split=4;//lower= more faces
 
     vector<VotingMatrix> voters=vector<VotingMatrix>();
     for(int i=0;i<6;i++){
@@ -41,7 +42,7 @@ void ModelEditor::createModel(){
     }
    ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color );
 
-   nullify(vertices, m_null_color, m_threshold);
+   tempNullify(vertices, m_null_color, m_threshold);
    smooth (vertices, m_vertices_density_split);
 
    ColoredVertexMatrix *shell= vertices.getShell(m_vertices_density_split);

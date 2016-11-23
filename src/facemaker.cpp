@@ -39,10 +39,6 @@ void FaceMaker::makeFaces(int vertices_density_split) {
                             //reccursive check algorithm
                             reccurFindNextVertex(x, y, z);
                             if(cur_loop.size()>0){
-                                foreach (ColoredVertex v, cur_loop) {
-                                    v.printVert();
-                                }
-
                                 loops.push_back(cur_loop);//create and add loop to level
 
                             }
@@ -196,7 +192,6 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
 
 
             foreach (ColoredVertex vertex, loop) {
-                vertex.printVert();
                 left_offset= ((float)(center_x-vertex.getX()))/(float) max_left_offset;
                 right_offset= ((float)(vertex.getX()-center_x))/(float)max_right_offset;
                 back_offset= ((float)(center_z-vertex.getZ()))/(float)max_back_offset;
@@ -642,11 +637,6 @@ void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
 
     }
     void FaceMaker:: addSquare(ColoredVertex corner_a,ColoredVertex corner_b,ColoredVertex corner_c,ColoredVertex corner_d) {// add group of 4 vertices to the list "squares"
-            corner_a.printVert();
-            corner_b.printVert();
-            corner_c.printVert();
-            corner_d.printVert();
-
         vector<ColoredVertex>square{corner_a,corner_b,corner_c,corner_d};
         squares.push_back(square);
 

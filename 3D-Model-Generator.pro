@@ -39,7 +39,8 @@ SOURCES += \
     src/precisetrimming.cpp \
     src/tools.cpp \
     src/color.cpp \
-    src/scene.cpp
+    src/scene.cpp \
+    src/modelsettings.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -69,7 +70,8 @@ HEADERS += \
     src/precisetrimming.h \
     src/tools.h \
     src/color.h \
-    src/scene.h
+    src/scene.h \
+    src/modelsettings.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -85,5 +87,6 @@ FORMS += \
     src/cubepreviewwidgetdemo.ui \
     src/cubemapeditor.ui \
     src/weighteditor.ui \
-    src/modelwindow.ui
+    src/modelwindow.ui \
+    src/modelsettings.ui
     src/modelwindow.ui

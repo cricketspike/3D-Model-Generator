@@ -16,7 +16,7 @@ public:
     explicit ModelWindow(QWidget *parent = 0);
     ~ModelWindow();
 
-    void createModel(box b);
+    void createModel(box b,int density_split,int loop_dist);
 
 private slots:
     void on_openGLWidget_resized();

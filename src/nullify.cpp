@@ -139,6 +139,32 @@ float color_diff_2(Color col1, Color col2) {
 }
 */
 
+
+
+float tempColorDiff(uint8_t* c1, uint8_t* c2) {
+    const float max_diff = sqrt( pow(255,2) + pow(255,2) + pow(255,2) );
+    float diff = sqrt( pow(c1[0] - c2[0], 2) + pow(c1[1] - c2[1], 2) + pow(c1[2] - c2[2], 2) );
+    return (diff/max_diff) * 100.0;
+}
+
+
+void tempNullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh) {
+    std::vector<std::vector<std::vector<ColoredVertex>>>verts=image.getVertices();
+    for(unsigned long x=0; x<image.getWidth(); ++x) {
+        for(unsigned long y=0; y<image.getHeight(); ++y) {
+           for(unsigned long z=0; z<image.getDepth(); ++z) {
+               // if color difference is less than threshold
+               if( tempColorDiff(verts[x][y][z].getValue(), c_null) < thresh ){
+                   image.setNull(x,y,z);//nullify
+               }
+            }
+        }
+    }
+}
+
+
+
+
 void nullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh) {
     Color color_null;
     color_null.r = c_null[0];

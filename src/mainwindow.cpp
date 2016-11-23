@@ -77,10 +77,6 @@ glDepthFunc(GL_LEQUAL);
     m_program->setUniformValue(m_matrixUniform, matrix);
 
 
-
-    std::cout<<sizeof(vertices);
-    std::cout<<sizeof(colors);
-    std::cout<<":" <<colors[44]<<endl;
     glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 0, vertices);
     glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
 

@@ -14,4 +14,7 @@ float color_diff_2(Color col1, Color col2) ;
 //	thresh = [0, 100]
 void nullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh);
 void nullify(ColoredVertexMatrix& image, Color c_null, float thresh);
+
+void tempNullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh) ;
+
 #endif//NULLIFY_H

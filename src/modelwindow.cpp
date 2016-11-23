@@ -18,13 +18,13 @@ void ModelWindow::on_openGLWidget_resized()
 
 }
 
-void ModelWindow::createModel(box b){
+void ModelWindow::createModel(box b,int density_split,int loop_dist){
 
     std::cout<<"TEST1"<<endl;
     ModelEditor * editor= new ModelEditor();
     connect(editor,SIGNAL(renderModel(vector<GLfloat>,vector<GLfloat>)),ui->openGLWidget,SLOT(renderModel(vector<GLfloat>,vector<GLfloat>)));
 
-    editor->SetupModel(b);
+    editor->SetupModel(b,density_split,loop_dist);
     std::cout<<"TEST2"<<endl;
 
 
