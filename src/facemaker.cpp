@@ -404,7 +404,7 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
             for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop
                 cout<<"part1: level"<<i<<"loop num= "<<j<<"/"<<m_finished_loops[i].size()<<endl;
                 unsigned int cur_total[3]={0,0,0} ;//used to calculate average
-                unsigned int cur_avg[3]={-1,-1,-1} ;//used to calculate average
+                unsigned int cur_avg[3]={0,0,0} ;//used to calculate average
                 for (int k=0;k< m_finished_loops[i][j].size();k++) {
                     ColoredVertex elem= m_finished_loops[i][j][k];
                     cur_total[0]+= elem.getX();
