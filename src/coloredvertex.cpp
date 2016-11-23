@@ -10,7 +10,7 @@
        }
     uint8_t* ColoredVertex::getValue(){return value;}
     void ColoredVertex::addVoter(MatrixNode voter) { voters.push_back(voter); }
-    void ColoredVertex::setValueFromVoters(int grouping_tollerance, uint8_t* bg_color) {
+    void ColoredVertex::setValueFromVoters(int grouping_tollerance) {
         //group together nodes based on similar colors
         std::vector<VotingNode> groupedVoters;
         for (int i = 0; i < voters.size(); i++) {
@@ -21,6 +21,7 @@
                 }
             }
             int closest_group_index = -1, closest_size = -1;//find the group that matches the color the best
+
             for (int j = 0; j < groupedVoters.size(); j++) {
                 int contrast = (voters[i].colorContrast(groupedVoters[j].getColor(0), groupedVoters[j].getColor(1), groupedVoters[j].getColor(2)));
                 if (contrast <= grouping_tollerance) {
@@ -95,5 +96,12 @@
     int ColoredVertex::getX(){return width;}
     int ColoredVertex::getY(){return height;}
     int ColoredVertex::getZ(){return depth;}
+    float ColoredVertex::getNormalX(){return normalWidth;}
+    float ColoredVertex::getNormalY(){return normalHeight;}
+    float ColoredVertex::getNormalZ(){return normalDepth;}
+    int ColoredVertex::getLabel(){return label;}
+    void ColoredVertex::setX(float newValue){normalWidth = newValue;}
+    void ColoredVertex::setY(float newValue){normalHeight = newValue;}
+    void ColoredVertex::setZ(float newValue){normalDepth = newValue;}
     void ColoredVertex::printVert(){std::cout<<"x: "<<width<<"y: "<<height<<"z: "<<depth<<" Color:"<<(int)value[0]<<":"<<(int)value[1]<<":"<<(int)value[2]<<":"<<(int)value[3]<<":"<<endl;}
 
