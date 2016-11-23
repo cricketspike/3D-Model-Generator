@@ -10,8 +10,8 @@ void ModelEditor::SetupModel(box image_box){
 }
 void ModelEditor::createModel(){
 
-    uint8_t null_color[3] = {255, 255, 255};
-    m_null_color=null_color;
+    uint8_t null_col[3] = {255, 255, 255};
+    m_null_color=null_col;
     m_threshold = 40;
 
     int model_width=INT_MAX;
@@ -29,13 +29,11 @@ void ModelEditor::createModel(){
 
     }
 
-     m_resolution_split=3;//lower=slower, more accurate, more faces
-    int m_vertices_density_split=6;//lower= more faces
-    cout<<endl<<"FINAL: "<<model_width<<" "<<model_height<<" "<<model_depth<<endl;
+     m_resolution_split=4;//lower=slower, more accurate, more faces
+    int m_vertices_density_split=4;//lower= more faces
 
     vector<VotingMatrix> voters=vector<VotingMatrix>();
     for(int i=0;i<6;i++){
-        cout<<"Voting Matrix"<<i<<":"<<endl;
        voters.push_back(VotingMatrix(
             model_width, model_height, model_depth,m_image_box.getSides()[i],m_resolution_split)
         );
@@ -51,7 +49,6 @@ void ModelEditor::createModel(){
 
    QString filename="testVertsShell";
    QFile file(filename);
-   std::vector<uint8_t*> vertices_by_XYZ;
    if(file.open(QIODevice::ReadWrite)){
        QTextStream stream( &file );
        int width= shell->getWidth();
@@ -73,25 +70,17 @@ void ModelEditor::createModel(){
    FaceMaker fm=FaceMaker(shell);
    fm.makeFaces(m_vertices_density_split);
 
-
-
-
-   //float * vertArray= &shell->getListOfVertsAsFloats()[0];
-
    int wid=shell->getWidth();
    int hei=shell->getHeight();
-   //int dep=shell->getDepth();
+   int dep=shell->getDepth();
    std::vector<GLfloat> facesByXYZ=std::vector<float>();
    std::vector<GLfloat> facesByRBG=std::vector<float>();
 
    //print all triangles and add their raw data into the face arrays
               foreach (vector<ColoredVertex> face , fm.getTriangles()){
-                  //cout<<"TESTA"<<endl;
-                  //cout<<"triangle "<<face.size()<<"\n";
+
                   for (int i=0;i<3;i++){
-                   //cout<<"TEST+"<<endl;
                   ColoredVertex vert=face[i];
-                  //cout<<"TEST-"<<endl;
 
                   facesByXYZ.push_back(((float)vert.getX())/wid -.5);
                   facesByXYZ.push_back(((float)vert.getY())/hei -.5);
@@ -102,14 +91,10 @@ void ModelEditor::createModel(){
                   facesByRBG.push_back(((float)colors[1])/256);
                   facesByRBG.push_back(((float)colors[2])/256);
 
-//                      face[i].printVert();
-                  //cout<<"TESTB"<<endl;
-                  }
-                  //cout<<"TESTC"<<endl;
-              }
-//             cout<<"faces\n";
 
-              cout<<"TEST8"<<endl;
+                  }
+
+              }
 
      foreach (vector<ColoredVertex> face , fm.getSquares()){
          vector<ColoredVertex> triangles=fm.toTriangles(face);
@@ -124,7 +109,6 @@ void ModelEditor::createModel(){
          facesByRBG.push_back(((float)colors[0])/256);
          facesByRBG.push_back(((float)colors[1])/256);
          facesByRBG.push_back(((float)colors[2])/256);
-//                   triangles[i].printVert();
 
      }
 
@@ -134,18 +118,18 @@ void ModelEditor::createModel(){
      m_face_color_data=facesByRBG;
 
 
-
-
-//     MainWindow window(&facesByXYZ[0],&facesByRBG[0],facesByXYZ.size()/3 );
-
-
 }
 
 
 void ModelEditor::defaultStart(){
     //call a bunch of setters here or in cm's args
     createModel();
+    GLfloat* f=&m_face_color_data[0];
+
     renderModel(m_face_vertices_data,m_face_color_data);
+
+
+
 
 }
 

@@ -38,13 +38,10 @@ void FaceMaker::makeFaces(int vertices_density_split) {
                             cur_loop = std::vector<ColoredVertex>();
                             //reccursive check algorithm
                             reccurFindNextVertex(x, y, z);
-                            //cout<<"exited"<<endl;
                             if(cur_loop.size()>0){
-                                cout<<endl<<endl<<"LOOP:";
                                 foreach (ColoredVertex v, cur_loop) {
                                     v.printVert();
                                 }
-                                cout<<"/LOOP:"<<endl<<endl;
 
                                 loops.push_back(cur_loop);//create and add loop to level
 
@@ -120,22 +117,17 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                     forward=vertex;
                 }
 
-                //cout<<"testtt"<<right_amount<<" "<<left_amount<<" "<<forward_amount<<" "<<back_amount<<" "<< endl;
 
                 center_position.push_back((right_amount+left_amount)/2);//x
                 center_position.push_back(level_num);//y
                 center_position.push_back((forward_amount+back_amount)/2);//z
-                //cout<<"loop center:"<<center_position[0]<<", "<<center_position[1]<<", "<<center_position[2]<<endl;
-                //cout<<"testtttttt"<<endl;
 
             }
 
 
-            //cout<<"testttt!1"<<endl;
 
             int  center_x=center_position[0],
                  center_z=center_position[2];
-            //cout<<"testttt!2"<<endl;
 
 
 
@@ -203,7 +195,6 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                float left_offset, right_offset, back_offset, forward_offset;
 
 
-               //cout<<"CX= "<<center_x<<"     CZ= "<<center_z<<endl;
             foreach (ColoredVertex vertex, loop) {
                 vertex.printVert();
                 left_offset= ((float)(center_x-vertex.getX()))/(float) max_left_offset;
@@ -211,25 +202,17 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                 back_offset= ((float)(center_z-vertex.getZ()))/(float)max_back_offset;
                 forward_offset= ((float)(vertex.getZ()-center_z))/(float)max_forward_offset;
 
-                //cout<<center_x<<"-"<<vertex.getX()<<"/"<<(float) max_left_offset<<"="<<"l:"<<left_offset<<endl;
-                //cout<<vertex.getX()<<"-"<<center_x<<"/"<<(float) max_right_offset<<"="<<"l:"<<right_offset<<endl;
-                //cout<<"b:"<<back_offset<<endl;
-                //cout<<"f:"<<forward_offset<<endl;
-
 
                 cur_c_left_amount= (left_offset-(std::max(back_offset,forward_offset)/2));
-                //cout<<cur_c_left_amount<<">"<<center_left_amount<<"?"<<endl;;
                 if(cur_c_left_amount>center_left_amount){
                     center_left_amount=cur_c_left_amount;
                     center_left=vertex;
-                    //cout<<"1!"<<endl;
                 }
 
                 cur_c_right_amount= (right_offset-(std::max(back_offset,forward_offset)/2));
                 if(cur_c_right_amount>center_right_amount){
                     center_right_amount=cur_c_right_amount;
                     center_right=vertex;
-                    //cout<<"2!"<<endl;
 
                 }
 
@@ -237,7 +220,6 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                 if(cur_c_back_amount>center_back_amount){
                     center_back_amount=cur_c_back_amount;
                     center_back=vertex;
-                    //cout<<"3!"<<endl;
 
                 }
 
@@ -245,7 +227,6 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                 if(cur_c_forward_amount>center_forward_amount){
                     center_forward_amount=cur_c_forward_amount;
                     center_forward=vertex;
-                    //cout<<"4!"<<endl;
 
                 }
 
@@ -254,7 +235,6 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                 if (cur_back_left_amount> back_left_amount){
                     back_left_amount=cur_back_left_amount;
                     back_left=vertex;
-                    //cout<<"5!"<<endl;
 
                 }
 
@@ -263,19 +243,15 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                 if (cur_right_back_amount> right_back_amount){
                     right_back_amount=cur_right_back_amount;
                     right_back=vertex;
-                    //cout<<"6!"<<endl;
 
                 }
 
 
                 cur_left_forward_amount=forward_offset+left_offset;
-                //cout<<forward_offset<<"+"<<left_offset<<">"<<left_forward_amount<<"??"<<endl;;
 
                 if (cur_left_forward_amount> left_forward_amount){
                     left_forward_amount=cur_left_forward_amount;
                     left_forward=vertex;
-                    //cout<<"7!"<<endl;
-
                 }
 
                 cur_forward_right_amount=forward_offset+right_offset;
@@ -283,33 +259,13 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
                 if (cur_forward_right_amount> forward_right_amount){
                     forward_right_amount=cur_forward_right_amount;
                     forward_right=vertex;
-                    //cout<<"8!"<<endl;
-
                 }
 
             }
 
-            //cout<<"testttt!3"<<endl;
-
             vector<ColoredVertex>key_loop=vector<ColoredVertex>();
             //add in the key vertices clockwise
-            cout<<endl<<"loop"<<endl;
-            cout<<"center_left";
-            center_left.printVert();
-            cout<<"left_forward";
-            left_forward.printVert();
-            cout<<"center_forward";
-            center_forward.printVert();
-            cout<<"forward_right";
-            forward_right.printVert();
-            cout<<"center_right";
-            center_right.printVert();
-            cout<<"right_back";
-            right_back.printVert();
-            cout<<"center_back";
-            center_back.printVert();
-            cout<<"back_left";
-            back_left.printVert();
+
 
             key_loop.push_back(center_left);
             key_loop.push_back(left_forward);
@@ -322,7 +278,6 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
 
             finished_level.push_back(key_loop);
         }
-        //cout<<"testttt!4"<<endl;
         m_finished_loops.push_back(finished_level);
 
         level_num++;
@@ -404,7 +359,7 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
             for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop
                 cout<<"part1: level"<<i<<"loop num= "<<j<<"/"<<m_finished_loops[i].size()<<endl;
                 unsigned int cur_total[3]={0,0,0} ;//used to calculate average
-                unsigned int cur_avg[3]={-1,-1,-1} ;//used to calculate average
+                unsigned int cur_avg[3]={0,0,0} ;//used to calculate average
                 for (int k=0;k< m_finished_loops[i][j].size();k++) {
                     ColoredVertex elem= m_finished_loops[i][j][k];
                     cur_total[0]+= elem.getX();
@@ -457,7 +412,9 @@ cout<<"Test @"<<endl;
                 cout<<"TOP"<<endl;
                 top=true;
                 addHorzFace(m_finished_loops[i][j]);
+
             }else{
+                 cout<<"NOT TOP"<<endl;
                 for (int jj=0; jj< m_finished_loops[i+vertices_density_split].size();jj++) {//for each loop in next level
 
                     vector<ColoredVertex>current_loop = m_finished_loops[i][j];
@@ -532,14 +489,21 @@ cout<<"Test @"<<endl;
 
 
 
-                for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop given a certain placement (find best of all matches)
+                for (int j=0; j< match_lists.size();j++) {//for each loop given a certain placement (find best of all matches)
                     cout<<"part 3: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
-
+                    if(match_lists[j].size()==0)
+                    {
+                        addHorzFace(m_finished_loops[i][j]);
+                        continue;
+                    }
+                    int loop_index=match_lists[j][placement][1];
+                    cout<<"test 5:34"<<endl;
                     if(last_taken_list.size()==0||last_taken_list[j]==-1){//if nothing connects from below to this loop
                         cout<<"flatface 1"<<endl;
 
                         addHorzFace(m_finished_loops[i][j]);
                     }
+                    cout<<"TEST"<<match_lists.size()<<" "<<j<<endl;
                     if (match_lists[j].size()==0){
                         cout<<"flatface 2"<<endl;
 
@@ -636,19 +600,15 @@ cout<<"Test @"<<endl;
                     addSquare(lower_loop[lower_loop.size()-1],upper_loop[lower_loop.size()-1],upper_loop[0],lower_loop[0]);//wrap arround to begining
                 }
 
-                cout<<" a1"<<"------------------------"<<endl;
 
             }
-            cout<<" a2"<<"------------------------"<<endl;
 
 
         }
-        cout<<" a3"<<"------------------------"<<endl;
 
         last_taken_list=taken_list;
-        cout<<"a5"<<endl;
     }
-    cout<<"a4"<<"------------------------"<<endl;
+
 
 }
 
@@ -677,7 +637,6 @@ void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
 }
 
     void FaceMaker:: addSquare(std::vector<ColoredVertex> square) {// add group of 4 vertices to the list "squares"
-        cout<<"SQUARE ADDED0 "<<endl;
         squares.push_back(square);
 
 
@@ -685,12 +644,10 @@ void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
 
     }
     void FaceMaker:: addSquare(ColoredVertex corner_a,ColoredVertex corner_b,ColoredVertex corner_c,ColoredVertex corner_d) {// add group of 4 vertices to the list "squares"
-            cout<<"SQUARE ADDED"<<endl;
             corner_a.printVert();
             corner_b.printVert();
             corner_c.printVert();
             corner_d.printVert();
-            cout<<endl;
 
         vector<ColoredVertex>square{corner_a,corner_b,corner_c,corner_d};
         squares.push_back(square);
@@ -701,7 +658,6 @@ void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
     }
     std::vector<ColoredVertex>  FaceMaker::toTriangles(std::vector<ColoredVertex> square){
          std::vector<ColoredVertex> doubleTriangles=std::vector<ColoredVertex>();
-         cout<<"in TT";
         doubleTriangles.push_back(square[0]);
         doubleTriangles.push_back(square[1]);
         doubleTriangles.push_back(square[2]);
@@ -709,7 +665,6 @@ void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
         doubleTriangles.push_back(square[2]);
         doubleTriangles.push_back(square[3]);
         doubleTriangles.push_back(square[0]);
-        cout<<"out TT";
         return doubleTriangles;
 
 

@@ -1,17 +1,9 @@
 #version 330
 
-uniform sampler2D texture;
-uniform int useTexture;
-
-varying mediump vec2 texc;
-
+in vec3 vertexColor; // The input variable from the vertex shader (same name and same type)
+out vec4 color;
 void main()
 {
-    if (useTexture > 0)
-        gl_FragColor = texture2D(texture, texc);
-    else
-        gl_FragColor = vec4(0.8, 0.8, 0.8, 1.0);
+        color = vec4(vertexColor[0],vertexColor[1],vertexColor[2],1);
 
-    if (gl_FragColor.rgb == vec3(1.0, 1.0, 1.0))
-        gl_FragColor.a = 0.4;
 }

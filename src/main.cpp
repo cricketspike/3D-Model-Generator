@@ -98,13 +98,11 @@ int main(int argc, char **argv)
 
             }
 
-            float resolution_split=6;//lower=slower, more accurate
-            int vertices_density_split=4;//lower= more faces
-            cout<<endl<<"FINAL: "<<model_width<<" "<<model_height<<" "<<model_depth<<endl;
+            float resolution_split=4;//lower=slower, more accurate
+            int vertices_density_split=4;//lower= more loops
 
             vector<VotingMatrix> voters=vector<VotingMatrix>();
             for(int i=0;i<6;i++){
-                cout<<"Voting Matrix"<<i<<":"<<endl;
                voters.push_back(VotingMatrix(
                     model_width, model_height, model_depth,b.getSides()[i],resolution_split)
                 );
@@ -150,13 +148,6 @@ int main(int argc, char **argv)
 
            FaceMaker fm=FaceMaker(shell);
            fm.makeFaces(vertices_density_split);
-/*
-           VertexLinker vl=VertexLinker(shell);
-           vl.makeShapes(vertices_density_split);
-*/
-
-
-           //float * vertArray= &shell->getListOfVertsAsFloats()[0];
 
            int wid=shell->getWidth();
            int hei=shell->getHeight();
@@ -165,12 +156,9 @@ int main(int argc, char **argv)
            std::vector<GLfloat> facesByRBG=std::vector<float>();
            //print all triangles and add their raw data into the face arrays
                       foreach (vector<ColoredVertex> face , fm.getTriangles()){
-                          cout<<"TESTA"<<endl;
-                          //cout<<"triangle "<<face.size()<<"\n";
+
                           for (int i=0;i<3;i++){
-                           //cout<<"TEST+"<<endl;
                           ColoredVertex vert=face[i];
-                          //cout<<"TEST-"<<endl;
 
                           facesByXYZ.push_back(((float)vert.getX())/wid -.5);
                           facesByXYZ.push_back(((float)vert.getY())/hei -.5);
@@ -181,16 +169,10 @@ int main(int argc, char **argv)
                           facesByRBG.push_back(((float)colors[1])/256);
                           facesByRBG.push_back(((float)colors[2])/256);
 
-    //                      face[i].printVert();
-                          //cout<<"TESTB"<<endl;
                           }
-                          //cout<<"TESTC"<<endl;
                       }
-            cout<<"faces\n";
              foreach (vector<ColoredVertex> face , fm.getSquares()){
-                 cout<<"test";
                  vector<ColoredVertex> triangles=fm.toTriangles(face);
-                 //cout<<triangles.size();
                  for (int i=0;i<6;i++){
                      ColoredVertex  vert=triangles[i];
 
@@ -202,12 +184,13 @@ int main(int argc, char **argv)
                  facesByRBG.push_back(((float)colors[0])/256);
                  facesByRBG.push_back(((float)colors[1])/256);
                  facesByRBG.push_back(((float)colors[2])/256);
-  //                   triangles[i].printVert();
 
              }
 
 
              }
+
+
              QGuiApplication app(argc, argv);
 
              QSurfaceFormat format;
@@ -229,6 +212,5 @@ int main(int argc, char **argv)
 
         }
 
-        std::cout << std::endl;
     }
 }

@@ -44,7 +44,7 @@ MainWindow::~MainWindow()
 void MainWindow::initialize()
 {
     glEnable(GL_DEPTH_TEST);
-   // glShadeModel(GL_SMOOTH);//This was working before :<
+    glShadeModel(GL_SMOOTH);//This was working before :<
 
 
     // Create shader program
@@ -69,9 +69,7 @@ glDepthFunc(GL_LEQUAL);
     glViewport(0, 0, width() * retinaScale, height() * retinaScale);
     glClear(GL_DEPTH_BUFFER_BIT);
     glClear(GL_COLOR_BUFFER_BIT);
-
     m_program->bind();
-
     QMatrix4x4 matrix;
     matrix.perspective(60.0f, 4.0f/3.0f, 0.1f, 100.0f);
     matrix.translate(0, 0, -1);
@@ -80,6 +78,9 @@ glDepthFunc(GL_LEQUAL);
 
 
 
+    std::cout<<sizeof(vertices);
+    std::cout<<sizeof(colors);
+    std::cout<<":" <<colors[44]<<endl;
     glVertexAttribPointer(m_posAttr, 3, GL_FLOAT, GL_FALSE, 0, vertices);
     glVertexAttribPointer(m_colAttr, 3, GL_FLOAT, GL_FALSE, 0, colors);
 
