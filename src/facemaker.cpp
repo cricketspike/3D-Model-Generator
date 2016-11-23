@@ -6,7 +6,7 @@ FaceMaker::FaceMaker(ColoredVertexMatrix * matrix_in) {
     m_matrix_width = m_matrix->getWidth();
     m_matrix_height = m_matrix->getHeight();
     m_matrix_depth = m_matrix->getDepth();
-    m_max_dist = (matrix_in->getWidth() + matrix_in->getDepth())/8;//TODO: make the 8 changable later
+    m_max_dist = (matrix_in->getWidth() + matrix_in->getDepth())/4;
 
 }
 
@@ -286,17 +286,13 @@ void FaceMaker::SetKeyPoints(int vertices_density_split){
 
 bool FaceMaker::reccurFindNextVertex(int x, int y, int z) {
     //returns true if it reccurs or reaches the end
-    //cout<<"asdf1"<<endl;
     if (!m_matrix->isValid(x,y,z)){
-       //cout<<" OOB \n";
         return false;//hit a side
     }
-    //cout<<"asdf2"<<endl;
     ColoredVertex  active = m_vertices[x][y][z];
     if((!m_matrix->isValid(x,y,z))||m_taken[x][y][z]){return false;}
     //taken bit shouldnt need to be here after it is hollowed
     //from now on return true because this was added to the loop
-    //cout<<"added"<<x<<","<<y<<","<<z<<endl;
 
     cur_loop.push_back(active);
     m_taken[x][y][z] = true;
@@ -347,13 +343,12 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 
     //first go through each level to get the center of every loop
-    vector<vector<unsigned int*>> loop_center_positions;//level: index: x,y,z this will hold the center of the loop on every level
+    vector<vector<vector<int>>> loop_center_positions;//level: index: x,y,z this will hold the center of the loop on every level
     for (int i=0;i< m_finished_loops.size();i+=vertices_density_split) {//for each level
-            vector<unsigned int*>centers_of_this_level;//hold this until end of level then push it as the top level onto loop_center_positions
+            vector<vector<int>>centers_of_this_level;//hold this until end of level then push it as the top level onto loop_center_positions
             for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop
-                cout<<"part1: level"<<i<<"loop num= "<<j<<"/"<<m_finished_loops[i].size()<<endl;
-                unsigned int cur_total[3]={0,0,0} ;//used to calculate average
-                unsigned int cur_avg[3]={0,0,0} ;//used to calculate average
+                vector<int> cur_total={0,0,0} ;//used to calculate average
+                vector<int> cur_avg={0,0,0} ;//used to calculate average
                 for (int k=0;k< m_finished_loops[i][j].size();k++) {
                     ColoredVertex elem= m_finished_loops[i][j][k];
                     cur_total[0]+= elem.getX();
@@ -364,9 +359,10 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
                 cur_avg[1]=(cur_total[1]/m_finished_loops[i][j].size());
                 cur_avg[2]=(cur_total[2]/m_finished_loops[i][j].size());
                 centers_of_this_level.push_back(cur_avg);
-                cout<<"average("<<cur_avg[0]<<", "<<cur_avg[1]<<", "<<cur_avg[2]<<")"<<endl;
+
             }
             loop_center_positions.push_back(centers_of_this_level);
+
         }
 
 
@@ -383,14 +379,14 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 
     vector<int> last_taken_list;
-    for (int i=0;i<m_finished_loops.size();i+=vertices_density_split) {//for each level
+    for (int i=0;i<m_finished_loops.size();i+=vertices_density_split) {//do everything level by level
 
-        vector<vector<unsigned int*>> match_lists;//loop_num: placement: match   -will hold all matches of each loop in THIS level, in order, to be compared
-        vector<vector<float>> distance_lists;//loop_num: placement: distance of match   -will hold distance to each match
+        vector<vector<unsigned int*>> match_lists;//[loop_num][ placement]: match   -will hold all matches of each loop in THIS level, in order, to be compared
+        vector<vector<float>> distance_lists;//[loop_num][placement]: distance of match   -will hold distance to each match
         bool top=false;
 
-         vector<int> taken_list;
-        if(i+vertices_density_split<m_finished_loops.size()){
+         vector<int> taken_list;//eventually used to compare loops on this level competing for partners on next level
+        if(i+vertices_density_split<m_finished_loops.size()){//if not out of vertical bounds
              taken_list=vector<int> (m_finished_loops[i+vertices_density_split].size(), -1);
         }
         //this is a list of -1s representing all the loops on the next level
@@ -398,38 +394,48 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 
         for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop find all matches
-            cout<<"part2: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
-            cout<<"LOOP finding all matches"<<endl;
+
             vector<unsigned int*> matches;//size 2: {level of loop, loop's index in level}
             vector<float> distances;//used for comparison of matches, will not cary over
-            if(i+vertices_density_split>=m_finished_loops.size()){
-                cout<<"TOP"<<endl;
+            if(i+vertices_density_split>=m_finished_loops.size()){//if wwe run off the top, just flatten the loop
                 top=true;
                 addHorzFace(m_finished_loops[i][j]);
 
-            }else{
-                 cout<<"NOT TOP"<<endl;
+            }else{//not Top i
                 for (int jj=0; jj< m_finished_loops[i+vertices_density_split].size();jj++) {//for each loop in next level
-
                     vector<ColoredVertex>current_loop = m_finished_loops[i][j];
                     vector<ColoredVertex>next_loop = m_finished_loops[i+vertices_density_split][jj];
-                     cout<<"index of this loop in loops: "<<i<<", "<<j<<"  size of this loop: "<<current_loop.size()<<endl;
-                     cout<<"index of next loop in loops: "<<next_loop.size()<<endl;
+
+                    int this_avg_level=(i+1)/vertices_density_split;
+
+                    int this_x=loop_center_positions[this_avg_level][j][0];
+
+                    int this_z=loop_center_positions[this_avg_level][j][1];
+                 //cout<<"A ["<<i<<"--"<<this_avg_level<<"]"<<"["<<j<<"] ="<<this_x<<","<<this_z<<endl;
+
+
+                    int next_avg_level=this_avg_level+1;
+
+                    int next_x=loop_center_positions[next_avg_level][jj][0];
+                    int next_z=loop_center_positions[next_avg_level][jj][1];
+                 //cout<<"B ["<<i<<"--"<<next_avg_level<<"]"<<"["<<jj<<"] ="<<next_x<<","<<next_z<<endl;
+
+
+
                     float cur_distance=//diagonal distance
-                        pow ((loop_center_positions[i/vertices_density_split][j][0]-loop_center_positions[i/vertices_density_split+1][jj][0]),2)+//x distance squared
-                            pow ((loop_center_positions[i/vertices_density_split][j][2]-loop_center_positions[i/vertices_density_split+1][jj][2]),2);// + z distance squared
+                       (this_x-next_x)*(this_x-next_x)+(this_z-next_z)*(this_z-next_z);
+
+                 //cout<<"CURDIS ["<<i<<"]["<<j<<"-"<<jj<<"] ="<<cur_distance<<endl;
 
 
 
-                    cout<<"is"<<cur_distance<<"<"<<m_max_dist<<endl;
                     bool closeEnough= cur_distance <m_max_dist;
                     if(closeEnough){
-                        cout<<"Yes"<<endl;
                         unsigned int newMatch[2]={i+vertices_density_split,jj};
                         assert (matches.size()==distances.size());//distance is associated with the match at the same index
                         bool inserted=false;//used to check if we got to the end withour insetring
                         for ( int ranking = 0; ranking<matches.size();ranking++){
-                            cout<<"competition1:"<<cur_distance<<" < "<<distances[ranking]<<endl;
+                         //cout<<"competition1:"<<cur_distance<<" < "<<distances[ranking]<<endl;
                             if  (cur_distance < distances[ranking]||( //if closer
                                     cur_distance == distances[ranking]&&( //or the same distance and the diameter is smaller
                                         pow ((current_loop[0].getX()-current_loop[current_loop.size()/2].getX()),2)//X diameter of cur loop
@@ -441,20 +447,23 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
                                 distances.insert(distances.begin() +ranking ,cur_distance);
                                 matches.insert(matches.begin() +ranking ,newMatch);
-                                cout<<"match("<<newMatch[0]<<", "<<newMatch[1]<<", "<<cur_distance<<")"<<" in place "<< ranking<<endl;
+                             //cout<<"match("<<newMatch[0]<<", "<<newMatch[1]<<", "<<cur_distance<<")"<<" in place "<< ranking<<endl;
                                 inserted=true;
                                 break;
                             }
                         }
+
                         if(!inserted){//if it gets to the end without inserting, it is in last place so just add it to end;
                             distances.push_back(cur_distance);
                             matches.push_back(newMatch);
-                            cout<<"match("<<newMatch[0]<<", "<<newMatch[1]<<", "<<cur_distance<<")"<<endl;
+                         //cout<<"match("<<newMatch[0]<<", "<<newMatch[1]<<", "<<cur_distance<<")"<<endl;
                         }
                     }
 
 
                 }
+             //cout<<"["<<i<<"]"<<"["<<j<<"]"<<"matches="<<matches.size()<<endl;
+
 
                 match_lists.push_back(matches);//push the list of matches for the loop into a list of all the loops' matches
                 distance_lists.push_back(distances);
@@ -474,7 +483,7 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 
                 for (int placement=0;found_any_this_place ;placement++){//compare the first place of every loop then then second, etc
-                cout<<"placement ="<<placement<<endl;
+             //cout<<"placement ="<<placement<<endl;
                 if (match_lists.size()==0){
                         break;
                     ;}
@@ -483,26 +492,25 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 
                 for (int j=0; j< match_lists.size();j++) {//for each loop given a certain placement (find best of all matches)
-                    cout<<"part 3: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
+                 //cout<<"part 3: level"<<i<<"loop num="<<j<<"/"<<m_finished_loops[i].size()<<endl;
                     if(match_lists[j].size()==0)
                     {
                         addHorzFace(m_finished_loops[i][j]);
                         continue;
                     }
                     int loop_index=match_lists[j][placement][1];
-                    cout<<"test 5:34"<<endl;
+                 //cout<<"test 5:34"<<endl;
                     if(last_taken_list.size()==0||last_taken_list[j]==-1){//if nothing connects from below to this loop
-                        cout<<"flatface 1"<<endl;
+                     //cout<<"flatface 1"<<endl;
 
                         addHorzFace(m_finished_loops[i][j]);
                     }
-                    cout<<"TEST"<<match_lists.size()<<" "<<j<<endl;
                     if (match_lists[j].size()==0){
-                        cout<<"flatface 2"<<endl;
+                     //cout<<"flatface 2"<<endl;
 
                         addHorzFace(m_finished_loops[i][j]);
                     }else{
-                        cout<<"not flat face"<<i<<endl;
+                     //cout<<"Not flat face up"<<i<<endl;
 
 
                     }
@@ -520,9 +528,9 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
                     int taken_index=taken_list[match[1]];//the index of this loops nth best match
 
                     if(!locked[match[1]]){//if not already taken in a previous round
-                        cout<<"NOTLOCKED"<<endl;
+                     //cout<<"NOTLOCKED"<<endl;
                     if (taken_index==-1){//if no other loop has been matched with the loop above yet
-                        cout<<"index= -1"<<endl;
+                     //cout<<"index= -1"<<endl;
                     taken_list[match[1]]=j;//this loop claims the one above
                         }else {
 
@@ -530,15 +538,15 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
 
 
-                        cout<<"index= "<<taken_index<<endl;
-                            cout<<"current best match's level="<<match[0]<<", current best's index: "<<match[1]<<endl;
+                     //cout<<"index= "<<taken_index<<endl;
+                         //cout<<"current best match's level="<<match[0]<<", current best's index: "<<match[1]<<endl;
 
-                            cout<<"current lowest distance="<<cur_best_distance<<endl;
+                         //cout<<"current lowest distance="<<cur_best_distance<<endl;
                             vector<ColoredVertex> cur_best_match=m_finished_loops[match[0]][match[1]];
 
 
-                            cout<<"contenders's level="<<i<<", contender's index: "<<j<<endl;
-                             cout<<"contender's distance="<<cur_loop_distances[placement]<<endl;
+                         //cout<<"contenders's level="<<i<<", contender's index: "<<j<<endl;
+                          //cout<<"contender's distance="<<cur_loop_distances[placement]<<endl;
                             vector<ColoredVertex> cur_contender_match=m_finished_loops[i][j];//note: at this point match[0] should = i
 
 
@@ -547,12 +555,13 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
                                     pow ((cur_contender_match[0].getX()-cur_contender_match[cur_contender_match.size()/2 ].getX()),2)//diameter of cur loop
                                     < pow ((cur_best_match[0].getX()-cur_best_match[cur_best_match.size()/2 ].getX()),2)//diameter of curent best loop
                             ){//then
-                                cout<<"contender is closer"<<endl;
+                             //cout<<"contender is closer"<<endl;
                                 taken_list[match[1]]=j;//this loop claims the one above becoming the new best loop
                             }
 
                         }
                     }
+
 
                 }
                 for (int taken_index=0;taken_index<taken_list.size();taken_index++){
@@ -565,33 +574,32 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
             }
 
 
-             cout<<"CONNECT FACES"<<"------------------------"<<endl;
+          //cout<<"CONNECT FACES"<<"------------------------"<<endl;
             for (int e_index=0; e_index<taken_list.size();e_index++ ){//for each element e in taken list:
 
-                cout<<"taken list size "<<taken_list.size()<<">0"<<endl;
+             //cout<<"taken list size "<<taken_list.size()<<">0"<<endl;
                 int e=taken_list[e_index];
                 vector<ColoredVertex> upper_loop=m_finished_loops[i+vertices_density_split][e_index];
 
                 if(e!=-1){//if element was connected to
 
-                    cout<<"element"<<e <<"in the taken list was taken"<<endl;
+                 //cout<<"element"<<e <<"in the taken list was taken"<<endl;
                     //connect loops[e] to loops[e's index] with 8*n faces (be sure to loop arround)
-                    cout<<"Taken List:"<<e_index<<"/"<<taken_list.size();
+                 //cout<<"Taken List:"<<e_index<<"/"<<taken_list.size();
 
-                    cout<<e_index<<"/"<<m_finished_loops[i+vertices_density_split].size()<<endl;
+                 //cout<<e_index<<"/"<<m_finished_loops[i+vertices_density_split].size()<<endl;
                     vector<ColoredVertex> lower_loop=m_finished_loops[i][e];
-                    cout<<e<<"/"<<m_finished_loops[i].size()<<endl;
+                 //cout<<e<<"/"<<m_finished_loops[i].size()<<endl;
 
 
                     assert(lower_loop.size()==upper_loop.size());
-                    cout<<"test %";
+                 //cout<<"test %";
                     for(int connecting_i=0; connecting_i<lower_loop.size()-1; connecting_i++){
-                        cout<<"enter2"<<endl;
                             addSquare(lower_loop[connecting_i],upper_loop[connecting_i],upper_loop[connecting_i+1],lower_loop[connecting_i+1]);
 
                     }
                     addSquare(lower_loop[lower_loop.size()-1],upper_loop[lower_loop.size()-1],upper_loop[0],lower_loop[0]);//wrap arround to begining
-                }
+                }else{cout<<"NULLED"<<endl;}
 
 
             }

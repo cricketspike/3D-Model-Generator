@@ -31,6 +31,9 @@ void ModelEditor::createModel(){
 
 
     }
+    if (model_width<10||model_height<10*10||model_depth<10){
+        cout<<"WARNING:Very small model, may cause crash if divided too much"<<endl;
+    }
 
 
     vector<VotingMatrix> voters=vector<VotingMatrix>();
