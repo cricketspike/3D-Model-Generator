@@ -468,7 +468,9 @@ void CubeMapEditorDisplay::paintGL()
 
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
-    drawRulers(painter);
+	Scene::draw(painter);
+    Tool::draw(painter);
+    //drawRulers(painter);  - Functionality removed
 }
 
 void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
@@ -500,38 +502,63 @@ void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
 
 }
 
+void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
+{
+    Tool::updateMouse((double)event->pos().x(), (double)event->pos().y());
+    if(event->buttons() == Qt::LeftButton) {
+        Tool::onMouseDrag();
+    }
+	
+    if(Tool::selected == Tool::T_MOVER) {
+        if (event->buttons() == Qt::LeftButton) {
+            // Generate a vector (QPointF) describing the mouse motion
+
+            QPoint mouse_pos = event->pos();
+            QPoint v = (mouse_pos - last_mouse_pos);
+            QPointF fv(v.x(), -v.y());
+            fv /= 1000;
+
+            if (selected_face != CubeMapEditor::Face::NONE) {
+                // Alter the positioning of the selected face using mouse motion vector
+
+                double zoom;
+                QPointF offset;
+                images[selected_face].getFocus(zoom, offset);
+                images[selected_face].setFocus(zoom, offset+fv);
+            } else {
+                // Alter the positioning of the display using mouse motion vector
+
+                offset += fv;
+                setFocus(zoom, offset);
+            }
+            last_mouse_pos = mouse_pos;
+        }
+    }
+}
+
 void CubeMapEditorDisplay::mousePressEvent(QMouseEvent* event)
 {
-
-    if (event->modifiers().testFlag(Qt::ShiftModifier)) {                       // Shift pressed
-
-        double nx = ((double)event->pos().x())/width();
-        double ny = ((double)event->pos().y())/height();
-
-        DisplayRuler match_ruler;
-        if (event->modifiers().testFlag(Qt::ControlModifier)) {                 //    Control pressed
-           match_ruler.orientation = DisplayRuler::Orientation::Vertical;
-           match_ruler.normalized_offset = nx;
-        } else {                                                                //    Control not pressed
-            match_ruler.orientation = DisplayRuler::Orientation::Horizontal;
-            match_ruler.normalized_offset = ny;
-        }
-
-        if (event->buttons() == Qt::LeftButton) {                               //    Left-click
-            addRuler(match_ruler);
-        } else {                                                                //    Right-click
-            removeRuler(match_ruler);
-        }
-
-    } else {                                                                    // Shift not pressed
-
-        if (event->buttons() == Qt::LeftButton) {                               //    Left-click
-            last_mouse_pos = event->pos();
-        } else if (selected_face != CubeMapEditor::Face::NONE) {                //    Right-click
-            images[selected_face].rotate();
-        }
-
+    Tool::updateMouse((double)event->pos().x(), (double)event->pos().y());
+    if(event->button() == Qt::LeftButton)
+        Tool::onMouseLeftPress();
+    else if(event->button() == Qt::RightButton)
+        Tool::onMouseRightPress();
+	
+    if(Tool::selected == Tool::T_MOVER)
+    if (event->buttons() == Qt::LeftButton) {                               //    Left-click
+        last_mouse_pos = event->pos();
+    } else if (selected_face != CubeMapEditor::Face::NONE) {                //    Right-click
+        images[selected_face].rotate();
     }
+}
+
+void CubeMapEditorDisplay::mouseReleaseEvent(QMouseEvent* event)
+{
+    Tool::updateMouse((double)event->pos().x(), (double)event->pos().y());
+    if(event->button() == Qt::LeftButton)
+        Tool::onMouseLeftRelease();
+    else if(event->button() == Qt::RightButton)
+        Tool::onMouseRightRelease();
 }
 
 void CubeMapEditorDisplay::wheelEvent(QWheelEvent* event)
@@ -551,6 +578,51 @@ void CubeMapEditorDisplay::wheelEvent(QWheelEvent* event)
         setFocus(zoom, offset);
     }
 }
+
+void CubeMapEditorDisplay::keyPressEvent(QKeyEvent* event) {
+    switch(event->key()) {
+    case Qt::Key_1:
+        Tool::set(Tool::T_POINTER);
+        break;
+    case Qt::Key_2:
+        Tool::set(Tool::T_RULER);
+        break;
+    case Qt::Key_3:
+        Tool::set(Tool::T_PICKER);
+        break;
+    case Qt::Key_4:
+        Tool::set(Tool::T_MOVER);
+        break;
+    case Qt::Key_0: {
+        QColorDialog picker;
+        picker.setCurrentColor(QColor(Tool::color.r*255,Tool::color.g*255,Tool::color.b*255));
+        picker.exec();
+        int red, green, blue;
+        picker.selectedColor().getRgb(&red, &green, &blue);
+        Tool::color.r = red/255.0;
+        Tool::color.g = green/255.0;
+        Tool::color.b = blue/255.0;
+    } break;
+    case Qt::Key_Minus:
+        Tool::Model::color = Tool::color;
+        break;
+    case Qt::Key_Equal:
+        Tool::Null::color = Tool::color;
+        break;
+    case Qt::Key_Control:
+        Tool::MODIFIER |= Tool::M_CTRL;
+        break;
+    }
+}
+
+void CubeMapEditorDisplay::keyReleaseEvent(QKeyEvent* event) {
+    switch(event->key()) {
+        case Qt::Key_Control:
+        Tool::MODIFIER &= ~Tool::M_CTRL;
+        break;
+    }
+}
+
 void CubeMapEditorDisplay::addRuler(DisplayRuler r) {
     rulers.append(r);
 }

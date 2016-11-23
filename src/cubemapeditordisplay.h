@@ -9,9 +9,11 @@
 #include <QOpenGLShader>
 #include <QOpenGLTexture>
 #include <QWheelEvent>
+#include <QColorDialog>
 
 #include "cubemapeditor.h"
 #include "cubemapeditorimage.h"
+#include "tools.h"
 
 /*
  * This class provides an interactive display
@@ -60,7 +62,10 @@ protected:
 
     void mouseMoveEvent(QMouseEvent* event);
     void mousePressEvent(QMouseEvent* event);
+	void mouseReleaseEvent(QMouseEvent* event);
     void wheelEvent(QWheelEvent* event);
+    void keyPressEvent(QKeyEvent* event);
+    void keyReleaseEvent(QKeyEvent* event);
 
 private:
     void updateVertices();
