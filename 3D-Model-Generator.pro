@@ -28,7 +28,8 @@ SOURCES += \
     src/verticessmoothing.cpp \
     src/cubemapeditordisplay.cpp \
     src/cubemapeditorimage.cpp \
-    src/cubemapeditor.cpp
+    src/cubemapeditor.cpp \
+    src/weighteditor.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -49,7 +50,8 @@ HEADERS += \
     src/verticessmoothing.h \
     src/cubemapeditordisplay.h \
     src/cubemapeditorimage.h \
-    src/cubemapeditor.h
+    src/cubemapeditor.h \
+    src/weighteditor.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -62,4 +64,5 @@ DEPENDPATH += $$PWD/include
 FORMS += \
     src/importwindow.ui \
     src/cubepreviewwidgetdemo.ui \
-    src/cubemapeditor.ui
+    src/cubemapeditor.ui \
+    src/weighteditor.ui

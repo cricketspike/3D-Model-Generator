@@ -37,6 +37,11 @@ void CubeMapEditorDisplay::loadImage(QImage image)
     images[selected_face].setImage(image);
 }
 
+CubeMapEditorImage* CubeMapEditorDisplay::getImage()
+{
+    return &images[selected_face];
+}
+
 void CubeMapEditorDisplay::getFocus(double& zoom, QPointF& offset)
 {
     switch (selected_face) {

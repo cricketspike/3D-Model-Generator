@@ -12,7 +12,7 @@
 
 #include "cubemapeditor.h"
 #include "cubemapeditorimage.h"
-
+#include <vector>
 /*
  * This class provides an interactive display
  * of the cube map in CubeMapEditor.
@@ -46,6 +46,8 @@ public:
     void setFocus(double zoom, QPointF offset);
 
     void loadImage(QImage image);
+    CubeMapEditorImage* getImage();
+    //vector<vector<uint8_t*>> getWeight();
 
 protected:
     void initializeGL();

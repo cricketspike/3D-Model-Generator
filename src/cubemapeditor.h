@@ -2,6 +2,8 @@
 #define CUBEMAPEDITOR_H
 
 #include <QMainWindow>
+#include "src/weighteditor.h"
+
 
 /*
  * This class provides a UI for editing/arranging six images
@@ -24,11 +26,18 @@ public:
     ~CubeMapEditor();
 
 private slots:
+
     void selection(int);
     void on_pushButton_loadImage_clicked();
+    void on_pushButton_weight_clicked();
 
 private:
+
+    QImage image;
     Ui::CubeMapEditor *ui;
+    //weighteditor *weight;
+    std::vector<std::vector<uint8_t>> weight;
+
 };
 
 #endif // CUBEMAPEDITOR_H

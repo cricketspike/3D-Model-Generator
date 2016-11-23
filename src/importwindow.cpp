@@ -32,17 +32,17 @@ importwindow::importwindow(QWidget *parent) :
 
 
   //Set temp images and keep images scaled
-  ui->label->setPixmap(QPixmap::fromImage(*cube.getSides().at(0).getImage()));
+  ui->label->setPixmap(QPixmap::fromImage(cube.getSides().at(0).getImage()));
   ui->label->setScaledContents(true);
-  ui->label_2->setPixmap(QPixmap::fromImage(*cube.getSides().at(1).getImage()));
+  ui->label_2->setPixmap(QPixmap::fromImage(cube.getSides().at(1).getImage()));
   ui->label_2->setScaledContents(true);
-  ui->label_3->setPixmap(QPixmap::fromImage(*cube.getSides().at(2).getImage()));
+  ui->label_3->setPixmap(QPixmap::fromImage(cube.getSides().at(2).getImage()));
   ui->label_3->setScaledContents(true);
-  ui->label_4->setPixmap(QPixmap::fromImage(*cube.getSides().at(3).getImage()));
+  ui->label_4->setPixmap(QPixmap::fromImage(cube.getSides().at(3).getImage()));
   ui->label_4->setScaledContents(true);
-  ui->label_5->setPixmap(QPixmap::fromImage(*cube.getSides().at(4).getImage()));
+  ui->label_5->setPixmap(QPixmap::fromImage(cube.getSides().at(4).getImage()));
   ui->label_5->setScaledContents(true);
-  ui->label_6->setPixmap(QPixmap::fromImage(*cube.getSides().at(5).getImage()));
+  ui->label_6->setPixmap(QPixmap::fromImage(cube.getSides().at(5).getImage()));
   ui->label_6->setScaledContents(true);
 }
 
@@ -53,73 +53,73 @@ importwindow::~importwindow(){
 void importwindow::on_importimage1_clicked() {
   QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "C://", "JPG (*.jpg)");
   QImage newImage (filename);
-  cube.setSide(0,ImportedImage(&newImage));
+  cube.setSide(0,ImportedImage(newImage));
   cube.setPixelsAt(0);
-  ui->label->setPixmap(QPixmap::fromImage(*cube.getSides().at(0).getImage()));
+  ui->label->setPixmap(QPixmap::fromImage(cube.getSides().at(0).getImage()));
 }
 
 void importwindow::on_importimage2_clicked() {
   QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "C://", "JPG (*.jpg)");
   QImage newImage (filename);
-  cube.setSide(1,ImportedImage(&newImage));
+  cube.setSide(1,ImportedImage(newImage));
   cube.setPixelsAt(1);
-  ui->label_2->setPixmap(QPixmap::fromImage(*cube.getSides().at(1).getImage()));
+  ui->label_2->setPixmap(QPixmap::fromImage(cube.getSides().at(1).getImage()));
 }
 
 void importwindow::on_importimage3_clicked() {
   QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "C://", "JPG (*.jpg)");
   QImage newImage (filename);
-  cube.setSide(2,ImportedImage(&newImage));
+  cube.setSide(2,ImportedImage(newImage));
   cube.setPixelsAt(2);
-  ui->label_3->setPixmap(QPixmap::fromImage(*cube.getSides().at(2).getImage()));
+  ui->label_3->setPixmap(QPixmap::fromImage(cube.getSides().at(2).getImage()));
 }
 
 void importwindow::on_importimage4_clicked() {
   QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "C://", "JPG (*.jpg)");
   QImage newImage (filename);
-  cube.setSide(3,ImportedImage(&newImage));
+  cube.setSide(3,ImportedImage(newImage));
   cube.setPixelsAt(3);
-  ui->label_4->setPixmap(QPixmap::fromImage(*cube.getSides().at(3).getImage()));
+  ui->label_4->setPixmap(QPixmap::fromImage(cube.getSides().at(3).getImage()));
 }
 
 void importwindow::on_importimage5_clicked() {
   QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "C://", "JPG (*.jpg)");
   QImage newImage (filename);
-  cube.setSide(4,ImportedImage(&newImage));
+  cube.setSide(4,ImportedImage(newImage));
   cube.setPixelsAt(4);
-  ui->label_5->setPixmap(QPixmap::fromImage(*cube.getSides().at(4).getImage()));
+  ui->label_5->setPixmap(QPixmap::fromImage(cube.getSides().at(4).getImage()));
 }
 
 void importwindow::on_importimage6_clicked() {
   QString filename = QFileDialog::getOpenFileName(this,tr("Open File"), "C://", "JPG (*.jpg)");
   QImage newImage (filename);
-  cube.setSide(5,ImportedImage(&newImage));
+  cube.setSide(5,ImportedImage(newImage));
   cube.setPixelsAt(5);
-  ui->label_6->setPixmap(QPixmap::fromImage(*cube.getSides().at(5).getImage()));
+  ui->label_6->setPixmap(QPixmap::fromImage(cube.getSides().at(5).getImage()));
 }
 
 void importwindow::on_preview1_clicked() {
-  ui->PreviewImage->setPixmap(QPixmap::fromImage(*cube.getSides().at(0).getImage()));
+  ui->PreviewImage->setPixmap(QPixmap::fromImage(cube.getSides().at(0).getImage()));
 }
 
 void importwindow::on_preview2_clicked() {
-  ui->PreviewImage->setPixmap(QPixmap::fromImage(*cube.getSides().at(1).getImage()));
+  ui->PreviewImage->setPixmap(QPixmap::fromImage(cube.getSides().at(1).getImage()));
 }
 
 void importwindow::on_preview3_clicked() {
-  ui->PreviewImage->setPixmap(QPixmap::fromImage(*cube.getSides().at(2).getImage()));
+  ui->PreviewImage->setPixmap(QPixmap::fromImage(cube.getSides().at(2).getImage()));
 }
 
 void importwindow::on_preview4_clicked() {
-  ui->PreviewImage->setPixmap(QPixmap::fromImage(*cube.getSides().at(3).getImage()));
+  ui->PreviewImage->setPixmap(QPixmap::fromImage(cube.getSides().at(3).getImage()));
 }
 
 void importwindow::on_preview5_clicked() {
-  ui->PreviewImage->setPixmap(QPixmap::fromImage(*cube.getSides().at(4).getImage()));
+  ui->PreviewImage->setPixmap(QPixmap::fromImage(cube.getSides().at(4).getImage()));
 }
 
 void importwindow::on_pushButton_6_clicked() {
-  ui->PreviewImage->setPixmap(QPixmap::fromImage(*cube.getSides().at(5).getImage()));
+  ui->PreviewImage->setPixmap(QPixmap::fromImage(cube.getSides().at(5).getImage()));
 }
 
 void importwindow::on_exportfile_clicked() {

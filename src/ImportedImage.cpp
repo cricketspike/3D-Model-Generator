@@ -12,17 +12,17 @@ using namespace std;
 
 void ImportedImage::setPixels() {
   //Check to see if the picture is exists
-  if ( false == pic->isNull() ) {
+  if ( false == pic.isNull() ) {
 
     //initiate a 2D vector of uint8 to represent all the pixels
     pixels = vector<vector<uint8_t*>>();
 
     //Go through every pixel in the picture
-    for ( int col = 0; col < pic->width(); ++col ) {
+    for ( int col = 0; col < pic.width(); ++col ) {
 
       pixels.push_back(vector<uint8_t*>());
-      for ( int row = 0; row < pic->height(); ++row ) {
-        QColor clrCurrent( pic->pixel( col, row ) ); //Grab color Data
+      for ( int row = 0; row < pic.height(); ++row ) {
+        QColor clrCurrent( pic.pixel( col, row ) ); //Grab color Data
         //Set color data
         uint8_t *data = new uint8_t [3] {((uint8_t)clrCurrent.red()),
                                          ((uint8_t)clrCurrent.green()),
@@ -44,7 +44,7 @@ box::box(vector<QImage> images) {
   //Go through all the images and set all the data
   for (int count = 0; count < 6; count++) {
 
-    ImportedImage side= ImportedImage(&images[count]);
+    ImportedImage side= ImportedImage(images[count]);
     side.setFace(count);
     side.setPixels();
     if(count == 0) {//front

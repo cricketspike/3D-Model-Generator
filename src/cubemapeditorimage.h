@@ -2,8 +2,10 @@
 #define CUBEMAPEDITORIMAGE_H
 
 #include <QObject>
+#include <stdio.h>
+#include<iostream>
 #include <QOpenGLTexture>
-
+#include <vector>
 
 /*
  * This class contains the image and editing state of one face
@@ -24,6 +26,8 @@ public:
     void setImage(QImage image);
     bool haveImage() const;
     QImage getImage() const;
+    void addWeight(double x, double y);
+    void subtractWeight(double x, double y);
 
     // Focus: positioning & scaling/zoom
     void getFocus(double& zoom, QPointF& offset) const;
@@ -45,6 +49,7 @@ private:
     // Focus
     double zoom;
     QPointF offset;
+    std::vector<std::vector<uint8_t>> weight;
 
 signals:
 
