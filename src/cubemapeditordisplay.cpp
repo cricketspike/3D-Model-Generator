@@ -475,35 +475,6 @@ void CubeMapEditorDisplay::paintGL()
 
 void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
 {
-    if (event->buttons() == Qt::LeftButton) {
-        // Generate a vector (QPointF) describing the mouse motion
-
-        QPoint mouse_pos = event->pos();
-        QPoint v = (mouse_pos - last_mouse_pos);
-        QPointF fv(v.x(), -v.y());
-        fv /= 1000;
-
-        if (selected_face != CubeMapEditor::Face::NONE) {
-            // Alter the positioning of the selected face using mouse motion vector
-
-            double zoom;
-            QPointF offset;
-            images[selected_face].getFocus(zoom, offset);
-            images[selected_face].setFocus(zoom, offset+fv);
-        } else {
-            // Alter the positioning of the display using mouse motion vector
-
-            offset += fv;
-            setFocus(zoom, offset);
-        }
-
-        last_mouse_pos = mouse_pos;
-    }
-
-}
-
-void CubeMapEditorDisplay::mouseMoveEvent(QMouseEvent* event)
-{
     Tool::updateMouse((double)event->pos().x(), (double)event->pos().y());
     if(event->buttons() == Qt::LeftButton) {
         Tool::onMouseDrag();
