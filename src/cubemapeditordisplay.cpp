@@ -14,10 +14,12 @@ CubeMapEditorDisplay::CubeMapEditorDisplay(QWidget* parent) : QOpenGLWidget(pare
                                                               projection_mode(ProjectionMode::None)
 {
     images = new CubeMapEditorImage[6];
+	grabKeyboard();
 }
 
 CubeMapEditorDisplay::~CubeMapEditorDisplay()
 {
+    releaseKeyboard();
     makeCurrent();
 
     vbo.destroy();
@@ -528,11 +530,12 @@ void CubeMapEditorDisplay::mousePressEvent(QMouseEvent* event)
     else if(event->button() == Qt::RightButton)
         Tool::onMouseRightPress();
 	
-    if(Tool::selected == Tool::T_MOVER)
-    if (event->buttons() == Qt::LeftButton) {                               //    Left-click
-        last_mouse_pos = event->pos();
-    } else if (selected_face != CubeMapEditor::Face::NONE) {                //    Right-click
-        images[selected_face].rotate();
+    if(Tool::selected == Tool::T_MOVER) {
+        if (event->buttons() == Qt::LeftButton) {                               //    Left-click
+            last_mouse_pos = event->pos();
+        } else if (selected_face != CubeMapEditor::Face::NONE) {                //    Right-click
+            images[selected_face].rotate();
+        }
     }
 }
 
