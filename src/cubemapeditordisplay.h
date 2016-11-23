@@ -53,6 +53,7 @@ public:
 
     void loadImage(QImage image);
     CubeMapEditorImage* getImage();
+    CubeMapEditorImage* getImage(CubeMapEditor::Face f);
 
     void setProjectionMode(ProjectionMode mode);
 

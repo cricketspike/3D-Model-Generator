@@ -13,6 +13,8 @@ CubeMapEditor::CubeMapEditor(QWidget *parent) :
     ui(new Ui::CubeMapEditor)
 {
     ui->setupUi(this);
+    ui->rasterWidget->setVisible(false);
+    ui->rasterWidget->setImage(ui->display->getImage());
 
     /* Connect the clicked() signal of each selection button
     *    to the selection(int) slot, with paramter based on
@@ -51,6 +53,10 @@ void CubeMapEditor::selection(int selection)
 
     // Can't load an image when no face is selected
     ui->pushButton_loadImage->setEnabled(f != Face::NONE);
+
+    if (f != Face::NONE) {
+        ui->rasterWidget->setImage(ui->display->getImage());
+    }
 }
 
 
@@ -88,4 +94,27 @@ void CubeMapEditor::on_pushButton_weight_clicked()
     //weight->loadImage(ui->display->getImage());
     //weight->show();
 
+}
+
+void CubeMapEditor::on_pushButton_saveCube_clicked()
+{
+    QSize sz = size();
+
+    QString filenames[] = {
+        "tmp/Left",
+        "tmp/Top",
+        "tmp/Front",
+        "tmp/Bottom",
+        "tmp/Right",
+        "tmp/Back"
+    };
+    if (!QDir("tmp/").exists())
+        QDir("tmp/").mkdir(".");
+
+    for (Face f = Face::Left; f < Face::NONE; f=(Face)(f+1)) {
+        ui->rasterWidget->setImage(ui->display->getImage(f));
+        ui->rasterWidget->raster(filenames[f]+".jpg");
+    }
+
+    setFixedSize(sz);
 }

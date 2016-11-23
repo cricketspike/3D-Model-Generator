@@ -41,7 +41,8 @@ SOURCES += \
     src/color.cpp \
     src/scene.cpp \
     src/modelsettings.cpp \
-    src/ObjFileWriter.cpp
+    src/ObjFileWriter.cpp \
+    src/cubemapeditorrasterwidget.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -73,7 +74,8 @@ HEADERS += \
     src/color.h \
     src/scene.h \
     src/modelsettings.h \
-    src/objfilewriter.h
+    src/objfilewriter.h \
+    src/cubemapeditorrasterwidget.h
 
 RESOURCES += \
     resources/resources.qrc

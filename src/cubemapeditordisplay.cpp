@@ -40,7 +40,15 @@ void CubeMapEditorDisplay::loadImage(QImage image)
 
 CubeMapEditorImage* CubeMapEditorDisplay::getImage()
 {
+    if (selected_face == CubeMapEditor::NONE)
+        return &images[0];
+
     return &images[selected_face];
+}
+
+CubeMapEditorImage* CubeMapEditorDisplay::getImage(CubeMapEditor::Face f)
+{
+    return &images[(int)f];
 }
 
 void CubeMapEditorDisplay::setProjectionMode(CubeMapEditorDisplay::ProjectionMode mode)

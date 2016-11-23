@@ -15,5 +15,7 @@
         <file>ModelPreviewWidget.vert</file>
         <file>ModelPreviewWidget.frag</file>
         <file>ModelPreviewWidget.vert</file>
+        <file>cubemapeditorrasterwidget.vert</file>
+        <file>cubemapeditorrasterwidget.frag</file>
     </qresource>
 </RCC>
