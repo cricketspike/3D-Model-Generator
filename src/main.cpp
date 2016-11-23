@@ -112,7 +112,10 @@ int main(int argc, char **argv)
             }
            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split,null_color );
 
+
+           cout<<"verts before nullify"<<vertices.totalVerts()<<endl;
            nullify(vertices, null_color, threshold);
+           cout<<"verts after nullify"<<vertices.totalVerts()<<endl;
 
            smooth (vertices, vertices_density_split);
 

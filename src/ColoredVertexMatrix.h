@@ -13,7 +13,9 @@
 #include <vector>
 class ColoredVertexMatrix {
 public:
+
     ColoredVertexMatrix(){};
+    unsigned int totalVerts();
     ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split,uint8_t * background );
     ColoredVertexMatrix(ColoredVertexMatrix * original,int vertices_density_split);
 

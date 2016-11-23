@@ -353,7 +353,6 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
 
     //first go through each level to get the center of every loop
     vector<vector<unsigned int*>> loop_center_positions;//level: index: x,y,z this will hold the center of the loop on every level
-    cout<<"Test !";
     for (int i=0;i< m_finished_loops.size();i+=vertices_density_split) {//for each level
             vector<unsigned int*>centers_of_this_level;//hold this until end of level then push it as the top level onto loop_center_positions
             for (int j=0; j< m_finished_loops[i].size();j++) {//for each loop
@@ -387,10 +386,10 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
     vector<vector<bool>> matched_with_above;//level:index:(is loop at index matched with one on next level?)
     vector<vector<bool>> matched_with_below;//level:index:(is loop at index matched with one on previous level?)
 
-cout<<"Test @"<<endl;
 
     vector<int> last_taken_list;
     for (int i=0;i<m_finished_loops.size();i+=vertices_density_split) {//for each level
+
         vector<vector<unsigned int*>> match_lists;//loop_num: placement: match   -will hold all matches of each loop in THIS level, in order, to be compared
         vector<vector<float>> distance_lists;//loop_num: placement: distance of match   -will hold distance to each match
         bool top=false;
@@ -421,7 +420,7 @@ cout<<"Test @"<<endl;
                     vector<ColoredVertex>next_loop = m_finished_loops[i+vertices_density_split][jj];
                      cout<<"index of this loop in loops: "<<i<<", "<<j<<"  size of this loop: "<<current_loop.size()<<endl;
                      cout<<"index of next loop in loops: "<<next_loop.size()<<endl;
-                    float cur_distance=//diagonal distance 
+                    float cur_distance=//diagonal distance
                         pow ((loop_center_positions[i/vertices_density_split][j][0]-loop_center_positions[i/vertices_density_split+1][jj][0]),2)+//x distance squared
                             pow ((loop_center_positions[i/vertices_density_split][j][2]-loop_center_positions[i/vertices_density_split+1][jj][2]),2);// + z distance squared
 
@@ -462,7 +461,6 @@ cout<<"Test @"<<endl;
 
                 }
 
-                cout<<"Test #";
                 match_lists.push_back(matches);//push the list of matches for the loop into a list of all the loops' matches
                 distance_lists.push_back(distances);
             }

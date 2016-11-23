@@ -52,6 +52,23 @@ bool ColoredVertexMatrix::isValid(unsigned int x,unsigned int y,unsigned int z){
     return true;
 
 }
+
+unsigned int ColoredVertexMatrix:: totalVerts(){
+    unsigned int count=0;
+    for (unsigned int i = 0; i < m_width; i++) {
+        for (unsigned int j = 0; j < m_height; j++) {
+            for (unsigned int k = 0; k < m_depth; k++) {
+                if (isValid(i,i,k)){count++;}
+
+            }
+        }
+    }
+    return count;
+
+
+}
+
+
 ColoredVertexMatrix::ColoredVertexMatrix(ColoredVertexMatrix * original,int vertices_density_split){
     m_width=original->getWidth();
     m_height=original->getHeight();

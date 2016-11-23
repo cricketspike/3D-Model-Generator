@@ -64,8 +64,6 @@ void CubeMapEditor::on_pushButton_loadImage_clicked()
 
 void CubeMapEditor::on_pushButton_clicked()
 {
-
-
     QImage img0(":/images/image0.jpg" );
     QImage img1( ":/images/image1.jpg" );
     QImage img2( ":/images/image2.jpg" );
@@ -89,8 +87,6 @@ void CubeMapEditor::on_pushButton_clicked()
     mwin.createModel(b);
 
     mwin.exec();
-
-
 }
 
 void CubeMapEditor::on_comboBox_projection_currentIndexChanged(int index)
