@@ -3,7 +3,12 @@
 #include <QFileDialog>
 #include "cubemapeditor.h"
 #include "ui_cubemapeditor.h"
+<<<<<<< HEAD
+
+
+=======
 #include "modelwindow.h"
+>>>>>>> master
 CubeMapEditor::CubeMapEditor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CubeMapEditor)
@@ -47,6 +52,7 @@ void CubeMapEditor::selection(int selection)
 
     // Can't load an image when no face is selected
     ui->pushButton_loadImage->setEnabled(f != Face::NONE);
+    ui->pushButton_weight->setEnabled(f != Face::NONE);
 }
 
 
@@ -54,11 +60,24 @@ void CubeMapEditor::on_pushButton_loadImage_clicked()
 {
     QString imagePath = QFileDialog::getOpenFileName( this, "Open File", "", "JPEG (*.jpg *.jpeg);;PNG (*.png)" );
 
-    QImage image;
     image.load(imagePath);
     ui->display->loadImage(image);
 }
 
+<<<<<<< HEAD
+void CubeMapEditor::on_pushButton_weight_clicked()
+{
+    weighteditor weight;
+    weight.setModal(true);
+    weight.loadImage(ui->display->getImage());
+    weight.exec();
+    //weight = new weighteditor();
+    //weight->loadImage(ui->display->getImage());
+    //weight->show();
+
+}
+
+=======
 void CubeMapEditor::on_pushButton_clicked()
 {
 
@@ -89,3 +108,4 @@ void CubeMapEditor::on_pushButton_clicked()
 
 
 }
+>>>>>>> master

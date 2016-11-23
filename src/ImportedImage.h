@@ -11,7 +11,7 @@ using namespace std;
 //and all the parts to it
 class ImportedImage {
   private:
-    QImage* pic; //Original image
+    QImage pic; //Original image
     int face;//0=front,1bottom,2back,3up,4left,5right
     vector<vector<uint8_t*>> pixels; //2D vector to represent pixels
     bool invert_u;
@@ -27,13 +27,13 @@ class ImportedImage {
     uint8_t weight;//0 to 100 replace this with a 2D array
   public:
     //Initializeation functions
-    ImportedImage(QImage* image){
+    ImportedImage(QImage image){
       pic=image;
-      img_width=image->width();
-      img_height=image->height();
+      img_width=image.width();
+      img_height=image.height();
     }
     ImportedImage(){}
-    void setPic(QImage* newPic) {pic = newPic;}
+    void setPic(QImage newPic) {pic = newPic;}
     void setFace(int newFace) {face = newFace;}
     void setInvertU(bool newValue) {invert_u = newValue;}
     void setInvertV(bool newValue) {invert_v = newValue;}
@@ -48,7 +48,7 @@ class ImportedImage {
 
     //View functions
 
-    QImage* getImage() {return pic;}
+    QImage getImage() {return pic;}
     unsigned int getImageWidth() {return img_width;}
     unsigned int getImageHeight() {return img_height;}
     unsigned int getFace() {return face;}
