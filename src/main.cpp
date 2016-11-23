@@ -112,7 +112,7 @@ int main(int argc, char **argv)
             }
            ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,resolution_split,null_color );
 
-           tempNullify(vertices, null_color, threshold);
+           nullify(vertices, null_color, threshold);
 
            smooth (vertices, vertices_density_split);
 

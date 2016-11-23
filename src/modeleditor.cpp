@@ -45,7 +45,7 @@ void ModelEditor::createModel(bool exprt,string path_in){
     }
    ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color );
 
-   tempNullify(vertices, m_null_color, m_threshold);
+   nullify(vertices, m_null_color, m_threshold);
    smooth (vertices, m_vertices_density_split);
 
    ColoredVertexMatrix *shell= vertices.getShell(m_vertices_density_split);
