@@ -30,8 +30,8 @@ int main(int argc, char **argv)
     std::cout << "3D Model Builder " << std::endl;
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
-    std::cout << "          editor " << std::endl;
-    std::cout << "          image  " << std::endl;
+    std::cout << "          editor: start program " << std::endl;
+    std::cout << "          image: test basic functionality  " << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
     while (true) {

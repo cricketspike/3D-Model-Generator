@@ -34,13 +34,11 @@ bool PreciseTrimming::trimVertex(int x,int y,int z){
                 //if not keep checking
                 if(++neighbors > 3) {
 
-                    m_matrix->getValue(x,y,z).printVert();
                     return false;
                 }//if it has more than 3 neighbors, its guarunteeed to not be trimmed
                 if(i!=0){
                     for(int k2=-1;k2<=1;k2++){
                         if(m_matrix->isValid(x-i,y,z+k2)){
-                            m_matrix->getValue(x,y,z).printVert();
                             return false;}//check all with opoite X
                     }
 
@@ -49,7 +47,6 @@ bool PreciseTrimming::trimVertex(int x,int y,int z){
                     for(int i2=-1;i2<=1;i2++){
 
                         if(m_matrix->isValid(x+i2,y,z-k)){
-                            m_matrix->getValue(x,y,z).printVert();
 
                             return false;
 
