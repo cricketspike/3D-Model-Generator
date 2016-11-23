@@ -2,9 +2,15 @@
 
 // Color Percent Difference
 float color_diff(Color c1, Color c2) {
-    float diff_r = (c1.r - c2.r) / ((c1.r + c2.r)/2.0);
-    float diff_g = (c1.g - c2.g) / ((c1.g + c2.g)/2.0);
-    float diff_b = (c1.b - c2.b) / ((c1.b + c2.b)/2.0);
+    float diff_r = 0;
+	float diff_g = 0;
+	float diff_b = 0;
+	if(c1.r != c2.r)
+		diff_r = (c1.r - c2.r) / ((c1.r + c2.r)/2.0);
+	if(c1.g != c2.g)
+		diff_g = (c1.g - c2.g) / ((c1.g + c2.g)/2.0);
+	if(c1.b != c2.b)
+		diff_b = (c1.b - c2.b) / ((c1.b + c2.b)/2.0);
 
     return (diff_r + diff_g + diff_b) * 100.0;
 }
