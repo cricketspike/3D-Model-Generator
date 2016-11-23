@@ -60,7 +60,7 @@ void ObjFileWriter::printVerticesToFile(string fileName, ColoredVertexMatrix & C
 		}
 }
 
-void ObjFileWriter::printFacesToFile(string fileName, ColoredVertexMatrix & CoordinateMap, vertexlinker vl){
+void ObjFileWriter::printFacesToFile(string fileName, ColoredVertexMatrix & CoordinateMap, vertexlinker & vl){
 	foreach (vector<ColoredVertex> face , vl.getSquares()){
 	    objFile << "f ";
 		foreach (ColoredVertex vertex, face){

@@ -24,14 +24,15 @@ private:
     
     // Helper Methods
     ColoredVertexMatrix & normalizeVertices(ColoredVertexMatrix & CoordinateMap);
-    void printVerticesToFile(ColoredVertexMatrix & CoordinateMap);
+    void printVerticesToFile(string fileName, ColoredVertexMatrix & CoordinateMap);¡¢
+    void printFacesToFile(string fileName, ColoredVertexMatrix & CoordinateMap, vertexlinker & vl);
 
 public:
     ObjFileWriter();
     ~ObjFileWriter();
 
     ColoredVertexMatrix & initiliaze(string fileName, ColoredVertexMatrix & CoordinateList);
-    void execute(string fileName, ColoredVertexMatrix & CoordinateList, vertexlinker vl);
+    void execute(string fileName, ColoredVertexMatrix & CoordinateList, vertexlinker & vl);
     
 }
 
