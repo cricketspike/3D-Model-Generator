@@ -1,5 +1,5 @@
 #include "cubemapeditorimage.h"
-
+#include <iostream>
 CubeMapEditorImage::CubeMapEditorImage(QObject *parent) : QObject(parent),
                                                           have_image(false),
                                                           texture(0),
@@ -39,6 +39,18 @@ void CubeMapEditorImage::setImage(QImage image)
     this->zoom = 1.0;
 
     this->have_image = true;
+
+    weight = std::vector<std::vector<uint8_t>>();
+
+    //Go through every pixel in the picture
+    for ( int col = 0; col < image.width(); ++col ) {
+
+      weight.push_back(std::vector<uint8_t>());
+      for ( int row = 0; row < image.height(); ++row ) {
+        uint8_t data = 0;
+        weight[col].push_back(data);
+      }
+    }
 }
 
 bool CubeMapEditorImage::haveImage() const
@@ -82,4 +94,21 @@ void CubeMapEditorImage::getFocus(double& zoom, QPointF& offset) const
 {
     zoom = this->zoom;
     offset = this->offset;
+}
+
+void CubeMapEditorImage::addWeight(double x, double y) {
+    std::cout << x << " " << y << std::endl;
+    if (weight[x].at(y) < 100) {
+        weight[x].at(y) += 1;
+    }
+    std::cout << (int) weight[x].at(y) << std::endl;
+}
+
+void CubeMapEditorImage::subtractWeight(double x, double y) {
+    std::cout << x << " " << y << std::endl;
+    if (weight[x].at(y) > 0) {
+        weight[x].at(y) -= 1;
+    }
+    std::cout << (int) weight[x].at(y) << std::endl;
+
 }

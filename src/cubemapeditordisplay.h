@@ -52,6 +52,7 @@ public:
     void setFocus(double zoom, QPointF offset);
 
     void loadImage(QImage image);
+    CubeMapEditorImage* getImage();
 
     void setProjectionMode(ProjectionMode mode);
 

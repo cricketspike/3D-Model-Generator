@@ -5,6 +5,8 @@
 #include "cubemapeditordisplay.h"
 #include "ui_cubemapeditor.h"
 #include "modelwindow.h"
+#include "src/weighteditor.h"
+
 CubeMapEditor::CubeMapEditor(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::CubeMapEditor)
@@ -96,4 +98,16 @@ void CubeMapEditor::on_comboBox_projection_currentIndexChanged(int index)
     CubeMapEditorDisplay::ProjectionMode mode = (CubeMapEditorDisplay::ProjectionMode)index;
 
     ui->display->setProjectionMode(mode);
+}
+
+void CubeMapEditor::on_pushButton_weight_clicked()
+{
+    weighteditor weight;
+    weight.setModal(true);
+    weight.loadImage(ui->display->getImage());
+    weight.exec();
+    //weight = new weighteditor();
+    //weight->loadImage(ui->display->getImage());
+    //weight->show();
+
 }

@@ -31,9 +31,11 @@ private slots:
     void on_pushButton_loadImage_clicked();
     void on_pushButton_clicked();
     void on_comboBox_projection_currentIndexChanged(int index);
+    void on_pushButton_weight_clicked();
 
 private:
     Ui::CubeMapEditor *ui;
+    std::vector<std::vector<uint8_t>> weight;
 };
 
 #endif // CUBEMAPEDITOR_H
