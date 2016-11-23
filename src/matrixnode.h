@@ -5,7 +5,7 @@
 
 class MatrixNode {
 public:
-    int multiplier=1;
+    float multiplier =1;
 	MatrixNode(uint8_t red, uint8_t blue, uint8_t green,float weight_value) {
 		colors = new uint8_t[3];
 		colors[0] = red;
@@ -36,7 +36,7 @@ public:
 		dif += colors[2] - blue;
 		return abs(dif);
 	}
-        float getWeight() { return weight*multiplier; }
+	float getWeight() { return weight; }
     void printValues(){
 
 std::cout<<"R:"<<(int)colors[0]<<" G:"<<(int)colors[1]<<" B:"<<(int)colors[2]<<weight<<std::endl;

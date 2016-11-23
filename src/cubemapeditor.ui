@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>995</width>
-    <height>659</height>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
+<<<<<<< HEAD
     <item row="0" column="0" rowspan="5">
      <widget class="CubeMapEditorDisplay" name="display">
       <property name="sizePolicy">
@@ -147,6 +148,8 @@
       </item>
      </layout>
     </item>
+=======
+>>>>>>> master
     <item row="0" column="1">
      <widget class="QGroupBox" name="groupBox_selection">
       <property name="title">
@@ -321,6 +324,148 @@
       </layout>
      </widget>
     </item>
+<<<<<<< HEAD
+=======
+    <item row="1" column="1">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="leftMargin">
+       <number>8</number>
+      </property>
+      <property name="topMargin">
+       <number>8</number>
+      </property>
+      <property name="rightMargin">
+       <number>8</number>
+      </property>
+      <property name="bottomMargin">
+       <number>8</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>In the editor, edit the selection:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>- Drag the mouse to pan.</string>
+        </property>
+        <property name="indent">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>- Scroll the mouse wheel to zoom.</string>
+        </property>
+        <property name="indent">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>- Right-click to rotate (faces only).</string>
+        </property>
+        <property name="indent">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>Use rulers to align images:</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>- Shift+Click to place an HRuler.</string>
+        </property>
+        <property name="indent">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>- Ctrl+Shift+Click to place a VRuler.</string>
+        </property>
+        <property name="indent">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>-  To remove a ruler, right-click instead.</string>
+        </property>
+        <property name="indent">
+         <number>16</number>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="2" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>228</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="0" column="0" rowspan="4">
+     <widget class="CubeMapEditorDisplay" name="display">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>750</width>
+        <height>600</height>
+       </size>
+      </property>
+      <property name="sizeIncrement">
+       <size>
+        <width>5</width>
+        <height>4</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1">
+     <widget class="QPushButton" name="pushButton">
+      <property name="text">
+       <string>open model</string>
+      </property>
+     </widget>
+    </item>
+>>>>>>> master
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">

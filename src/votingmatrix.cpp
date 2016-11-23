@@ -95,7 +95,6 @@ MatrixNode *VotingMatrix::createElement(int i_wid, int j_hei, int k_dep) {
     int image_height = m_image.getImageHeight()/m_resolution_split;
     char u = m_image.getU(); //images U and V values represent which of the cube's dimensions match with which of the image's
     char v = m_image.getV();
-    unsigned int depth_of_peak=m_image.getDepthOfPeak(u,v);  //depth will be how far in this goes into the image from 0 to imagelength-2 (need at least one space because opposite sides cant cross over)
     uint8_t weight=m_image.getWeight(u,v);
     float full_width=m_width*m_resolution_split;//width, height and depth of photo if it had full resolution
     float full_height=m_height*m_resolution_split;

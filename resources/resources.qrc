@@ -12,5 +12,8 @@
         <file>cubepreviewwidget.vert</file>
         <file>cubemapeditordisplay.frag</file>
         <file>cubemapeditordisplay.vert</file>
+        <file>ModelPreviewWidget.vert</file>
+        <file>ModelPreviewWidget.frag</file>
+        <file>ModelPreviewWidget.vert</file>
     </qresource>
 </RCC>
