@@ -1,12 +1,16 @@
 #include "nullify.h"
-float color_diff(uint8_t* c1, uint8_t* c2) {
-    const float max_diff = sqrt( pow(255,2) + pow(255,2) + pow(255,2) );
-    float diff = sqrt( pow(c1[0] - c2[0], 2) + pow(c1[1] - c2[1], 2) + pow(c1[2] - c2[2], 2) );
-    return (diff/max_diff) * 100.0;
-}
 
+// Color Percent Difference
+float color_diff(Color c1, Color c2) {
+    float diff_r = (c1.r - c2.r) / ((c1.r + c2.r)/2.0);
+    float diff_g = (c1.g - c2.g) / ((c1.g + c2.g)/2.0);
+    float diff_b = (c1.b - c2.b) / ((c1.b + c2.b)/2.0);
+
+    return (diff_r + diff_g + diff_b) * 100.0;
+}
+/*
 //	takes two rgb colors
-float color_diff_2(uint8_t* col1, uint8_t* col2) {
+float color_diff_2(Color col1, Color col2) {
     float r1, g1, b1, r2, g2, b2,
         x1, y1, z1, x2, y2, z2,
         l1, ap1, bp1, l2, ap2, bp2,
@@ -127,15 +131,29 @@ float color_diff_2(uint8_t* col1, uint8_t* col2) {
         + ( (rT) * ( (dC)/(kC * sC) ) * ( (dH)/(kH * sH) ) )
     );
 }
+*/
+
+void nullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh) {
+    Color color_null;
+    color_null.r = c_null[0];
+    color_null.g = c_null[1];
+    color_null.b = c_null[2];
+
+    nullify(image, color_null, thresh);
+}
 
 //	thresh = [0, 100]
-void nullify(ColoredVertexMatrix& image, uint8_t* c_null, float thresh) {
+void nullify(ColoredVertexMatrix& image, Color c_null, float thresh) {
      std::vector<std::vector<std::vector<ColoredVertex>>>verts=image.getVertices();
     for(unsigned long x=0; x<image.getWidth(); ++x) {
         for(unsigned long y=0; y<image.getHeight(); ++y) {
             for(unsigned long z=0; z<image.getDepth(); ++z) {
                 // if color difference is less than threshold
-                if( color_diff(verts[x][y][z].getValue(), c_null) < thresh )
+                Color color;
+                color.r = verts[x][y][z].getValue()[0];
+                color.g = verts[x][y][z].getValue()[1];
+                color.b = verts[x][y][z].getValue()[2];
+                if( color_diff(color, c_null) < thresh )
                     image.setNull(x,y,z);//nullify
             }
         }
