@@ -44,10 +44,11 @@ void Tool::onMouseLeftPress() {
         case T_CROP: {
         } break;
         case T_PICKER: {
-            //QPixmap pmap = WIDGET->grab(QRect(QPoint(MOUSE_X, MOUSE_Y), QSize(1,1)));
-            /*QImage image = pmap.toImage();
+            QPixmap pixmap(WIDGET->size());
+            WIDGET->render(&pixmap, QPoint(0,0), QRegion());
+            QImage image = pixmap.toImage();
             QColor pixel = image.pixel(MOUSE_X,MOUSE_Y);
-            color = Color(pixel.red()/255.0, pixel.green()/255.0, pixel.blue()/255.0);*/
+            color = Color(pixel.red()/255.0, pixel.green()/255.0, pixel.blue()/255.0);
         } break;
     }
 }
@@ -126,6 +127,7 @@ void Tool::onMouseDrag() {
 void Tool::draw(QPainter& p) {
     QBrush brush(QColor(color.r*255.0,color.g*255.0,color.b*255.0));
     p.setPen(QPen(brush, 2));
+    p.fillRect(QRect(0,0,10,10), QColor(color.r*255.0,color.g*255.0,color.b*255.0));
     switch(selected) {
         case T_POINTER:
             break;

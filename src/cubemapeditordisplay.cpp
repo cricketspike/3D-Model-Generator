@@ -15,6 +15,7 @@ CubeMapEditorDisplay::CubeMapEditorDisplay(QWidget* parent) : QOpenGLWidget(pare
 {
     images = new CubeMapEditorImage[6];
 	grabKeyboard();
+	Tool::WIDGET = this;
 }
 
 CubeMapEditorDisplay::~CubeMapEditorDisplay()
