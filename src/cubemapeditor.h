@@ -34,7 +34,11 @@ private slots:
     void on_comboBox_projection_currentIndexChanged(int index);
     void on_pushButton_weight_clicked();
 
-    void on_pushButton_saveCube_clicked();
+    void zoom_valueChanged(int value);
+    void tilt_x_valueChanged(int value);
+    void tilt_y_valueChanged(int value);
+    void tilt_z_valueChanged(int value);
+    void on_pushButton_cubePreviewUpdate_clicked();
 
 private:
     Ui::CubeMapEditor *ui;

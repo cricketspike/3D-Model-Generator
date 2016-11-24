@@ -20,7 +20,7 @@ public:
     explicit CubePreviewWidget(QWidget *parent = 0);
     ~CubePreviewWidget();
 
-    void texturesFromBox(box& b);
+    void texturesFromBox(box b);
     void setUseTexture(bool value);
     bool getUseTexture() const;
 

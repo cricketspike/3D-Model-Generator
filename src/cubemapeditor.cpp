@@ -16,6 +16,11 @@ CubeMapEditor::CubeMapEditor(QWidget *parent) :
     ui->rasterWidget->setVisible(false);
     ui->rasterWidget->setImage(ui->display->getImage());
 
+    connect(ui->horizontalSlider_cubePreview_zoom,  SIGNAL(valueChanged(int)), this, SLOT(zoom_valueChanged(int)));
+    connect(ui->dial_cubePreview_tx, SIGNAL(valueChanged(int)), this, SLOT(tilt_x_valueChanged(int)));
+    connect(ui->dial_cubePreview_ty, SIGNAL(valueChanged(int)), this, SLOT(tilt_y_valueChanged(int)));
+    connect(ui->dial_cubePreview_tz, SIGNAL(valueChanged(int)), this, SLOT(tilt_z_valueChanged(int)));
+
     /* Connect the clicked() signal of each selection button
     *    to the selection(int) slot, with paramter based on
     *    the signal emitter
@@ -65,11 +70,14 @@ void CubeMapEditor::on_pushButton_loadImage_clicked()
 {
     QString imagePath = QFileDialog::getOpenFileName( this, "Open File", "", "JPEG (*.jpg *.jpeg);;PNG (*.png)" );
 
+    if (imagePath.isEmpty())
+        return;
+
     QImage image;
     image.load(imagePath);
     ui->display->loadImage(image);
     ui->pushButton_weight->setEnabled(true);
-    ui->pushButton_saveCube->setEnabled(allHaveImage());
+    ui->pushButton_cubePreviewUpdate->setEnabled(allHaveImage());
 }
 
 void CubeMapEditor::on_pushButton_clicked()
@@ -99,33 +107,78 @@ void CubeMapEditor::on_pushButton_weight_clicked()
 
 }
 
-void CubeMapEditor::on_pushButton_saveCube_clicked()
-{
-    QSize sz = size();
-
-    QString filenames[] = {
-        "tmp/Left",
-        "tmp/Top",
-        "tmp/Front",
-        "tmp/Bottom",
-        "tmp/Right",
-        "tmp/Back"
-    };
-    if (!QDir("tmp/").exists())
-        QDir("tmp/").mkdir(".");
-
-    for (Face f = Face::Left; f < Face::NONE; f=(Face)(f+1)) {
-        ui->rasterWidget->setImage(ui->display->getImage(f));
-        ui->rasterWidget->raster(filenames[f]+".jpg");
-    }
-
-    setFixedSize(sz);
-    ui->pushButton->setEnabled(allHaveImage());
-}
 
 bool CubeMapEditor::allHaveImage(){
     for (Face f = Face::Left; f < Face::NONE; f=(Face)(f+1)) {
         if (ui->display->haveImage(f) == false) return false;
     }
     return true;
+}
+
+
+
+void CubeMapEditor::zoom_valueChanged(int value)
+{
+    double zoom = (double)value/(double)(ui->horizontalSlider_cubePreview_zoom->maximum());
+    ui->cubePreviewWidget->setZoom(zoom);
+}
+
+void CubeMapEditor::tilt_x_valueChanged(int value)
+{
+    double amt = (double)value/(double)(ui->dial_cubePreview_tx->maximum());
+    ui->cubePreviewWidget->setTilt_x(amt);
+}
+
+void CubeMapEditor::tilt_y_valueChanged(int value)
+{
+    double amt = (double)value/(double)(ui->dial_cubePreview_ty->maximum());
+    ui->cubePreviewWidget->setTilt_y(amt);
+}
+
+void CubeMapEditor::tilt_z_valueChanged(int value)
+{
+    double amt = (double)value/(double)(ui->dial_cubePreview_tz->maximum());
+    ui->cubePreviewWidget->setTilt_z(amt);
+}
+
+void CubeMapEditor::on_pushButton_cubePreviewUpdate_clicked()
+{
+    QSize sz = size();
+
+    QString filenames[] = {
+        "tmp/Left.jpg",
+        "tmp/Top.jpg",
+        "tmp/Front.jpg",
+        "tmp/Bottom.jpg",
+        "tmp/Right.jpg",
+        "tmp/Back.jpg"
+    };
+    if (!QDir("tmp/").exists())
+        QDir("tmp/").mkdir(".");
+
+    for (Face f = Face::Left; f < Face::NONE; f=(Face)(f+1)) {
+        ui->rasterWidget->setImage(ui->display->getImage(f));
+        ui->rasterWidget->raster(filenames[f]);
+    }
+
+    QImage img0( "tmp/Front.jpg" );
+    QImage img1( "tmp/Top.jpg" );
+    QImage img2( "tmp/Back.jpg" );
+    QImage img3( "tmp/Bottom.jpg" );
+    QImage img4( "tmp/Left.jpg" );
+    QImage img5( "tmp/Right.jpg" );
+
+    vector<QImage> images;
+    images.push_back(img0);
+    images.push_back(img1);
+    images.push_back(img2);
+    images.push_back(img3);
+    images.push_back(img4);
+    images.push_back(img5);
+
+    box b = box(images);
+    ui->cubePreviewWidget->texturesFromBox(b);
+
+    setFixedSize(sz);
+    ui->pushButton->setEnabled(allHaveImage());
 }

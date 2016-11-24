@@ -115,24 +115,6 @@ void CubePreviewWidget::initializeGL()
     m_program->release();
     m_vbo.release();
 
-    QImage img0( ":/images/image0.jpg" );
-    QImage img1( ":/images/image1.jpg" );
-    QImage img2( ":/images/image2.jpg" );
-    QImage img3( ":/images/image3.jpg" );
-    QImage img4( ":/images/image4.jpg" );
-    QImage img5( ":/images/image5.jpg" );
-
-    vector<QImage> images;
-    images.push_back(img0);
-    images.push_back(img1);
-    images.push_back(img2);
-    images.push_back(img3);
-    images.push_back(img4);
-    images.push_back(img5);
-
-    box b = box(images);
-    //texturesFromBox(b);
-
     connect(this, SIGNAL(frameSwapped()), this, SLOT(update()));
 }
 
@@ -201,8 +183,10 @@ void CubePreviewWidget::setUseTexture(bool value)
     m_useTextures = value;
 }
 
-void CubePreviewWidget::texturesFromBox(box& b)
+void CubePreviewWidget::texturesFromBox(box b)
 {
+    makeCurrent();
+
     std::vector<ImportedImage> imgs = b.getSides();
     for (int i=0; i<imgs.size(); i++) {
         textures[i] = new QOpenGLTexture(imgs[i].getImage().mirrored());
@@ -211,4 +195,6 @@ void CubePreviewWidget::texturesFromBox(box& b)
     }
 
     m_haveTextures = true;
+
+    doneCurrent();
 }
