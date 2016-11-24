@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     std::cout << "-----------------" << std::endl;
     std::cout << "Commands: hello  " << std::endl;
     std::cout << "          editor: start program " << std::endl;
-    std::cout << "          image: test basic functionality  " << std::endl;
+    //std::cout << "          image: test basic functionality  " << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
     while (true) {
@@ -65,7 +65,7 @@ int main(int argc, char **argv)
 
             app.exec();
 
-        }else if (input == "image") {
+        } /*else if (input == "image") {
 
             QImage img0( ":/images/image0.jpg" );
             QImage img1( ":/images/image1.jpg" );
@@ -206,7 +206,7 @@ int main(int argc, char **argv)
 
 
 
-        } else if (input == "exit" || input == "quit") {
+        }*/ else if (input == "exit" || input == "quit") {
 
             return 0;
 

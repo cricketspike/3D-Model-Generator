@@ -15,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_4">
-    <item row="7" column="1" colspan="2">
+    <item row="5" column="1">
      <widget class="QGroupBox" name="groupBox_selectionTools">
       <property name="title">
        <string>Selection Tools</string>
@@ -207,7 +207,66 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="0" rowspan="9">
+    <item row="5" column="2">
+     <widget class="CubeMapEditorRasterWidget" name="rasterWidget">
+      <property name="minimumSize">
+       <size>
+        <width>10</width>
+        <height>10</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>10</width>
+        <height>10</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="1" colspan="2">
+     <widget class="QPushButton" name="pushButton_weight">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Weight</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <spacer name="verticalSpacer">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>20</width>
+        <height>228</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="7" column="1" colspan="2">
+     <widget class="QPushButton" name="pushButton_saveCube">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>Save Cube</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1" colspan="2">
+     <widget class="QPushButton" name="pushButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="text">
+       <string>open model</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="0" rowspan="10">
      <widget class="CubeMapEditorDisplay" name="display">
       <property name="sizePolicy">
        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
@@ -246,14 +305,14 @@
       <item>
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>In the editor, edit the selection:</string>
+         <string>In the editor, Hold number to use:</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QLabel" name="label">
         <property name="text">
-         <string>- Drag the mouse to pan.</string>
+         <string>1. Zoom Tool: Scroll mouse wheel to zoom</string>
         </property>
         <property name="indent">
          <number>16</number>
@@ -263,7 +322,7 @@
       <item>
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>- Scroll the mouse wheel to zoom.</string>
+         <string>2. Ruler Tool</string>
         </property>
         <property name="indent">
          <number>16</number>
@@ -273,7 +332,7 @@
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>- Right-click to rotate (faces only).</string>
+         <string>3. Not Functioning </string>
         </property>
         <property name="indent">
          <number>16</number>
@@ -283,7 +342,7 @@
       <item>
        <widget class="QLabel" name="label_8">
         <property name="text">
-         <string/>
+         <string>4. Move Tool: Drag move/Left-click Rotate</string>
         </property>
        </widget>
       </item>
@@ -297,7 +356,7 @@
       <item>
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>- Shift+Click to place an HRuler.</string>
+         <string>- Right Click to place ruler</string>
         </property>
         <property name="indent">
          <number>16</number>
@@ -307,7 +366,7 @@
       <item>
        <widget class="QLabel" name="label_7">
         <property name="text">
-         <string>- Ctrl+Shift+Click to place a VRuler.</string>
+         <string>-Left Click to remove ruler</string>
         </property>
         <property name="indent">
          <number>16</number>
@@ -317,7 +376,7 @@
       <item>
        <widget class="QLabel" name="label_9">
         <property name="text">
-         <string>-  To remove a ruler, right-click instead.</string>
+         <string>-Drag to connect ruler</string>
         </property>
         <property name="indent">
          <number>16</number>
@@ -325,56 +384,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="4" column="2">
-     <widget class="CubeMapEditorRasterWidget" name="rasterWidget">
-      <property name="minimumSize">
-       <size>
-        <width>10</width>
-        <height>10</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>10</width>
-        <height>10</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="1" colspan="2">
-     <widget class="QPushButton" name="pushButton_weight">
-      <property name="text">
-       <string>Weight</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1">
-     <spacer name="verticalSpacer">
-      <property name="orientation">
-       <enum>Qt::Vertical</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>20</width>
-        <height>228</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="8" column="1" colspan="2">
-     <widget class="QPushButton" name="pushButton">
-      <property name="text">
-       <string>open model</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1" colspan="2">
-     <widget class="QPushButton" name="pushButton_saveCube">
-      <property name="text">
-       <string>Save Cube</string>
-      </property>
-     </widget>
     </item>
    </layout>
   </widget>

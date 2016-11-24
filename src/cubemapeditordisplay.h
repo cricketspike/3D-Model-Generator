@@ -52,6 +52,7 @@ public:
     void setFocus(double zoom, QPointF offset);
 
     void loadImage(QImage image);
+    bool haveImage(CubeMapEditor::Face f);
     CubeMapEditorImage* getImage();
     CubeMapEditorImage* getImage(CubeMapEditor::Face f);
 

@@ -53,6 +53,7 @@ void CubeMapEditor::selection(int selection)
 
     // Can't load an image when no face is selected
     ui->pushButton_loadImage->setEnabled(f != Face::NONE);
+    ui->pushButton_weight->setEnabled(ui->display->haveImage(f));
 
     if (f != Face::NONE) {
         ui->rasterWidget->setImage(ui->display->getImage());
@@ -67,6 +68,8 @@ void CubeMapEditor::on_pushButton_loadImage_clicked()
     QImage image;
     image.load(imagePath);
     ui->display->loadImage(image);
+    ui->pushButton_weight->setEnabled(true);
+    ui->pushButton_saveCube->setEnabled(allHaveImage());
 }
 
 void CubeMapEditor::on_pushButton_clicked()
@@ -117,4 +120,12 @@ void CubeMapEditor::on_pushButton_saveCube_clicked()
     }
 
     setFixedSize(sz);
+    ui->pushButton->setEnabled(allHaveImage());
+}
+
+bool CubeMapEditor::allHaveImage(){
+    for (Face f = Face::Left; f < Face::NONE; f=(Face)(f+1)) {
+        if (ui->display->haveImage(f) == false) return false;
+    }
+    return true;
 }
