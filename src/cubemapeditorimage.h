@@ -19,8 +19,9 @@ public:
     ~CubeMapEditorImage();
 
     QString getPath() const;
+    QString getTmpPath() const;
     void setPath(QString path);
-
+    void setTmpPath(QString path);
     void setImage(QImage image);
     bool haveImage() const;
     QImage getImage() const;
@@ -39,7 +40,7 @@ public:
 private:
     // Image path
     QString path;
-
+    QString tmpPath;
     // Image
     bool have_image;
     QImage image;

@@ -25,6 +25,7 @@ public:
 
     explicit CubeMapEditor(QWidget *parent = 0);
     ~CubeMapEditor();
+    bool allHaveImage();
 
 private slots:
     void selection(int);

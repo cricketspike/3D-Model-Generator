@@ -21,6 +21,11 @@ void CubeMapEditorImage::setPath(QString path)
     this->path = path;
 }
 
+void CubeMapEditorImage::setTmpPath(QString path)
+{
+    this->tmpPath = path;
+}
+
 void CubeMapEditorImage::setImage(QImage image)
 {
     if (have_image)
@@ -88,6 +93,11 @@ void CubeMapEditorImage::bindTexture()
 QString CubeMapEditorImage::getPath() const
 {
     return this->path;
+}
+
+QString CubeMapEditorImage::getTmpPath() const
+{
+    return this->tmpPath;
 }
 
 void CubeMapEditorImage::getFocus(double& zoom, QPointF& offset) const

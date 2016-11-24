@@ -15,12 +15,12 @@ ModelSettings::~ModelSettings()
 
 void ModelSettings::on_pushButton_2_clicked()//preview
 {
-    QImage img0(":/images/image0.jpg" );
-    QImage img1( ":/images/image1.jpg" );
-    QImage img2( ":/images/image2.jpg" );
-    QImage img3( ":/images/image3.jpg" );
-    QImage img4( ":/images/image4.jpg" );
-    QImage img5( ":/images/image5.jpg" );
+    QImage img0( "tmp/Left.jpg" );
+    QImage img1( "tmp/Front.jpg" );
+    QImage img2( "tmp/Right.jpg" );
+    QImage img3( "tmp/Back.jpg" );
+    QImage img4( "tmp/Top.jpg" );
+    QImage img5( "tmp/Bottom.jpg" );
 
     vector<QImage> images;
     images.push_back(img0);

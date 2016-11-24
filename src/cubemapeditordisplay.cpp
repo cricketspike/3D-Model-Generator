@@ -35,9 +35,37 @@ void CubeMapEditorDisplay::selectFace(CubeMapEditor::Face face)
     selected_face = face;
 }
 
+bool CubeMapEditorDisplay::haveImage(CubeMapEditor::Face f)
+{
+    return images[f].haveImage();
+}
+
 void CubeMapEditorDisplay::loadImage(QImage image)
 {
     images[selected_face].setImage(image);
+    switch (selected_face) {
+        case CubeMapEditor::Front:
+            images[selected_face].setTmpPath("tmp/Front.jpg");
+            break;
+        case CubeMapEditor::Right:
+            images[selected_face].setTmpPath("tmp/Right.jpg");
+            break;
+        case CubeMapEditor::Back:
+            images[selected_face].setTmpPath("tmp/Back.jpg");
+            break;
+        case CubeMapEditor::Left:
+            images[selected_face].setTmpPath("tmp/Left.jpg");
+            break;
+        case CubeMapEditor::Top:
+            images[selected_face].setTmpPath("tmp/Top.jpg");
+            break;
+        case CubeMapEditor::Bottom:
+            images[selected_face].setTmpPath("tmp/Bottom.jpg");
+            break;
+        case CubeMapEditor::NONE:
+            break;
+    }
+
 }
 
 CubeMapEditorImage* CubeMapEditorDisplay::getImage()
