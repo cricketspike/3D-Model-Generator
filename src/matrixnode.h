@@ -5,14 +5,13 @@
 
 class MatrixNode {
 public:
-    float multiplier;
+    float multiplier=1;
 	MatrixNode(uint8_t red, uint8_t blue, uint8_t green,float weight_value) {
 		colors = new uint8_t[3];
 		colors[0] = red;
 		colors[1] = blue;
 		colors[2] = green;
 		weight = weight_value;
-		multiplier = 1;
 	}
     uint8_t getColor(int RGorB_ZeroToTwo) {
 		//0R 1G 2B

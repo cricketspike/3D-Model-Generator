@@ -161,12 +161,12 @@ void CubeMapEditor::on_pushButton_cubePreviewUpdate_clicked()
         ui->rasterWidget->raster(filenames[f]);
     }
 
-    QImage img0( "tmp/Front.jpg" );
+    QImage img0( "tmp/Left.jpg" );
     QImage img1( "tmp/Top.jpg" );
-    QImage img2( "tmp/Back.jpg" );
+    QImage img2( "tmp/Front.jpg" );
     QImage img3( "tmp/Bottom.jpg" );
-    QImage img4( "tmp/Left.jpg" );
-    QImage img5( "tmp/Right.jpg" );
+    QImage img4( "tmp/Right.jpg" );
+    QImage img5( "tmp/Back.jpg" );
 
     vector<QImage> images;
     images.push_back(img0);

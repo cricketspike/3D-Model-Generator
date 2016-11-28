@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -46,7 +46,7 @@
           <item>
            <widget class="QSpinBox" name="resolution_splitting">
             <property name="minimum">
-             <number>1</number>
+             <number>3</number>
             </property>
             <property name="maximum">
              <number>10</number>
@@ -124,15 +124,6 @@
     </item>
    </layout>
   </widget>
-  <zorder>layoutWidget</zorder>
-  <zorder>label_4</zorder>
-  <zorder>lineEdit</zorder>
-  <zorder>lineEdit</zorder>
-  <zorder>pushButton</zorder>
-  <zorder>label_4</zorder>
-  <zorder></zorder>
-  <zorder></zorder>
-  <zorder>label</zorder>
  </widget>
  <resources/>
  <connections/>

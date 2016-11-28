@@ -579,19 +579,26 @@ void CubeMapEditorDisplay::mouseReleaseEvent(QMouseEvent* event)
 
 void CubeMapEditorDisplay::wheelEvent(QWheelEvent* event)
 {
+    double incr = (double)(event->angleDelta().y())/1200.0;
+
     if (selected_face != CubeMapEditor::Face::NONE) {
         // Alter the zoom of the selected face using mouse wheel movement
 
         double zoom;
         QPointF offset;
         images[selected_face].getFocus(zoom, offset);
-        zoom += (double)(event->angleDelta().y())/1200.0;
-        images[selected_face].setFocus(zoom, offset);
+
+        if (zoom+incr > 0) {
+            zoom += incr;
+            images[selected_face].setFocus(zoom, offset);
+        }
     } else {
         // Alter the zoom of the display using mouse wheel movement
 
-        zoom += (double)(event->angleDelta().y())/1200.0;
-        setFocus(zoom, offset);
+        if (zoom+incr > 0) {
+            zoom += incr;
+            setFocus(zoom, offset);
+        }
     }
 }
 
