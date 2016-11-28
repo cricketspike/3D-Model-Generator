@@ -152,6 +152,7 @@ void CubeMapEditor::on_pushButton_cubePreviewUpdate_clicked()
         "tmp/Bottom.jpg",
         "tmp/Right.jpg",
         "tmp/Back.jpg"
+
     };
     if (!QDir("tmp/").exists())
         QDir("tmp/").mkdir(".");
@@ -162,11 +163,11 @@ void CubeMapEditor::on_pushButton_cubePreviewUpdate_clicked()
     }
 
     QImage img0( "tmp/Left.jpg" );
-    QImage img1( "tmp/Top.jpg" );
-    QImage img2( "tmp/Front.jpg" );
-    QImage img3( "tmp/Bottom.jpg" );
-    QImage img4( "tmp/Right.jpg" );
-    QImage img5( "tmp/Back.jpg" );
+    QImage img1( "tmp/Front.jpg" );
+    QImage img2( "tmp/Right.jpg" );
+    QImage img3( "tmp/Back.jpg" );
+    QImage img4( "tmp/Top.jpg" );
+    QImage img5( "tmp/Bottom.jpg" );
 
     vector<QImage> images;
     images.push_back(img0);

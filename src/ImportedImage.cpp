@@ -47,43 +47,53 @@ box::box(vector<QImage> images) {
     ImportedImage side= ImportedImage(images[count]);
     side.setFace(count);
     side.setPixels();
-    if(count == 0) {//front
-      side.setInvertU(false);//right=+x
-      side.setInvertV(false);//up=+y
-      side.setInvertDepth(false);//forward(towards screen in opengl)=+z
-      side.setU('x');
-      side.setV('y');
-    } else if (count == 1) {//bottom
-      side.setInvertU(false);//right=+x
-      side.setInvertV(false);//up=+z
-      side.setInvertDepth(true);//forward(towards screen in opengl)=-y
-      side.setU('x');
-      side.setV( 'z');
-    } else if (count == 2) {//2back
-      side.setInvertU(true);//right=-x
-      side.setInvertV(false);//up=+y
-      side.setInvertDepth(true);//forward(towards screen in opengl)=-z
-      side.setU('x');
-      side.setV('y');
-    } else if (count == 3) {//up
-      side.setInvertU(false);//right=x
-      side.setInvertV(true);//up=-z
-      side.setInvertDepth(false);//forward(towards screen in opengl)=+y
-      side.setU('x');
-      side.setV('z');
-    } else if (count == 4) {//left
-      side.setInvertU(false);//right=+z
-      side.setInvertV(false);//up=+y
-      side.setInvertDepth(true);//forward(towards screen in opengl)=-x
-      side.setU('z');
-      side.setV('y');
-    } else if (count == 5) {//right
-      side.setInvertU(true);//right=-z
-      side.setInvertV(false);//up=+y
-      side.setInvertDepth(false);//forward(towards screen in opengl)=+x
-      side.setU('z');
-      side.setV('y');
-    }
+    if(count == 0) {//left
+        side.setInvertU(false);//right=+z
+        side.setInvertV(false);//up=+y
+        side.setInvertDepth(true);//forward(towards screen in opengl)=-x
+        side.setU('z');
+        side.setV('y');
+
+    } else if (count == 1) {//front
+        side.setInvertU(false);//right=+x
+        side.setInvertV(false);//up=+y
+        side.setInvertDepth(false);//forward(towards screen in opengl)=+z
+        side.setU('x');
+        side.setV('y');
+
+    } else if (count == 2) {//right
+        side.setInvertU(true);//right=-z
+        side.setInvertV(false);//up=+y
+        side.setInvertDepth(false);//forward(towards screen in opengl)=+x
+        side.setU('z');
+        side.setV('y');
+
+    } else if (count == 3) {//2back
+        side.setInvertU(true);//right=-x
+        side.setInvertV(false);//up=+y
+        side.setInvertDepth(true);//forward(towards screen in opengl)=-z
+        side.setU('x');
+        side.setV('y');
+
+    } else if (count == 4) {//top
+        side.setInvertU(false);//right=x
+        side.setInvertV(false);//up=-z
+        side.setInvertDepth(false);//forward(towards screen in opengl)=+y
+        side.setU('x');
+        side.setV('z');
+
+    } else if (count == 5) {  //bottom
+        side.setInvertU(false);//right=+x
+        side.setInvertV(true);//up=-z
+        side.setInvertDepth(true);//forward(towards screen in opengl)=-y
+        side.setU('x');
+        side.setV( 'z');
+
+
+
+
+
+      }
     sides.push_back(side);
   }
 }
