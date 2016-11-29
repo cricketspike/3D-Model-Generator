@@ -16,8 +16,8 @@ public:
     explicit ModelWindow(QWidget *parent = 0);
     ~ModelWindow();
 
-    void createModel(box b,int density_split,int loop_dist);
-    void exportModel(box b,int density_split,int loop_dist, string path);
+    void createModel(box b,int density_split,int loop_dist,float bg_bias);
+    void exportModel(box b,int density_split,int loop_dist,float bg_bias, string path);
 private slots:
     void on_openGLWidget_resized();
 

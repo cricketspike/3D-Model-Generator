@@ -61,8 +61,9 @@ public:
         is_null=true;
         //this is just  placeholder until he obejct is taken by an actual vertex
     }
-    ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm);
+    ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm, float background_bias=1);
     uint8_t* getValue();
+    float m_background_bias;
     void addVoter(MatrixNode voter) ;
     void setValueFromVoters(int grouping_tollerance);
     bool isInside(int vertices_density_split);

@@ -5,11 +5,11 @@ ModelEditor::ModelEditor()
 
 }
 
-void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_dist){
+void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_dist,float bg_bias){
     m_image_box=image_box;
     m_resolution_split=resolution_split;//lower=slower, more accurate, more faces
     m_levels_density_split=vert_loop_dist;//lower= more faces
-
+    m_bg_bias=bg_bias;
 }
 void ModelEditor::createModel(bool exprt,string path_in){
 
@@ -43,14 +43,20 @@ void ModelEditor::createModel(bool exprt,string path_in){
         );
 
     }
-   ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color );
+   ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color,m_bg_bias );
 
    nullify(vertices, m_null_color, m_threshold);
    smooth (vertices, m_levels_density_split);
 
    ColoredVertexMatrix *shell= vertices.getShell(m_levels_density_split);
    PreciseTrimming pt = PreciseTrimming(shell);
+   int vert_num=shell->totalVerts();
+   if(vert_num<20){
+       cerr<<"Error too few vertices found, please try other settings"<<endl;
+       return;
 
+
+   }else{cout<<"found"<<vert_num<<endl;}
    QString filename="testVertsShell";
    QFile file(filename);
    if(file.open(QIODevice::ReadWrite)){
@@ -69,6 +75,7 @@ void ModelEditor::createModel(bool exprt,string path_in){
       }}}
 
    }
+
 
 
    FaceMaker fm=FaceMaker(shell);

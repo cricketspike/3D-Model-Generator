@@ -304,9 +304,7 @@ bool FaceMaker::reccurFindNextVertex(int x, int y, int z) {
             for (int xo=-1;xo<=1;xo++){
                     for (int zo=-1;zo<=1;zo++){
                         if(xo==0&&zo==0){continue;}
-                        if (reccurFindNextVertex(x + xo, y, z+zo)) {
-                            return true;
-                        }
+                        reccurFindNextVertex(x + xo, y, z+zo);
                     }
                 }
 

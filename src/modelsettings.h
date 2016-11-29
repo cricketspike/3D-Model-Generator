@@ -24,9 +24,15 @@ private slots:
 
     void on_pushButton_clicked();
 
+    void on_bg_bias_spinner_valueChanged(double arg1);
+
+    void on_lineEdit_textChanged(const QString &arg1);
+
 private:
     int m_res_split;
     int m_loop_dis;
+    float m_background_bias;
+    std::string m_export_path="exportedModel";
     Ui::ModelSettings *ui;
 };
 

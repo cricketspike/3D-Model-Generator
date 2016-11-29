@@ -18,13 +18,13 @@ void ModelWindow::on_openGLWidget_resized()
 
 }
 
-void ModelWindow::createModel(box b,int density_split,int loop_dist){
+void ModelWindow::createModel(box b,int density_split,int loop_dist,float bg_bias){
 
     std::cout<<"TEST1"<<endl;
     ModelEditor * editor= new ModelEditor();
     connect(editor,SIGNAL(renderModel(vector<GLfloat>,vector<GLfloat>)),ui->openGLWidget,SLOT(renderModel(vector<GLfloat>,vector<GLfloat>)));
 
-    editor->SetupModel(b,density_split,loop_dist);
+    editor->SetupModel(b,density_split,loop_dist,bg_bias);
     std::cout<<"TEST2"<<endl;
 
 
@@ -37,12 +37,12 @@ void ModelWindow::createModel(box b,int density_split,int loop_dist){
 }
 
 
-void ModelWindow::exportModel(box b,int density_split,int loop_dist, string path){
+void ModelWindow::exportModel(box b,int density_split,int loop_dist,float bg_bias, string path){
 
     ModelEditor * editor= new ModelEditor();
     connect(editor,SIGNAL(renderModel(vector<GLfloat>,vector<GLfloat>)),ui->openGLWidget,SLOT(renderModel(vector<GLfloat>,vector<GLfloat>)));
 
-    editor->SetupModel(b,density_split,loop_dist);
+    editor->SetupModel(b,density_split,loop_dist,bg_bias);
 
 
     editor->renderStart(path);

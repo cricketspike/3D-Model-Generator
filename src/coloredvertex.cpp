@@ -1,13 +1,14 @@
 #include"ColoredVertex.h"
 #include "ColoredVertexMatrix.h"
 
-       ColoredVertex::ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm) {
+    ColoredVertex::ColoredVertex(int w, int h, int d, ColoredVertexMatrix *par_cvm,float background_bias) {
+
         width = w;
         height = h;
         depth = d;
-                cvm=par_cvm;
-
-       }
+        cvm=par_cvm;
+        m_background_bias=background_bias;
+    }
     uint8_t* ColoredVertex::getValue(){return value;}
     void ColoredVertex::addVoter(MatrixNode voter) { voters.push_back(voter); }
     void ColoredVertex::setValueFromVoters(int grouping_tollerance) {
@@ -19,7 +20,7 @@
             int bg_contrast=(voters[i].colorContrast(bg_color[0],bg_color[1],bg_color[2]));
             if(voters.size()>0){
                 if(bg_contrast<grouping_tollerance){
-                    voters[i].multiplier=2.5f ;//this only counts towards weight
+                    voters[i].multiplier=m_background_bias;//this only counts towards weight
                 }
             }
             int closest_group_index = -1, closest_size = -1;//find the group that matches the color the best
