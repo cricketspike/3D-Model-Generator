@@ -53,6 +53,21 @@ bool ColoredVertexMatrix::isValid(unsigned int x,unsigned int y,unsigned int z){
 
 }
 
+bool ColoredVertexMatrix::isFinal(unsigned int x,unsigned int y, unsigned int z){
+    if(x<0||x>=m_width||y<0||y>=m_height||z<0||z>=m_depth){
+        return false;
+    }
+    ColoredVertex vert=getValue(x,y,z);
+    /*if( vert.isNull() ||vert.getValue()[3]!=1){
+        cout<<"FINAL ATTMPT ON NULL"<<endl;
+        return false;
+    }*/
+    return vert.isFinal();
+
+}
+
+
+
 unsigned int ColoredVertexMatrix:: totalVerts(){
     unsigned int count=0;
     for (unsigned int i = 0; i < m_width; i++) {

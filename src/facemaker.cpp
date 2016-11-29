@@ -597,9 +597,37 @@ void FaceMaker::connectLoops(int vertices_density_split){//eventually use tween 
                     assert(lower_loop.size()==upper_loop.size());
                  //cout<<"test %";
                     for(int connecting_i=0; connecting_i<lower_loop.size()-1; connecting_i++){
-                            addSquare(lower_loop[connecting_i],upper_loop[connecting_i],upper_loop[connecting_i+1],lower_loop[connecting_i+1]);
+                        ColoredVertex lower_corner_1=lower_loop[connecting_i];
+                        ColoredVertex lower_corner_2=lower_loop[connecting_i+1];
+                        ColoredVertex upper_corner_1=upper_loop[connecting_i];
+                        ColoredVertex upper_corner_2=upper_loop[connecting_i+1];
+                        //set these vertices to get passed in to final output
+                        m_matrix->setFinal(lower_corner_1.getX(),lower_corner_1.getY(),lower_corner_1.getZ());
+                        m_matrix->setFinal(lower_corner_2.getX(),lower_corner_2.getY(),lower_corner_2.getZ());
+                        m_matrix->setFinal(upper_corner_1.getX(),upper_corner_1.getY(),upper_corner_1.getZ());
+                        m_matrix->setFinal(upper_corner_2.getX(),upper_corner_2.getY(),upper_corner_2.getZ());
+                        //create face in final output
+                        addSquare(lower_corner_1,upper_corner_1,upper_corner_2,lower_corner_2); //start at bottom left vertex,go up,right,down
 
                     }
+
+                    int last_connecting_i=lower_loop.size()-1;
+                    ColoredVertex lower_corner_1=lower_loop[last_connecting_i];
+                    ColoredVertex lower_corner_2=lower_loop[0];
+                    ColoredVertex upper_corner_1=upper_loop[last_connecting_i];
+                    ColoredVertex upper_corner_2=upper_loop[0];
+
+                    //set these vertices to get passed in to final output
+
+                    m_matrix->setFinal(lower_corner_1.getX(),lower_corner_1.getY(),lower_corner_1.getZ());
+
+                    m_matrix->setFinal(lower_corner_2.getX(),lower_corner_2.getY(),lower_corner_2.getZ());
+                    m_matrix->setFinal(upper_corner_1.getX(),upper_corner_1.getY(),upper_corner_1.getZ());
+                    m_matrix->setFinal(upper_corner_2.getX(),upper_corner_2.getY(),upper_corner_2.getZ());
+
+
+                    //create face in final output
+
                     addSquare(lower_loop[lower_loop.size()-1],upper_loop[lower_loop.size()-1],upper_loop[0],lower_loop[0]);//wrap arround to begining
                 }else{cout<<"NULLED"<<endl;}
 
@@ -627,6 +655,13 @@ void FaceMaker::addTriangle(ColoredVertex vA, ColoredVertex vB, ColoredVertex vC
 }
 
 void FaceMaker::addHorzFace(vector<ColoredVertex> loop){
+
+
+    for (int i=0;i<8;i++){
+        m_matrix->setFinal(loop[i].getX(),loop[i].getY(),loop[i].getZ());
+    }
+
+
     assert(loop.size()>=8);
     addTriangle(loop[0],loop[2],loop[6]);
     addTriangle(loop[6],loop[4],loop[2]);

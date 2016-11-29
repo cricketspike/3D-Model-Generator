@@ -33,15 +33,19 @@ void ObjFileWriter::normalizeVertices(){
 	for(int x = 0; x < xMax; x++){
 		for(int y = 0; y < yMax; y++){
 		    for(int z = 0; z < zMax; z++){
-		    	Coordinate = CoordinateMatrix->getValueRef(x, y, z);
-		    	Coordinate->setLabel(vertexLabel++);
-		    	normalWidth = (Coordinate->getX())/xMax;
-		    	normalHeight = (Coordinate->getY())/yMax;
-		    	normalDepth = (Coordinate->getZ())/zMax;
-		    	Coordinate->setX(normalWidth);
-		    	Coordinate->setY(normalHeight);
-		    	Coordinate->setZ(normalDepth);
-			}
+                if (CoordinateMatrix->isFinal(x,y,z)){
+                    Coordinate = CoordinateMatrix->getValueRef(x, y, z);
+                    cout<<"V LABEL:"<<vertexLabel<<endl;
+                    Coordinate->setLabel(vertexLabel++);
+                    normalWidth = (Coordinate->getX())/xMax;
+                    normalHeight = (Coordinate->getY())/yMax;
+                    normalDepth = (Coordinate->getZ())/zMax;
+                    Coordinate->setX(normalWidth);
+                    Coordinate->setY(normalHeight);
+                    Coordinate->setZ(normalDepth);
+
+                }
+            }
 		}
 	}
 }
@@ -54,8 +58,9 @@ void ObjFileWriter::printVerticesToFile(){
 			for(int y = 0; y < yMax; y++){
 			    for(int z = 0; z < zMax; z++){
 			    	Coordinate = CoordinateMatrix->getValueRef(x, y, z);
-			    	objFile << "v " << Coordinate->getNormalX() << " " << Coordinate->getNormalY() << " " << Coordinate->getNormalZ() << endl;
-			    	
+                    if (CoordinateMatrix->isFinal(x,y,z)){
+                        objFile << "v " << Coordinate->getNormalX() << " " << Coordinate->getNormalY() << " " << Coordinate->getNormalZ() << endl;
+                    }
 				}
 			}
 		}
@@ -65,14 +70,18 @@ void ObjFileWriter::printFacesToFile(FaceMaker * fm){
     foreach (vector<ColoredVertex> face , fm->getSquares()){
 	    objFile << "f ";
 		foreach (ColoredVertex vertex, face){
-            objFile << vertex.getLabel() <<"/";
+            ColoredVertex vertex_at_spot= CoordinateMatrix->getValue(vertex.getX(),vertex.getY(),vertex.getZ());
+            objFile << vertex_at_spot.getLabel() <<"/";
 	    }
 		objFile << "\n";
 	}
     foreach (vector<ColoredVertex> face , fm->getTriangles()){
         objFile << "f ";
+
         foreach (ColoredVertex vertex, face){
-            objFile << vertex.getLabel() <<"/";
+            ColoredVertex vertex_at_spot= CoordinateMatrix->getValue(vertex.getX(),vertex.getY(),vertex.getZ());
+
+            objFile << vertex_at_spot.getLabel() <<"/";
         }
         objFile << "\n";
     }

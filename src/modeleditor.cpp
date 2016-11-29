@@ -87,9 +87,8 @@ void ModelEditor::createModel(bool exprt,string path_in){
    std::vector<GLfloat> facesByXYZ=std::vector<float>();
    std::vector<GLfloat> facesByRBG=std::vector<float>();
 
-   //print all triangles and add their raw data into the face arrays
+   //turn the vertex and face objects into data to be read in by opengl
               foreach (vector<ColoredVertex> face , fm.getTriangles()){
-
                   for (int i=0;i<3;i++){
                   ColoredVertex vert=face[i];
 
@@ -106,14 +105,15 @@ void ModelEditor::createModel(bool exprt,string path_in){
                   }
 
               }
-              if(exprt){
+              if(exprt){//if export flag enabled
                   path_in+=".obj";
                   ObjFileWriter *writer= new ObjFileWriter(shell,path_in);
-
                   writer->execute(&fm);
+                  cout<<"export complete"<<endl;
                   delete(writer);
 
               }
+
 
      foreach (vector<ColoredVertex> face , fm.getSquares()){
          vector<ColoredVertex> triangles=fm.toTriangles(face);
