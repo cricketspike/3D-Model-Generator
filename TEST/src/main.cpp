@@ -244,8 +244,8 @@ int main(int argc, char **argv)
 {
     std::string input;
 
-    std::cout << "3D Model Builder " << std::endl;
-    std::cout << "-----------------" << std::endl;
+    std::cout << "3D Model Builder Tests" << std::endl;
+    std::cout << "----------------------" << std::endl;
     std::cout << "Commands: connors-tests  " << std::endl;
     std::cout << "          ut-cubemapeditorimage" << std::endl;
     std::cout << "          ut-cubemapeditorrasterwidget" << std::endl;
