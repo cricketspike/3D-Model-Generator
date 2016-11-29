@@ -40,6 +40,10 @@ bool CubeMapEditorDisplay::haveImage(CubeMapEditor::Face f)
 {
     return images[f].haveImage();
 }
+bool CubeMapEditorDisplay::haveImage()
+{
+    return images[selected_face].haveImage();
+}
 
 void CubeMapEditorDisplay::loadImage(QImage image)
 {
