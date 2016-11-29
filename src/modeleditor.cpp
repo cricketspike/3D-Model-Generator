@@ -106,7 +106,9 @@ void ModelEditor::createModel(bool exprt,string path_in){
 
               }
               if(exprt){//if export flag enabled
-                  path_in+=".obj";
+                  if(path_in.substr( path_in.length() - 4 ) != ".obj"){
+                    path_in+=".obj";
+                }
                   ObjFileWriter *writer= new ObjFileWriter(shell,path_in);
                   writer->execute(&fm);
                   cout<<"export complete"<<endl;
@@ -155,7 +157,7 @@ void ModelEditor::defaultStart(){
 
 void ModelEditor::renderStart(string path){
     //call a bunch of setters here or in cm's args
-    createModel(true,path);
+    createModel(true,path);//this makes it call the export fucntion by setting the flag to true and passing in a path
     GLfloat* f=&m_face_color_data[0];
 
     renderModel(m_face_vertices_data,m_face_color_data);

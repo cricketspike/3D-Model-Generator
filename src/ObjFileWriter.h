@@ -28,9 +28,10 @@ private:
     // Helper Methods
     void normalizeVertices();
     void printVerticesToFile();
+    void printColorsToFile();
+    void printNormalsToFile(FaceMaker * fm);
     void printFacesToFile(FaceMaker * fm);
-
-
+    bool smoothing_on=true;
     float xMax, yMax, zMax;
 public:
     ObjFileWriter(ColoredVertexMatrix * CoordinateMap,string path);

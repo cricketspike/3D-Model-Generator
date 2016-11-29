@@ -94,3 +94,6 @@ FORMS += \
     src/modelwindow.ui \
     src/modelsettings.ui
     src/modelwindow.ui
+
+DISTFILES += \
+    resources/rgbtri.jpg

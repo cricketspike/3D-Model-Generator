@@ -26,7 +26,6 @@ private slots:
 
     void on_bg_bias_spinner_valueChanged(double arg1);
 
-    void on_lineEdit_textChanged(const QString &arg1);
 
 private:
     int m_res_split;
