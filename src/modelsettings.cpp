@@ -40,20 +40,20 @@ void ModelSettings::on_pushButton_2_clicked()//preview
     mwin.exec();
 }
 
-void ModelSettings::on_resolution_splitting_valueChanged(int arg1)
+void ModelSettings::on_resolution_splitting_valueChanged(int arg1)// resolution_splitting number scroller
 {
     m_res_split=arg1;
 
 }
 
 
-void ModelSettings::on_Level_dist_valueChanged(int arg1)
+void ModelSettings::on_Level_dist_valueChanged(int arg1)//Level_dist number scroller
 {
     m_loop_dis=arg1;
 }
 
 
-void ModelSettings::on_bg_bias_spinner_valueChanged(double arg1)
+void ModelSettings::on_bg_bias_spinner_valueChanged(double arg1)//background bias number scroller
 {
     m_background_bias=arg1;
 }
@@ -63,6 +63,8 @@ void ModelSettings::on_pushButton_clicked()//export
 {
 
     m_export_path= QFileDialog::getSaveFileName().toStdString();
+    cout<<m_export_path;
+
     QImage img0( "tmp/Left.jpg" );
     QImage img1( "tmp/Front.jpg" );
     QImage img2( "tmp/Right.jpg" );
@@ -81,8 +83,9 @@ void ModelSettings::on_pushButton_clicked()//export
     box b = box(images);
     ModelWindow mwin;
     mwin.setModal(true);
-    mwin.exportModel(b,m_res_split,m_loop_dis,m_background_bias, m_export_path);
-
-    mwin.exec();
+    if(m_export_path!=""){//if they put in a path rather than hitting esacape
+        mwin.exportModel(b,m_res_split,m_loop_dis,m_background_bias, m_export_path);
+        mwin.exec();
+    }
 }
 
