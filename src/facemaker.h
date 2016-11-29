@@ -30,7 +30,7 @@ private:
     ColoredVertexMatrix * m_matrix;
 
     unsigned int m_matrix_width, m_matrix_height, m_matrix_depth;
-    float m_max_dist;
+    float m_max_sqr_dist;
     vector<vector<vector<ColoredVertex>>> m_levels_of_loops;
     vector<vector<vector<ColoredVertex>>> m_finished_loops;//TODO: make FUNCTION THAT CONVERTS THESE INTO X<Y Z VALUES, as these are copys and have duplicate verts in them
     std::vector<std::vector<std::vector<bool>>> m_taken;

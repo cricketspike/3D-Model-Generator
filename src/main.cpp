@@ -22,6 +22,12 @@
 #include "facemaker.h"
 #include "verticessmoothing.h"
 #include"mainwaindow.h"
+
+#include "../unit-tests/Nir/CubeMapEditorImage/cubemapeditorimage_driver.h"
+#include "../unit-tests/Nir/CubeMapEditorRasterWidget/cubemapeditorrasterwidget_driver.h"
+#include "../unit-tests/Nir/CubeMapEditorDisplay/cubemapeditordisplay_driver.h"
+#include "../unit-tests/Nir/CubePreviewWidget/cubepreviewwidget_driver.h"
+
 int main(int argc, char **argv)
 {
 
@@ -32,6 +38,10 @@ int main(int argc, char **argv)
     std::cout << "Commands: hello  " << std::endl;
     std::cout << "          editor: start program " << std::endl;
     //std::cout << "          image: test basic functionality  " << std::endl;
+    std::cout << "          ut-cubemapeditorimage" << std::endl;
+    std::cout << "          ut-cubemapeditorrasterwidget" << std::endl;
+    std::cout << "          ut-cubemapeditordisplay" << std::endl;
+    std::cout << "          ut-cubepreviewwidget" << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
     while (true) {
@@ -43,9 +53,6 @@ int main(int argc, char **argv)
         std::getline(std::cin, input);
 
         // Command processing
-        //      Commands to affect variables
-        //      to be passed into MainWindow constructor
-        //      on "render" command
 
         if (input == "hello") {
 
@@ -64,6 +71,65 @@ int main(int argc, char **argv)
             widget.show();
 
             app.exec();
+
+        } else if (input == "ut-cubemapeditorimage") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubeMapEditorImage_Driver widget;
+            widget.show();
+
+            app.exec();
+
+        } else if (input == "ut-cubemapeditorrasterwidget") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubeMapEditorRasterWidget_Driver widget;
+            widget.show();
+
+            app.exec();
+
+
+        } else if (input == "ut-cubemapeditordisplay") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubeMapEditorDisplay_Driver widget;
+            widget.show();
+
+            app.exec();
+
+
+        } else if (input == "ut-cubepreviewwidget") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubePreviewWidget_Driver widget;
+            widget.show();
+
+            app.exec();
+
 
         } /*else if (input == "image") {
 

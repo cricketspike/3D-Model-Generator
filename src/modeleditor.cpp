@@ -8,7 +8,7 @@ ModelEditor::ModelEditor()
 void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_dist){
     m_image_box=image_box;
     m_resolution_split=resolution_split;//lower=slower, more accurate, more faces
-    m_vertices_density_split=vert_loop_dist;//lower= more faces
+    m_levels_density_split=vert_loop_dist;//lower= more faces
 
 }
 void ModelEditor::createModel(bool exprt,string path_in){
@@ -46,9 +46,9 @@ void ModelEditor::createModel(bool exprt,string path_in){
    ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color );
 
    nullify(vertices, m_null_color, m_threshold);
-   smooth (vertices, m_vertices_density_split);
+   smooth (vertices, m_levels_density_split);
 
-   ColoredVertexMatrix *shell= vertices.getShell(m_vertices_density_split);
+   ColoredVertexMatrix *shell= vertices.getShell(m_levels_density_split);
    PreciseTrimming pt = PreciseTrimming(shell);
 
    QString filename="testVertsShell";
@@ -72,7 +72,7 @@ void ModelEditor::createModel(bool exprt,string path_in){
 
 
    FaceMaker fm=FaceMaker(shell);
-   fm.makeFaces(m_vertices_density_split);
+   fm.makeFaces(m_levels_density_split);
 
    int wid=shell->getWidth();
    int hei=shell->getHeight();

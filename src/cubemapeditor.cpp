@@ -14,7 +14,6 @@ CubeMapEditor::CubeMapEditor(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->rasterWidget->setVisible(false);
-    ui->rasterWidget->setImage(ui->display->getImage());
 
     connect(ui->horizontalSlider_cubePreview_zoom,  SIGNAL(valueChanged(int)), this, SLOT(zoom_valueChanged(int)));
     connect(ui->dial_cubePreview_tx, SIGNAL(valueChanged(int)), this, SLOT(tilt_x_valueChanged(int)));

@@ -49,7 +49,7 @@ public:
     void createModel(bool exprt=false,string path_in="exported_image");//generate infromation for model and run opengl
     void resetModel();//recalculate and apply changes
     void setResolution(    float resolution_split){   m_resolution_split= resolution_split;}
-    void setDesnitySplit(    int vertices_density_split){   m_vertices_density_split= vertices_density_split;}
+    void setDesnitySplit(    int vertices_density_split){   m_levels_density_split= vertices_density_split;}
 
 private:
     box m_image_box;
@@ -59,7 +59,7 @@ private:
     std::vector<GLfloat> m_face_vertices_data;
     std::vector<GLfloat> m_face_color_data;
     float m_resolution_split;
-    int m_vertices_density_split;
+    int m_levels_density_split;
 
 };
 
