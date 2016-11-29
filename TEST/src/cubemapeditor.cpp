@@ -14,7 +14,6 @@ CubeMapEditor::CubeMapEditor(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->rasterWidget->setVisible(false);
-    ui->rasterWidget->setImage(ui->display->getImage());
 
     connect(ui->horizontalSlider_cubePreview_zoom,  SIGNAL(valueChanged(int)), this, SLOT(zoom_valueChanged(int)));
     connect(ui->dial_cubePreview_tx, SIGNAL(valueChanged(int)), this, SLOT(tilt_x_valueChanged(int)));
@@ -161,12 +160,12 @@ void CubeMapEditor::on_pushButton_cubePreviewUpdate_clicked()
         ui->rasterWidget->raster(filenames[f]);
     }
 
-    QImage img0( "tmp/Front.jpg" );
+    QImage img0( "tmp/Left.jpg" );
     QImage img1( "tmp/Top.jpg" );
-    QImage img2( "tmp/Back.jpg" );
+    QImage img2( "tmp/Front.jpg" );
     QImage img3( "tmp/Bottom.jpg" );
-    QImage img4( "tmp/Left.jpg" );
-    QImage img5( "tmp/Right.jpg" );
+    QImage img4( "tmp/Right.jpg" );
+    QImage img5( "tmp/Back.jpg" );
 
     vector<QImage> images;
     images.push_back(img0);

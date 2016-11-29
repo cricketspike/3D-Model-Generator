@@ -33,7 +33,7 @@ void CubeMapEditorRasterWidget::raster(QString filename)
     setVisible(true);
     makeCurrent();
 
-    QOpenGLFramebufferObject* fbo = new QOpenGLFramebufferObject(minimumSize());
+    QOpenGLFramebufferObject* fbo = new QOpenGLFramebufferObject(size());
 
     fbo->bind();
     paintGL();
@@ -105,18 +105,28 @@ void CubeMapEditorRasterWidget::paintGL()
     program->bind();
 
     glClear(GL_COLOR_BUFFER_BIT);
-    double zoom;
-    QPointF offset;
-    image->getFocus(zoom, offset);
+    double zoom = 1.0;
+    QPointF offset(0.0, 0.0);
+    int rotation = 0;
+    bool haveImage = false;
 
-    program->setUniformValue(uniform_rotation, image->getRotation());
-    program->setUniformValue(uniform_haveTexture, (image->haveImage() ? 1 : 0)); // Whether image set for this face
+    if (image) {
+        image->getFocus(zoom, offset);
+        rotation = image->getRotation();
+        haveImage = image->haveImage();
+    }
+
+    program->setUniformValue(uniform_rotation, rotation);
+    program->setUniformValue(uniform_haveTexture, (haveImage ? 1 : 0));             // Whether image set for this face
     program->setUniformValue(uniform_zoom, (GLfloat)zoom);                          // Image zoom (scaling)
     program->setUniformValue(uniform_offset, offset);                               // Image offset (positioning)
-    image->bindTexture();
+
+    if (image)
+        image->bindTexture();
 
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     program->release();
     vao.release();
+
 }

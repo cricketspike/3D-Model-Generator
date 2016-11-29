@@ -42,7 +42,11 @@ SOURCES += \
     src/scene.cpp \
     src/modelsettings.cpp \
     src/ObjFileWriter.cpp \
-    src/cubemapeditorrasterwidget.cpp
+    src/cubemapeditorrasterwidget.cpp \
+    unit-tests/CubeMapEditorDisplay/cubemapeditordisplay_driver.cpp \
+    unit-tests/CubeMapEditorImage/cubemapeditorimage_driver.cpp \
+    unit-tests/CubeMapEditorRasterWidget/cubemapeditorrasterwidget_driver.cpp \
+    unit-tests/CubePreviewWidget/cubepreviewwidget_driver.cpp
 
 HEADERS += \
     src/openglwindow.h \
@@ -75,7 +79,11 @@ HEADERS += \
     src/scene.h \
     src/modelsettings.h \
     src/objfilewriter.h \
-    src/cubemapeditorrasterwidget.h
+    src/cubemapeditorrasterwidget.h \
+    unit-tests/CubeMapEditorDisplay/cubemapeditordisplay_driver.h \
+    unit-tests/CubeMapEditorImage/cubemapeditorimage_driver.h \
+    unit-tests/CubeMapEditorRasterWidget/cubemapeditorrasterwidget_driver.h \
+    unit-tests/CubePreviewWidget/cubepreviewwidget_driver.h
 
 RESOURCES += \
     resources/resources.qrc
@@ -92,5 +100,9 @@ FORMS += \
     src/cubemapeditor.ui \
     src/weighteditor.ui \
     src/modelwindow.ui \
-    src/modelsettings.ui
+    src/modelsettings.ui \
+    unit-tests/CubeMapEditorDisplay/cubemapeditordisplay_driver.ui \
+    unit-tests/CubeMapEditorImage/cubemapeditorimage_driver.ui \
+    unit-tests/CubeMapEditorRasterWidget/cubemapeditorrasterwidget_driver.ui \
+    unit-tests/CubePreviewWidget/cubepreviewwidget_driver.ui
     src/modelwindow.ui

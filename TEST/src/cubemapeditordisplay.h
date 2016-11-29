@@ -53,6 +53,7 @@ public:
 
     void loadImage(QImage image);
     bool haveImage(CubeMapEditor::Face f);
+    bool haveImage();
     CubeMapEditorImage* getImage();
     CubeMapEditorImage* getImage(CubeMapEditor::Face f);
 

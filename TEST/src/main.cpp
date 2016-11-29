@@ -23,7 +23,10 @@
 #include "verticessmoothing.h"
 #include"mainwaindow.h"
 
-
+#include "unit-tests/CubeMapEditorDisplay/cubemapeditordisplay_driver.h"
+#include "unit-tests/CubeMapEditorImage/cubemapeditorimage_driver.h"
+#include "unit-tests/CubeMapEditorRasterWidget/cubemapeditorrasterwidget_driver.h"
+#include "unit-tests/CubePreviewWidget/cubepreviewwidget_driver.h"
 
 
 
@@ -237,15 +240,94 @@ void test_6_voters_to_matrix(){
 
 
 
-int main(){
+int main(int argc, char **argv)
+{
+    std::string input;
+
+    std::cout << "3D Model Builder " << std::endl;
+    std::cout << "-----------------" << std::endl;
+    std::cout << "Commands: connors-tests  " << std::endl;
+    std::cout << "          ut-cubemapeditorimage" << std::endl;
+    std::cout << "          ut-cubemapeditorrasterwidget" << std::endl;
+    std::cout << "          ut-cubemapeditordisplay" << std::endl;
+    std::cout << "          ut-cubepreviewwidget" << std::endl;
+    std::cout << "          quit   " << std::endl << std::endl;
+
+    while (true) {
+
+        // Prompt
+
+        std::cout << "> ";
+        std::string input;
+        std::getline(std::cin, input);
+
+        // Command processing
+        if (input == "connors-tests") {
+
+            Test_ImageTo2DMatrix();
+            Test_2dMatrixTo3DVotingMatrix();
+            test_6_voters_to_matrix();
+
+        } else if (input == "ut-cubemapeditorimage") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubeMapEditorImage_Driver widget;
+            widget.show();
+
+            app.exec();
+
+        } else if (input == "ut-cubemapeditorrasterwidget") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubeMapEditorRasterWidget_Driver widget;
+            widget.show();
+
+            app.exec();
 
 
-        Test_ImageTo2DMatrix();
+        } else if (input == "ut-cubemapeditordisplay") {
+
+            QApplication app(argc, argv);
+
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubeMapEditorDisplay_Driver widget;
+            widget.show();
+
+            app.exec();
 
 
+        } else if (input == "ut-cubepreviewwidget") {
 
-        Test_2dMatrixTo3DVotingMatrix();
+            QApplication app(argc, argv);
 
-        test_6_voters_to_matrix();
+            QSurfaceFormat format;
+            format.setDepthBufferSize(24);
+            format.setStencilBufferSize(8);
+            QSurfaceFormat::setDefaultFormat(format);
+
+            CubePreviewWidget_Driver widget;
+            widget.show();
+
+            app.exec();
+
+
+        }
+    }
 }
 
