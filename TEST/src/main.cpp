@@ -28,6 +28,9 @@
 #include "unit-tests/CubeMapEditorRasterWidget/cubemapeditorrasterwidget_driver.h"
 #include "unit-tests/CubePreviewWidget/cubepreviewwidget_driver.h"
 
+#include "test_nullify.h"
+#include "test_tools.h"
+
 
 
 
@@ -251,6 +254,8 @@ int main(int argc, char **argv)
     std::cout << "          ut-cubemapeditorrasterwidget" << std::endl;
     std::cout << "          ut-cubemapeditordisplay" << std::endl;
     std::cout << "          ut-cubepreviewwidget" << std::endl;
+	std::cout << "          nullify" << std::endl;
+	std::cout << "          tools" << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
     while (true) {
@@ -327,7 +332,17 @@ int main(int argc, char **argv)
             app.exec();
 
 
-        }
+        } else if(input == "nullify") {
+			test_colorPercentDifference();
+			test_colorPercentError();
+			test_colorVectorDifference();
+		} else if(input == "tools") {
+			test_updateMouse();
+			test_setTool();
+			test_setInvalidTool();
+			test_makeRuler();
+			test_deleteRuler();
+		}
     }
 }
 
