@@ -16,7 +16,7 @@ public:
 
     ColoredVertexMatrix(){};
     unsigned int totalVerts();
-    ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split,uint8_t * background );
+    ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split,uint8_t * background,float bg_bias );
     ColoredVertexMatrix(ColoredVertexMatrix * original,int vertices_density_split);
 
     ColoredVertex getValue(int x, int y, int z){
@@ -27,6 +27,11 @@ public:
         return &matrix[x][y][z];}
 
 	void setValue(int x, int y, int z, MatrixNode value);
+        void setFinal(int x,int y,int z){
+            matrix[x][y][z].setFin(true);
+
+
+        }
     void setNull(int x,int y,int z){
         matrix[x][y][z].getValue()[3]=0;
     }
@@ -38,8 +43,9 @@ public:
     std::vector<std::vector<std::vector<ColoredVertex>>>  getVertices(){return matrix;}
     ColoredVertexMatrix * getShell(int vertices_density_split);
     bool isValid(unsigned int x,unsigned int y, unsigned int z);
-    protected:
+    bool isFinal(unsigned int x,unsigned int y, unsigned int z);
 
+    protected:
 
 private:
         std::vector<std::vector<std::vector<ColoredVertex>>> matrix;

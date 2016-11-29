@@ -1,7 +1,7 @@
 
 #include "coloredvertexmatrix.h"
 
-ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split, uint8_t * background){
+ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned int undivided_height, unsigned int undivided_depth, std::vector<VotingMatrix> image_matrices ,float resolution_split, uint8_t * background,float bg_bias){
     m_width = undivided_width/resolution_split;
     m_height = undivided_height/resolution_split;
     m_depth = undivided_depth/resolution_split;
@@ -13,7 +13,7 @@ ColoredVertexMatrix::ColoredVertexMatrix(unsigned int undivided_width, unsigned 
         for (unsigned int j = 0; j < m_height; j++) {
 			matrix[i].push_back(std::vector<ColoredVertex>());
             for (unsigned int k = 0; k < m_depth; k++) {
-                ColoredVertex temp = ColoredVertex(i, j, k,this);
+                ColoredVertex temp = ColoredVertex(i, j, k,this,bg_bias);
 				matrix[i][j].push_back( temp);
 			}
 		}
@@ -52,6 +52,21 @@ bool ColoredVertexMatrix::isValid(unsigned int x,unsigned int y,unsigned int z){
     return true;
 
 }
+
+bool ColoredVertexMatrix::isFinal(unsigned int x,unsigned int y, unsigned int z){
+    if(x<0||x>=m_width||y<0||y>=m_height||z<0||z>=m_depth){
+        return false;
+    }
+    ColoredVertex vert=getValue(x,y,z);
+    /*if( vert.isNull() ||vert.getValue()[3]!=1){
+        cout<<"FINAL ATTMPT ON NULL"<<endl;
+        return false;
+    }*/
+    return vert.isFinal();
+
+}
+
+
 
 unsigned int ColoredVertexMatrix:: totalVerts(){
     unsigned int count=0;

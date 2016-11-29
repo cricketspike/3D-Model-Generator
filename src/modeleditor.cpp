@@ -5,11 +5,11 @@ ModelEditor::ModelEditor()
 
 }
 
-void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_dist){
+void ModelEditor::SetupModel(box image_box,int resolution_split,int vert_loop_dist,float bg_bias){
     m_image_box=image_box;
     m_resolution_split=resolution_split;//lower=slower, more accurate, more faces
     m_levels_density_split=vert_loop_dist;//lower= more faces
-
+    m_bg_bias=bg_bias;
 }
 void ModelEditor::createModel(bool exprt,string path_in){
 
@@ -43,14 +43,20 @@ void ModelEditor::createModel(bool exprt,string path_in){
         );
 
     }
-   ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color );
+   ColoredVertexMatrix  vertices= ColoredVertexMatrix(model_width, model_height,model_depth, voters ,m_resolution_split,m_null_color,m_bg_bias );
 
    nullify(vertices, m_null_color, m_threshold);
    smooth (vertices, m_levels_density_split);
 
    ColoredVertexMatrix *shell= vertices.getShell(m_levels_density_split);
    PreciseTrimming pt = PreciseTrimming(shell);
+   int vert_num=shell->totalVerts();
+   if(vert_num<20){
+       cerr<<"Error too few vertices found, please try other settings"<<endl;
+       return;
 
+
+   }else{cout<<"found"<<vert_num<<endl;}
    QString filename="testVertsShell";
    QFile file(filename);
    if(file.open(QIODevice::ReadWrite)){
@@ -71,6 +77,7 @@ void ModelEditor::createModel(bool exprt,string path_in){
    }
 
 
+
    FaceMaker fm=FaceMaker(shell);
    fm.makeFaces(m_levels_density_split);
 
@@ -80,9 +87,8 @@ void ModelEditor::createModel(bool exprt,string path_in){
    std::vector<GLfloat> facesByXYZ=std::vector<float>();
    std::vector<GLfloat> facesByRBG=std::vector<float>();
 
-   //print all triangles and add their raw data into the face arrays
+   //turn the vertex and face objects into data to be read in by opengl
               foreach (vector<ColoredVertex> face , fm.getTriangles()){
-
                   for (int i=0;i<3;i++){
                   ColoredVertex vert=face[i];
 
@@ -99,14 +105,17 @@ void ModelEditor::createModel(bool exprt,string path_in){
                   }
 
               }
-              if(exprt){
-                  path_in+=".obj";
+              if(exprt){//if export flag enabled
+                  if(path_in.substr( path_in.length() - 4 ) != ".obj"){
+                    path_in+=".obj";
+                }
                   ObjFileWriter *writer= new ObjFileWriter(shell,path_in);
-
                   writer->execute(&fm);
+                  cout<<"export complete"<<endl;
                   delete(writer);
 
               }
+
 
      foreach (vector<ColoredVertex> face , fm.getSquares()){
          vector<ColoredVertex> triangles=fm.toTriangles(face);
@@ -148,7 +157,7 @@ void ModelEditor::defaultStart(){
 
 void ModelEditor::renderStart(string path){
     //call a bunch of setters here or in cm's args
-    createModel(true,path);
+    createModel(true,path);//this makes it call the export fucntion by setting the flag to true and passing in a path
     GLfloat* f=&m_face_color_data[0];
 
     renderModel(m_face_vertices_data,m_face_color_data);

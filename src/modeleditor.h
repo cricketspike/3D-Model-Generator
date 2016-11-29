@@ -37,7 +37,7 @@ signals:
 public:
 
     ModelEditor();
-    void SetupModel(box image_box,int resolution_split,int vert_loop_dist);//set all the variables
+    void SetupModel(box image_box,int resolution_split,int vert_loop_dist,float bg_bias);//set all the variables
     void setImageAccuracy(unsigned int newAmmount);
     void setVertexSparseness(unsigned int newAmmount);
     void setBackgroundColor(uint8_t* color);
@@ -54,6 +54,7 @@ public:
 private:
     box m_image_box;
     uint8_t * m_null_color;
+    float m_bg_bias;
     float m_threshold;
     std::vector<uint8_t*> vertices_by_XYZ;
     std::vector<GLfloat> m_face_vertices_data;

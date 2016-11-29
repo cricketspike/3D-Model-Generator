@@ -1,9 +1,10 @@
 #include "modelsettings.h"
 #include "ui_modelsettings.h"
 #include"modelwindow.h"
+#include<QFileDialog>
 
 ModelSettings::ModelSettings(QWidget *parent) :
-    QDialog(parent),m_res_split(5),m_loop_dis(5),ui(new Ui::ModelSettings)
+    QDialog(parent),m_res_split(5),m_loop_dis(5),m_background_bias(10),ui(new Ui::ModelSettings)
 {
     ui->setupUi(this);
 }
@@ -30,13 +31,12 @@ void ModelSettings::on_pushButton_2_clicked()//preview
     images.push_back(img4);
     images.push_back(img5);
 
+
+
     box b = box(images);
-
-
     ModelWindow mwin;
     mwin.setModal(true);
-    mwin.createModel(b,m_res_split,m_loop_dis);
-
+    mwin.createModel(b,m_res_split,m_loop_dis,m_background_bias);
     mwin.exec();
 }
 
@@ -52,8 +52,17 @@ void ModelSettings::on_Level_dist_valueChanged(int arg1)
     m_loop_dis=arg1;
 }
 
+
+void ModelSettings::on_bg_bias_spinner_valueChanged(double arg1)
+{
+    m_background_bias=arg1;
+}
+
+
 void ModelSettings::on_pushButton_clicked()//export
 {
+
+    m_export_path= QFileDialog::getSaveFileName().toStdString();
     QImage img0( "tmp/Left.jpg" );
     QImage img1( "tmp/Front.jpg" );
     QImage img2( "tmp/Right.jpg" );
@@ -70,11 +79,10 @@ void ModelSettings::on_pushButton_clicked()//export
     images.push_back(img5);
 
     box b = box(images);
-
-
     ModelWindow mwin;
     mwin.setModal(true);
-    mwin.createModel(b,m_res_split,m_loop_dis);
+    mwin.exportModel(b,m_res_split,m_loop_dis,m_background_bias, m_export_path);
 
     mwin.exec();
 }
+
