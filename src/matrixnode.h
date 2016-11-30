@@ -5,7 +5,6 @@
 
 class MatrixNode {
 public:
-        float multiplier=1;
 	MatrixNode(uint8_t red, uint8_t blue, uint8_t green,float weight_value) {
 		colors = new uint8_t[3];
 		colors[0] = red;
