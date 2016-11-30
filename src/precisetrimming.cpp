@@ -61,8 +61,6 @@ bool PreciseTrimming::trimVertex(int x,int y,int z){
         }
     }
     m_matrix->setNull(x,y,z);
-    m_matrix->getValue(x,y,z).printVert();
-
     return true;
     //if it reaches the end:
         //remove the node

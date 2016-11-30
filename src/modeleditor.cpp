@@ -56,7 +56,7 @@ void ModelEditor::createModel(bool exprt,string path_in){
        return;
 
 
-   }else{cout<<"found"<<vert_num<<endl;}
+   }
    QString filename="testVertsShell";
    QFile file(filename);
    if(file.open(QIODevice::ReadWrite)){

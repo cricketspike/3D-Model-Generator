@@ -58,10 +58,6 @@ bool ColoredVertexMatrix::isFinal(unsigned int x,unsigned int y, unsigned int z)
         return false;
     }
     ColoredVertex vert=getValue(x,y,z);
-    /*if( vert.isNull() ||vert.getValue()[3]!=1){
-        cout<<"FINAL ATTMPT ON NULL"<<endl;
-        return false;
-    }*/
     return vert.isFinal();
 
 }

@@ -65,7 +65,6 @@ void ObjFileWriter::normalizeVertices(){//set a normalized position value for ea
 		    for(int z = 0; z < zMax; z++){
                 if (CoordinateMatrix->isFinal(x,y,z)){
                     Coordinate = CoordinateMatrix->getValueRef(x, y, z);
-                    cout<<"V LABEL:"<<vertexLabel<<endl;
                     Coordinate->setLabel(vertexLabel++);
                     normalWidth = (Coordinate->getX())/xMax;
                     normalHeight = (Coordinate->getY())/yMax;
@@ -133,12 +132,18 @@ void ObjFileWriter::printFacesToFile(FaceMaker * fm){
 
     foreach (vector<ColoredVertex> face , fm->getSquares()){
         objFile << "f ";
+        vector<int>used;
         foreach (ColoredVertex vertex, face){
             //since each of these is printed in the same order we print out the same value
             ColoredVertex vertex_at_spot= CoordinateMatrix->getValue(vertex.getX(),vertex.getY(),vertex.getZ());
-            objFile << vertex_at_spot.getLabel()<<"/";//pos vert number
-            objFile << vertex_at_spot.getLabel()<<"/";//texture vert number
-            objFile << vertex_at_spot.getLabel()<<" ";//normal number
+            int label=vertex_at_spot.getLabel();
+            if(find(used.begin(), used.end(), label) == used.end()) {//if it was not allready used
+
+            used.push_back(label);
+                objFile << label <<"/";//pos vert number
+                objFile << label<<"/";//texture vert number
+                objFile << label<<" ";//normal number
+            }
 
         }
         objFile<<endl;
