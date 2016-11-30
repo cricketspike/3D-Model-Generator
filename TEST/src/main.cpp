@@ -121,7 +121,7 @@ for(int i=0;i<3;i++){
 
 
 
-cout<<"passed test convert image to 2d matrix of color values"<<endl;
+cout<<"passed test: convert image to 2d matrix of color values"<<endl;
 }
 
 
@@ -249,13 +249,15 @@ int main(int argc, char **argv)
 
     std::cout << "3D Model Builder Tests" << std::endl;
     std::cout << "----------------------" << std::endl;
-    std::cout << "Commands: connors-tests  " << std::endl;
-    std::cout << "          ut-cubemapeditorimage" << std::endl;
+    std::cout << "          image-to-2D-matrix-test" << std::endl;
+    std::cout << "          2D-matrix-to-3D-matrix-test" << std::endl;
+    std::cout << "          voters-to-color-matrix-test" << std::endl;
     std::cout << "          ut-cubemapeditorrasterwidget" << std::endl;
     std::cout << "          ut-cubemapeditordisplay" << std::endl;
     std::cout << "          ut-cubepreviewwidget" << std::endl;
 	std::cout << "          nullify" << std::endl;
-	std::cout << "          tools" << std::endl;
+    std::cout << "          tools" << std::endl;
+    std::cout << "          all (non-UI only)" << std::endl;
     std::cout << "          quit   " << std::endl << std::endl;
 
     while (true) {
@@ -267,8 +269,14 @@ int main(int argc, char **argv)
         std::getline(std::cin, input);
 
         // Command processing
-        if (input == "connors-tests") {
+        if (input == "image-to-2D-matrix-test") {
+            Test_ImageTo2DMatrix();
+        }else if(input=="2D-matrix-to-3D-matrix-test"){
 
+            Test_2dMatrixTo3DVotingMatrix();
+        }else if(input == "voters-to-color-matrix-test") {
+            test_6_voters_to_matrix();
+        }else if(input == "all") {
             Test_ImageTo2DMatrix();
             Test_2dMatrixTo3DVotingMatrix();
             test_6_voters_to_matrix();
@@ -342,7 +350,7 @@ int main(int argc, char **argv)
 			test_setInvalidTool();
 			test_makeRuler();
 			test_deleteRuler();
-		}
+        }
     }
 }
 
