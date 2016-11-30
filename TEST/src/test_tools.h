@@ -49,9 +49,11 @@ bool test_makeRuler() {
 	Tool::set(Tool::T_RULER);
 	Tool::updateMouse(15,15);
 	Tool::onMouseLeftPress();
+	Tool::onMouseLeftRelease();
 	
 	Tool::updateMouse(30,30);
 	Tool::onMouseLeftPress();
+	Tool::onMouseLeftRelease();
 	
     test = (((Ruler*)Scene::objects[0])->x == 15
         && ((Ruler*)Scene::objects[0])->y == 15
@@ -72,11 +74,14 @@ bool test_deleteRuler() {
 	Tool::set(Tool::T_RULER);
 	Tool::updateMouse(15,15);
 	Tool::onMouseLeftPress();
+	Tool::onMouseLeftRelease();
 	
 	Tool::updateMouse(30,30);
 	Tool::onMouseLeftPress();
+	Tool::onMouseLeftRelease();
 	
 	Tool::onMouseRightPress();
+	Tool::onMouseRightRelease();
 	
 	test = (Scene::objects.size() == 0);
 		
