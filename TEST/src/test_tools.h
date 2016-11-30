@@ -53,10 +53,10 @@ bool test_makeRuler() {
 	Tool::updateMouse(30,30);
 	Tool::onMouseLeftPress();
 	
-	test = (Scene::objects[0].x == 15
-		&& Scene::objects[0].y == 15
-		&& ((Ruler)Scene::objects[0])->x2 == 30
-		&& ((Ruler)Scene::objects[0])->y2 == 30);
+    test = (((Ruler*)Scene::objects[0])->x == 15
+        && ((Ruler*)Scene::objects[0])->y == 15
+        && ((Ruler*)Scene::objects[0])->x2 == 30
+        && ((Ruler*)Scene::objects[0])->y2 == 30);
 		
 	Scene::objects.clear();
 	if(test) printf("Success\n"); else printf("Failure\n");
