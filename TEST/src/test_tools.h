@@ -49,17 +49,19 @@ bool test_makeRuler() {
 	Tool::set(Tool::T_RULER);
 	Tool::updateMouse(15,15);
 	Tool::onMouseLeftPress();
-	Tool::onMouseLeftRelease();
 	
 	Tool::updateMouse(30,30);
-	Tool::onMouseLeftPress();
 	Tool::onMouseLeftRelease();
 	
-    test = (((Ruler*)Scene::objects[0])->x == 15
-        && ((Ruler*)Scene::objects[0])->y == 15
-        && ((Ruler*)Scene::objects[0])->x2 == 30
-        && ((Ruler*)Scene::objects[0])->y2 == 30);
-		
+	if(Scene::obejcts.size() > 0) {
+		test = (((Ruler*)Scene::objects[0])->x == 15
+			&& ((Ruler*)Scene::objects[0])->y == 15
+			&& ((Ruler*)Scene::objects[0])->x2 == 30
+			&& ((Ruler*)Scene::objects[0])->y2 == 30);
+		}
+	else
+		test = false;
+	
 	Scene::objects.clear();
 	if(test) printf("Success\n"); else printf("Failure\n");
 	return test;
@@ -74,10 +76,8 @@ bool test_deleteRuler() {
 	Tool::set(Tool::T_RULER);
 	Tool::updateMouse(15,15);
 	Tool::onMouseLeftPress();
-	Tool::onMouseLeftRelease();
 	
 	Tool::updateMouse(30,30);
-	Tool::onMouseLeftPress();
 	Tool::onMouseLeftRelease();
 	
 	Tool::onMouseRightPress();
