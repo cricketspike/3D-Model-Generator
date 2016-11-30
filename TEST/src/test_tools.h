@@ -22,8 +22,8 @@ bool test_setTool() {
 	bool test = true;
 	
 	printf("set() /Valid:\n");
-	Tool::set(T_PICKER);
-	test = (Tool::selected == T_PICKER);
+	Tool::set(Tool::T_PICKER);
+	test = (Tool::selected == Tool::T_PICKER);
 	
 	if(test) printf("Success\n"); else printf("Failure\n");
 	return test;
@@ -46,7 +46,7 @@ bool test_makeRuler() {
 	
 	Scene::objects.clear();
 	
-	Tool::set(T_RULER);
+	Tool::set(Tool::T_RULER);
 	Tool::updateMouse(15,15);
 	Tool::onMouseLeftPress();
 	
@@ -55,8 +55,8 @@ bool test_makeRuler() {
 	
 	test = (Scene::objects[0].x == 15
 		&& Scene::objects[0].y == 15
-		&& Scene::objects[0].x2 == 30
-		&& Scene::objects[0].y2 == 30);
+		&& ((Ruler)Scene::objects[0])->x2 == 30
+		&& ((Ruler)Scene::objects[0])->y2 == 30);
 		
 	Scene::objects.clear();
 	if(test) printf("Success\n"); else printf("Failure\n");
@@ -69,7 +69,7 @@ bool test_deleteRuler() {
 	
 	Scene::objects.clear();
 	
-	Tool::set(T_RULER);
+	Tool::set(Tool::T_RULER);
 	Tool::updateMouse(15,15);
 	Tool::onMouseLeftPress();
 	

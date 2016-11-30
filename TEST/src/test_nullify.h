@@ -22,15 +22,15 @@ bool test_colorPercentDifference() {
 	float diff;
 	printf("colorPercentDifference():\n");
 	
-	diff = colorPercentDifference(Color(0,0,0), Color(.75,.75,.75))
+	diff = colorPercentDifference(Color(0,0,0), Color(.75,.75,.75));
 	if(diff < 0 || diff > 1)
 		test = false;
 	
-	diff = colorPercentDifference(Color(.5,.5,.5), Color(.5,.5,.5))
+	diff = colorPercentDifference(Color(.5,.5,.5), Color(.5,.5,.5));
 	if(diff != 0)
 		test = false;
 	
-	diff = colorPercentDifference(Color(0,0,0), Color(1,1,1))
+	diff = colorPercentDifference(Color(0,0,0), Color(1,1,1));
 	if(diff != 1)
 		test = false;
 	
@@ -43,15 +43,15 @@ bool test_colorPercentError() {
 	float diff;
 	printf("colorPercentError():\n");
 	
-	diff = colorPercentError(Color(0,0,0), Color(.75,.75,.75))
+	diff = colorPercentError(Color(0,0,0), Color(.75,.75,.75));
 	if(diff < 0 || diff > 1)
 		test = false;
 	
-	diff = colorPercentError(Color(.5,.5,.5), Color(.5,.5,.5))
+	diff = colorPercentError(Color(.5,.5,.5), Color(.5,.5,.5));
 	if(diff != 0)
 		test = false;
 	
-	diff = colorPercentError(Color(0,0,0), Color(1,1,1))
+	diff = colorPercentError(Color(0,0,0), Color(1,1,1));
 	if(diff != 1)
 		test = false;
 	
@@ -64,15 +64,15 @@ bool test_colorVectorDifference() {
 	float diff;
 	printf("colorVectorDifference():\n");
 	
-	diff = colorVectorDifference(Color(0,0,0), Color(.75,.75,.75))
+	diff = colorVectorDifference(Color(0,0,0), Color(.75,.75,.75));
 	if(diff < 0 || diff > 1)
 		test = false;
 	
-	diff = colorVectorDifference(Color(.5,.5,.5), Color(.5,.5,.5))
+	diff = colorVectorDifference(Color(.5,.5,.5), Color(.5,.5,.5));
 	if(diff != 0)
 		test = false;
 	
-	diff = colorVectorDifference(Color(0,0,0), Color(1,1,1))
+	diff = colorVectorDifference(Color(0,0,0), Color(1,1,1));
 	if(diff != 1)
 		test = false;
 	
