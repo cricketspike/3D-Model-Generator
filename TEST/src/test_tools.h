@@ -53,7 +53,7 @@ bool test_makeRuler() {
 	Tool::updateMouse(30,30);
 	Tool::onMouseLeftRelease();
 	
-	if(Scene::obejcts.size() > 0) {
+        if(Scene::objects.size() > 0) {
 		test = (((Ruler*)Scene::objects[0])->x == 15
 			&& ((Ruler*)Scene::objects[0])->y == 15
 			&& ((Ruler*)Scene::objects[0])->x2 == 30
